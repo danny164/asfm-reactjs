@@ -96,7 +96,7 @@ function Register(props) {
                                     <div className="form-group mb-5 text-left">
                                         <div className="checkbox-inline">
                                             <label className="checkbox m-0">
-                                                <input type="checkbox" name="agree" onSubmit={handleSubmit} />
+                                                <input type="checkbox" name="agree" onClick={handleLicense} />
                                                 <span />
                                                 Tôi đồng ý với các{' '}
                                                 <Link to="#" className="ml-1">
