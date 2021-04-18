@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import Signout from '../LogOut';
-import Avatar from '../../assets/media/avatar.png';
-import AbstractThree from '../../assets/media/abstract-3.svg';
-import AbstractTwo from '../../assets/media/abstract-2.svg';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { db } from '../../firebase';
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import AbstractTwo from '../../assets/media/abstract-2.svg';
+import AbstractThree from '../../assets/media/abstract-3.svg';
+import Avatar from '../../assets/media/avatar.png';
+import Signout from '../LogOut';
 
 AsideRight.propTypes = {
     name: PropTypes.string,
@@ -17,7 +15,7 @@ AsideRight.defaultProps = {
 };
 
 function AsideRight(props) {
-    const {name} = props
+    const { name } = props;
 
     return (
         <aside className="sidebar d-flex flex-row-auto flex-column">

@@ -1,28 +1,27 @@
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import { Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-import { Link } from 'react-router-dom';
-import { Alert } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
 
 MainChangePw.propTypes = {};
 
 function MainChangePw(props) {
-    const [message, setMessage] = useState('')
-    const [alert, setAlert] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState('');
+    const [alert, setAlert] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const passwordRef = useRef()
-    const confirmPasswordRef = useRef()
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
 
-    const {updatePassword} = useAuth();
+    const { updatePassword } = useAuth();
 
-    async function changePassWord(e){
+    async function changePassWord(e) {
         e.preventDefault();
 
-        if(passwordRef.current.value !== confirmPasswordRef.current.value){
-            setAlert("red");
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            setAlert('red');
             return setMessage('Xác nhận mật khẩu chưa chính xác !');
         }
 
@@ -86,7 +85,7 @@ function MainChangePw(props) {
                         </header>
                         <form className="form">
                             <div className="card-body">
-                            {message && <Alert style={{ color: alert }}>{message}</Alert>}
+                                {message && <Alert style={{ color: alert }}>{message}</Alert>}
                                 {/* current password */}
                                 <div className="form-group row">
                                     <label htmlFor="current-password" className="col-xl-3 col-lg-4 col-form-label">
@@ -108,7 +107,13 @@ function MainChangePw(props) {
                                         Mật khẩu mới
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
-                                        <input className="form-control form-control-lg"  type="password" id="password" ref={passwordRef} placeholder="Nhập mật khẩu mới" />
+                                        <input
+                                            className="form-control form-control-lg"
+                                            type="password"
+                                            id="password"
+                                            ref={passwordRef}
+                                            placeholder="Nhập mật khẩu mới"
+                                        />
                                     </div>
                                 </div>
                                 {/* confirm password */}

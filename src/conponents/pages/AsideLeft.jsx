@@ -1,6 +1,6 @@
 import React from 'react';
-import TheNightOwl from '../../assets/media/the-night-owl.png';
 import { Link } from 'react-router-dom';
+import TheNightOwl from '../../assets/media/the-night-owl.png';
 
 function AsideLeft(props) {
     return (

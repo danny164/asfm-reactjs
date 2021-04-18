@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import Header from "../common/Header";
-import Footer from "../common/Footer";
-import Avatar from "../../assets/media/avatar.png";
-import { Alert } from "react-bootstrap";
-
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Alert } from 'react-bootstrap';
+import Avatar from '../../assets/media/avatar.png';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
 
 MainProfile.propTypes = {
     user: PropTypes.object,
@@ -12,7 +11,7 @@ MainProfile.propTypes = {
 };
 
 MainProfile.defaultProps = {
-    user: "",
+    user: '',
     onChange: null,
 };
 
@@ -29,7 +28,6 @@ function MainProfile(props) {
     // useEffect(() => {
     //     console.log(ward);
     // }, [ward]);
-
 
     function handleChangeEdit() {
         if (onChange) {
@@ -85,7 +83,7 @@ function MainProfile(props) {
                                     </button>
                                 </div>
                             </header>
-                            <h3 style={{ align: "center" }}>{user.error && <Alert style={{ color: user.alert }}>{user.error}</Alert>}</h3>
+                            <h3 style={{ align: 'center' }}>{user.error && <Alert style={{ color: user.alert }}>{user.error}</Alert>}</h3>
                             <div className="card-body">
                                 {/* avatar */}
                                 <div className="form-group row">
