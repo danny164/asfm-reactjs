@@ -1,11 +1,9 @@
-import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Header from '../common/Header';
-import Footer from '../common/Footer';
-import Avatar from '../../assets/media/avatar.png';
-import { useHistory } from 'react-router';
-import { db } from '../../firebase';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Avatar from '../../assets/media/avatar.png';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
 
 EditProfile.propTypes = {
     user: PropTypes.object,

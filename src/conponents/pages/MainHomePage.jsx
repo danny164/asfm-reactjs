@@ -1,14 +1,14 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Cancelled from '../labels/Cancelled';
 import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 
 MainHomePage.propTypes = {
     datas: PropTypes.object,
