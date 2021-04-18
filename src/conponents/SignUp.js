@@ -13,6 +13,7 @@ function Register(props) {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState('');
+    const [license, setLicense] = useState(false)
 
     const { signup } = useAuth();
 
@@ -35,6 +36,14 @@ function Register(props) {
             console.log(emailRef.current.value, 'va', passWordRef.current.value);
         }
         setLoading(false);
+    }
+
+    function handleLicense(e){
+        if(e.target.checked === true){
+            setLicense(true)
+        } else {
+            setLicense(false)
+        }
     }
 
     return (
@@ -87,7 +96,7 @@ function Register(props) {
                                     <div className="form-group mb-5 text-left">
                                         <div className="checkbox-inline">
                                             <label className="checkbox m-0">
-                                                <input type="checkbox" name="agree" />
+                                                <input type="checkbox" name="agree" onClick={handleLicense} />
                                                 <span />
                                                 Tôi đồng ý với các{' '}
                                                 <Link to="#" className="ml-1">
