@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import Header from '../common/Header';
-import Footer from '../common/Footer';
-import random from 'randomstring';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import random from 'randomstring';
+import React, { useRef, useState } from 'react';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
