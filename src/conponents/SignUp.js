@@ -4,50 +4,72 @@ import { Link } from 'react-router-dom';
 import '../assets/css/portal.css';
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 function Register(props) {
+    const schema = yup.object().shape({
+        email: yup
+            .string()
+            .email('Email không hợp lệ')
+            .matches(/^[a-z|A-Z|0-9|\.\@]+$/, 'Không chứa các kí tự đặc biệt')
+            .required('Bạn chưa nhập địa chỉ email'),
+        password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
+        rePassword: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không khớp'),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const checkingEmail = `form-control h-auto form-control-solid py-4 px-8 ${errors.email ? 'is-invalid' : ''}`;
+    const checkingPw = `form-control h-auto form-control-solid py-4 px-8 ${errors.password ? 'is-invalid' : ''}`;
+    const checkingRePw = `form-control h-auto form-control-solid py-4 px-8 ${errors.rePassword ? 'is-invalid' : ''}`;
+
     const emailRef = useRef();
-    const passWordRef = useRef();
-    const passWordConfirmRef = useRef();
+    const passwordRef = useRef();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState('');
-    const [license, setLicense] = useState(false)
+    const [license, setLicense] = useState(false);
 
     const { signup } = useAuth();
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if(license === false){
-            setAlert('red')
-            return setError('Bạn phải đồng ý với các điều khoản !')
-        }
-
-        if (passWordRef.current.value !== passWordConfirmRef.current.value) {
-            setAlert('red');
-            return setError('Password is not match !');
+    const onSubmit = async (e) => {
+        if (license === false) {
+            setAlert('#f27173');
+            return setError('Bạn phải đồng ý với các điều khoản !');
         }
 
         try {
             setLoading(true);
-            await signup(emailRef.current.value, passWordRef.current.value);
+            await signup(emailRef.current.value, passwordRef.current.value);
             setAlert('green');
-            setError('Register success !');
-        } catch {
-            setAlert('red');
-            setError('Failed to create an account !');
-            console.log(emailRef.current.value, 'va', passWordRef.current.value);
+            setError('Đăng kí thành công !');
+        } catch (err) {
+            setAlert('#f27173');
+            // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
+            const errorCode = err.code;
+            if (errorCode == 'auth/email-already-in-use') {
+                setError('Tài khoản đã tồn tại');
+            } else {
+                setError('Đăng kí thất bại');
+            }
         }
         setLoading(false);
-    }
+    };
 
-    function handleLicense(e){
-        if(e.target.checked === true){
-            setLicense(true)
+    function handleLicense(e) {
+        if (e.target.checked === true) {
+            setLicense(true);
         } else {
-            setLicense(false)
+            setLicense(false);
         }
     }
 
@@ -67,37 +89,38 @@ function Register(props) {
                                     <h3>Đăng ký</h3>
                                     <div className="text-muted font-weight-bold">Nhập thông tin để tạo tài khoản</div>
                                 </div>
-                                {/* nếu error != null thì render */}
+
                                 {error && <Alert style={{ color: alert }}>{error}</Alert>}
-                                <form className="form" id="login_signup_form" onSubmit={handleSubmit}>
+
+                                <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group mb-5">
                                         <input
-                                            className="form-control h-auto form-control-solid py-4 px-8"
+                                            className={checkingEmail}
                                             type="text"
                                             placeholder="Email"
-                                            name="email"
+                                            {...register('email')}
                                             autoComplete="off"
                                             ref={emailRef}
                                         />
                                     </div>
+                                    <p className="text-chartjs">{errors.email?.message}</p>
+
                                     <div className="form-group mb-5">
                                         <input
-                                            className="form-control h-auto form-control-solid py-4 px-8"
+                                            className={checkingPw}
                                             type="password"
                                             placeholder="Mật khẩu"
-                                            name="password"
-                                            ref={passWordRef}
+                                            {...register('password')}
+                                            ref={passwordRef}
                                         />
                                     </div>
+                                    <p className="text-chartjs">{errors.password?.message}</p>
+
                                     <div className="form-group mb-5">
-                                        <input
-                                            className="form-control h-auto form-control-solid py-4 px-8"
-                                            type="password"
-                                            placeholder="Nhập lại mật khẩu"
-                                            name="cpassword"
-                                            ref={passWordConfirmRef}
-                                        />
+                                        <input className={checkingRePw} type="password" placeholder="Nhập lại mật khẩu" {...register('rePassword')} />
                                     </div>
+                                    <p className="text-chartjs">{errors.rePassword?.message}</p>
+
                                     <div className="form-group mb-5 text-left">
                                         <div className="checkbox-inline">
                                             <label className="checkbox m-0">
