@@ -4,6 +4,10 @@ import random from 'randomstring';
 import React, { useRef, useState } from 'react';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import InputMask from 'react-input-mask';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -145,11 +149,37 @@ function MainPostOrder(props) {
             setWard('');
         }
     };
+    //////////////////////////////////////////////////////
+
+    const schema = yup.object().shape({
+        fullname: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng điền tên khách hàng'),
+        phone: yup
+            .string()
+            .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
+            .required('Vui lòng điền số điện thoại khách hàng'),
+        shipFee: yup
+            .string()
+            .matches(/^[0-9]+$/, { message: 'Chỉ được phép nhập số', excludeEmptyString: true })
+            .required('Vui lòng nhập phí giao hàng bạn muốn trả'),
+        tempFee: yup
+            .string()
+            .matches(/^[0-9]+$/, { message: 'Chỉ được phép nhập số', excludeEmptyString: true })
+            .max(7, 'Số tiền cho phép dưới 9 999 999 VND'),
+        note: yup.string().max(150, 'Vượt quá ${max} kí tự được cho phép'),
+        shipAddress: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     //////////////////////////////////////////////////////
     // Handle submitForm
-    function handleSubmit(e) {
-        e.preventDefault();
+    const onSubmit = (e) => {
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
@@ -166,7 +196,7 @@ function MainPostOrder(props) {
         if (postOrder) {
             postOrder(dataPostOrder);
         }
-    }
+    };
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -175,7 +205,7 @@ function MainPostOrder(props) {
                 {/* core content */}
                 <div className="core d-flex flex-column flex-row-fluid container">
                     <div className="card card-custom card-sticky" id="on_page_sticky_card">
-                        <form className="form" onSubmit={handleSubmit}>
+                        <form className="form" onSubmit={handleSubmit(onSubmit)}>
                             <header className="card-header py-3">
                                 <div className="card-title align-items-start flex-column">
                                     <h3 className="card-label">Đăng đơn</h3>
@@ -201,11 +231,12 @@ function MainPostOrder(props) {
                                         <input
                                             className="form-control form-control-lg"
                                             type="text"
+                                            {...register('fullname')}
                                             id="fullname"
-                                            maxLength={35}
                                             placeholder="Tên khách hàng"
                                             ref={customerRef}
                                         />
+                                        <span className="form-text text-muted text-chartjs">{errors.fullname?.message}</span>
                                     </div>
                                 </div>
                                 {/* phone number */}
@@ -214,14 +245,16 @@ function MainPostOrder(props) {
                                         Số điện thoại
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
-                                        <input
+                                        <InputMask
+                                            mask="9999 999 999"
                                             className="form-control form-control-lg"
                                             type="text"
+                                            {...register('phone')}
                                             id="phone_inputmask"
                                             placeholder="Số điện thoại"
                                             ref={numberRef}
                                         />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted text-chartjs">{errors.phone?.message}</span>
                                     </div>
                                 </div>
                                 {/* ship fee */}
@@ -229,12 +262,22 @@ function MainPostOrder(props) {
                                     <label htmlFor="ship_inputmask" className="col-xl-3 col-lg-4 col-form-label">
                                         Chi phí giao hàng
                                     </label>
-                                    <div className="col-xl-9 col-lg-8 input-group">
-                                        <input type="text" className="form-control" id="ship_inputmask" placeholder={0} ref={shipFeeRef} />
-                                        <div className="input-group-append">
-                                            <span className="input-group-text">VND</span>
+                                    <div className="col-xl-9 col-lg-8">
+                                        <div className="input-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                {...register('shipFee')}
+                                                id="ship_inputmask"
+                                                placeholder={0}
+                                                ref={shipFeeRef}
+                                            />
+
+                                            <div className="input-group-append">
+                                                <span className="input-group-text">VND</span>
+                                            </div>
                                         </div>
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted text-chartjs">{errors.shipFee?.message}</span>
                                     </div>
                                 </div>
                                 {/* temp fee */}
@@ -243,11 +286,20 @@ function MainPostOrder(props) {
                                         Tạm ứng
                                     </label>
                                     <div className="col-xl-9 col-lg-8 input-group">
-                                        <input type="text" className="form-control" id="temp_inputmask" placeholder={0} ref={depositFeeRef} />
-                                        <div className="input-group-append">
-                                            <span className="input-group-text">VND</span>
+                                        <div className="input-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                {...register('tempFee')}
+                                                id="temp_inputmask"
+                                                placeholder={0}
+                                                ref={depositFeeRef}
+                                            />
+                                            <div className="input-group-append">
+                                                <span className="input-group-text">VND</span>
+                                            </div>
                                         </div>
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted text-chartjs">{errors.tempFee?.message}</span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -256,15 +308,17 @@ function MainPostOrder(props) {
                                         Ghi chú
                                     </label>
                                     <div className="col-xl-9 col-lg-8 input-group">
-                                        <textarea
-                                            className="form-control"
-                                            id="note_maxlength"
-                                            maxLength={150}
-                                            rows={3}
-                                            placeholder="Viết ghi chú cho shipper"
-                                            ref={noteRef}
-                                        />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <div className="input-group">
+                                            <textarea
+                                                className="form-control"
+                                                id="note_maxlength"
+                                                rows={3}
+                                                {...register('note')}
+                                                placeholder="Viết ghi chú cho shipper"
+                                                ref={noteRef}
+                                            />
+                                        </div>
+                                        <span className="form-text text-muted text-chartjs">{errors.note?.message}</span>
                                     </div>
                                 </div>
 
@@ -325,6 +379,7 @@ function MainPostOrder(props) {
                                             <option value="">Chọn Quận/Huyện</option>
                                             {districtList()}
                                         </select>
+                                        <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
                                     </div>
                                 </div>
 
@@ -356,11 +411,13 @@ function MainPostOrder(props) {
                                         <input
                                             className="form-control form-control-lg"
                                             type="text"
+                                            {...register('shipAddress')}
                                             maxLength={50}
                                             id="address"
                                             placeholder="Số nhà, tên đường"
                                             ref={shipAddressRef}
                                         />
+                                        <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
                                     </div>
                                 </div>
                             </div>

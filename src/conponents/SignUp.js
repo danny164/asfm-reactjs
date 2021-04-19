@@ -13,7 +13,7 @@ function Register(props) {
         email: yup
             .string()
             .email('Email không hợp lệ')
-            .matches(/^[a-z|A-Z|0-9|\.\@]+$/, 'Không chứa các kí tự đặc biệt')
+            .matches(/^[a-z|A-Z|0-9|.@]+$/, 'Không chứa các kí tự đặc biệt')
             .required('Bạn chưa nhập địa chỉ email'),
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
         rePassword: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không khớp'),
