@@ -308,8 +308,7 @@ function EditProfile(props) {
                                         <select
                                             className="form-control form-control-lg"
                                             id="district"
-                                            value={user.input.district}
-                                            onChange={handleDistrictChange}
+                                            onClick={handleDistrictChange}
                                             ref={districtRef}
                                         >
                                             <option value="">Chọn Quận/Huyện</option>
@@ -327,8 +326,7 @@ function EditProfile(props) {
                                         <select
                                             className="form-control form-control-lg"
                                             id="ward"
-                                            value={ward}
-                                            onChange={(e) => setWard(e.target.value)}
+                                            onClick={(e) => setWard(e.target.value)}
                                             ref={wardRef}
                                         >
                                             <option value="">Chọn Phường/Xã</option>
