@@ -21,6 +21,9 @@ export default function Profile() {
             fullname: '',
             phone: '',
             address: '',
+            district: '',
+            ward: '',
+            detailAddress: ''
         },
     });
 
@@ -39,12 +42,15 @@ export default function Profile() {
         });
     }
 
-    async function editProfile(fullName, phone, address) {
+    async function editProfile(fullName, phone, address, district, ward, detailAddress) {
         try {
             await db.collection('ShopProfile').doc(userInfor.uid).set({
                 fullname: fullName,
                 phone: phone,
                 address: address,
+                district: district,
+                ward: ward,
+                detailAddress: detailAddress
             });
             changeToProfile();
         } catch {

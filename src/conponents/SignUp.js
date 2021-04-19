@@ -20,6 +20,11 @@ function Register(props) {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        if(license === false){
+            setAlert('red')
+            return setError('Bạn phải đồng ý với các điều khoản !')
+        }
+
         if (passWordRef.current.value !== passWordConfirmRef.current.value) {
             setAlert('red');
             return setError('Password is not match !');
