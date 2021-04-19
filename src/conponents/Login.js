@@ -95,7 +95,6 @@ function Login1(props) {
                                             Ghi nhớ đăng nhập
                                         </label>
                                     </div>
-                                    <p>counter: {counter++}</p>
                                     <Link to="forgotpw" id="login_forgot" className="text-muted text-hover-primary">
                                         Quên mật khẩu?
                                     </Link>
