@@ -308,7 +308,7 @@ function EditProfile(props) {
                                         <select
                                             className="form-control form-control-lg"
                                             id="district"
-                                            value={district}
+                                            value={user.input.district}
                                             onChange={handleDistrictChange}
                                             ref={districtRef}
                                         >
@@ -346,6 +346,7 @@ function EditProfile(props) {
                                         <input
                                             className="form-control form-control-lg"
                                             type="text"
+                                            defaultValue={user.input.detailAddress}
                                             maxLength={50}
                                             id="address"
                                             placeholder="Số nhà, tên đường"

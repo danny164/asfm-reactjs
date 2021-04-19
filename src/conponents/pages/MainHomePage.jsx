@@ -108,47 +108,45 @@ function MainHomePage(props) {
 
                     {datas ? (
                         Object.values(sortStatus).map((data, index) => (
-                            <>
-                                <article
-                                    className="card-body order"
-                                    key={index}
-                                    onClick={() => {
-                                        setShow(true);
-                                        setDataModal(data);
-                                    }}
-                                >
-                                    <div className="d-flex align-items-start">
-                                        <span className="bullet bullet-bar bg-orange align-self-stretch" />
-                                        <div className="d-flex flex-column flex-grow-1 ml-4">
-                                            <header className="card-title content">
-                                                <span>#{data.id_post}</span>
-                                                <span className="flex-shrink-0">
-                                                    {dateToFromNowDaily(data.thoi_gian)}
-                                                    {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
+                            <article
+                                className="card-body order"
+                                key={index}
+                                onClick={() => {
+                                    setShow(true);
+                                    setDataModal(data);
+                                }}
+                            >
+                                <div className="d-flex align-items-start">
+                                    <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                    <div className="d-flex flex-column flex-grow-1 ml-4">
+                                        <header className="card-title content">
+                                            <span>#{data.id_post}</span>
+                                            <span className="flex-shrink-0">
+                                                {dateToFromNowDaily(data.thoi_gian)}
+                                                {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
+                                            </span>
+                                        </header>
+                                        <section className="card-info content">
+                                            <p>
+                                                <span className="font-weight-bold">{data.phi_giao} - Tiền mặt</span>
+                                                <br />
+                                                <span>
+                                                    {data.ten_nguoi_nhan} - {data.sdt_nguoi_nhan}
                                                 </span>
-                                            </header>
-                                            <section className="card-info content">
-                                                <p>
-                                                    <span className="font-weight-bold">{data.phi_giao} - Tiền mặt</span>
-                                                    <br />
-                                                    <span>
-                                                        {data.ten_nguoi_nhan} - {data.sdt_nguoi_nhan}
-                                                    </span>
-                                                </p>
-                                                <span className="delivery">Giao hàng tới</span>
-                                                <div className="d-flex align-items-center justify-content-between">
-                                                    <address className="mb-0 pl-0">{data.noi_giao}</address>
-                                                    {data.status === '0' && <InProcessing />}
-                                                    {data.status === '1' && <Picked />}
-                                                    {data.status === '2' && <Completed />}
-                                                    {data.status === '3' && <Cancelled />}
-                                                </div>
-                                            </section>
-                                        </div>
+                                            </p>
+                                            <span className="delivery">Giao hàng tới</span>
+                                            <div className="d-flex align-items-center justify-content-between">
+                                                <address className="mb-0 pl-0">{data.noi_giao}</address>
+                                                {data.status === '0' && <InProcessing />}
+                                                {data.status === '1' && <Picked />}
+                                                {data.status === '2' && <Completed />}
+                                                {data.status === '3' && <Cancelled />}
+                                            </div>
+                                        </section>
                                     </div>
-                                    <div className="separator separator-dashed my-5" />
-                                </article>
-                            </>
+                                </div>
+                                <div className="separator separator-dashed my-5" />
+                            </article>
                         ))
                     ) : (
                         <h3>không có đơn nào</h3>
