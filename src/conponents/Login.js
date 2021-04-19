@@ -5,7 +5,7 @@ import '../assets/css/portal.css';
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 
-
+var counter = 0;
 function Login1(props) {
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -21,9 +21,8 @@ function Login1(props) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            setError('');
             setLoading(true);
-      await signin(emailRef.current.value, passwordRef.current.value);
+            await signin(emailRef.current.value, passwordRef.current.value);
             history.push('/home');
         } catch {
             setError('Username or password is incorrect !');
@@ -76,7 +75,7 @@ function Login1(props) {
                                             Ghi nhớ đăng nhập
                                         </label>
                                     </div>
-
+                                <p>counter: {counter++}</p>
                                     <Link to="forgotpw" id="login_forgot" className="text-muted text-hover-primary">
                                         Quên mật khẩu?
                                     </Link>
