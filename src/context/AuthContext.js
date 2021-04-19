@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { auth } from "../firebase";
+import React, { useContext, useEffect, useState } from 'react';
+import { auth } from '../firebase';
 
 const AuthContext = React.createContext();
 
@@ -27,8 +27,8 @@ export default function AuthProvider({ children }) {
         return auth.sendPasswordResetEmail(email);
     }
 
-    function updatePassword(newPassword){
-        return currentUser.updatePassword(newPassword)
+    function updatePassword(newPassword) {
+        return currentUser.updatePassword(newPassword);
     }
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function AuthProvider({ children }) {
             setCurrentUser(user);
             setLoading(false);
         });
-        return unsubscribe 
+        return () => unsubscribe();
     }, []);
 
     const value = {
@@ -45,7 +45,7 @@ export default function AuthProvider({ children }) {
         signin,
         logout,
         resetPassword,
-        updatePassword
+        updatePassword,
     };
 
     return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
