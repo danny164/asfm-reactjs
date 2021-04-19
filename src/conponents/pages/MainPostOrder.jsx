@@ -161,10 +161,6 @@ function MainPostOrder(props) {
             phi_giao: shipFeeRef.current.value,
             phi_ung: depositFeeRef.current.value,
             id_roomchat: idChat,
-            city: "",
-            district: "",
-            ward: "",
-            detailAddress: ''
         };
 
         if (postOrder) {

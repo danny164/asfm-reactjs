@@ -129,7 +129,8 @@ function EditProfile(props) {
             edit(
                 fullNameRef.current.value,
                 phoneRef.current.value,
-                addressRef.current.value + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng'
+                addressRef.current.value + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
+                
             );
         }
     }
