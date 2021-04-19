@@ -8,8 +8,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-let counter = 0;
-
 function Login1(props) {
     const schema = yup.object().shape({
         email: yup.string().email('Email không hợp lệ').required('Bạn chưa nhập địa chỉ email'),
@@ -43,7 +41,7 @@ function Login1(props) {
             await signin(emailRef.current.value, passwordRef.current.value);
             history.push('/home');
         } catch {
-            setError('Email và mật khẩu không khớp');
+            setError('Đăng nhập không thành công!');
         }
 
         setLoading(false);
@@ -64,8 +62,6 @@ function Login1(props) {
                                 <div className="text-muted font-weight-bold">Amateur Shipper for Merchants</div>
                             </div>
                             {error && <Alert className="text-chartjs p-0">{error}</Alert>}
-                            <p className="text-chartjs">{errors.email?.message}</p>
-                            <p className="text-chartjs">{errors.password?.message}</p>
                             <form className="form" id="login_signin_form" onSubmit={handleSubmit(onSubmit)}>
                                 <div className="form-group mb-5">
                                     <input
@@ -77,6 +73,7 @@ function Login1(props) {
                                         ref={emailRef}
                                     />
                                 </div>
+                                <p className="text-chartjs">{errors.email?.message}</p>
 
                                 <div className="form-group mb-5">
                                     <input
@@ -87,6 +84,8 @@ function Login1(props) {
                                         ref={passwordRef}
                                     />
                                 </div>
+                                <p className="text-chartjs">{errors.password?.message}</p>
+
                                 <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
                                     <div className="checkbox-inline">
                                         <label className="checkbox m-0 text-muted">
@@ -99,9 +98,6 @@ function Login1(props) {
                                         Quên mật khẩu?
                                     </Link>
                                 </div>
-                                <p>
-                                    render: <span>{counter++}</span>
-                                </p>
                                 <button
                                     disabled={loading}
                                     type="submit"
