@@ -53,6 +53,10 @@ function PostOrder(props) {
                 ten_nguoi_gui: userInfor.fullname,
                 phi_giao: dataPostOrder.phi_giao,
                 phi_ung: dataPostOrder.phi_ung,
+                city: "",
+                district: "",
+                ward: "",
+                detailAddress: ''
             });
             
             //tạo bảng transaction

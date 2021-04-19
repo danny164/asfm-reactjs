@@ -5,12 +5,14 @@ import '../assets/css/portal.css';
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 
+
 function Login1(props) {
     const emailRef = useRef();
     const passwordRef = useRef();
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+ 
 
     const history = useHistory();
 
@@ -21,7 +23,7 @@ function Login1(props) {
         try {
             setError('');
             setLoading(true);
-            await signin(emailRef.current.value, passwordRef.current.value);
+      await signin(emailRef.current.value, passwordRef.current.value);
             history.push('/home');
         } catch {
             setError('Username or password is incorrect !');
@@ -46,6 +48,7 @@ function Login1(props) {
                             </div>
                             {error && <Alert style={{ color: 'red' }}>{error}</Alert>}
                             <form className="form" id="login_signin_form" onSubmit={handleSubmit}>
+                               
                                 <div className="form-group mb-5">
                                     <input
                                         className="form-control h-auto form-control-solid py-4 px-8"
@@ -77,6 +80,7 @@ function Login1(props) {
                                     <Link to="forgotpw" id="login_forgot" className="text-muted text-hover-primary">
                                         Quên mật khẩu?
                                     </Link>
+                                  
                                 </div>
                                 <button
                                     disabled={loading}
