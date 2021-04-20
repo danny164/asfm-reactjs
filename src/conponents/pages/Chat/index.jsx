@@ -14,7 +14,7 @@ function ChatModal(props) {
     };
 
     return (
-        <Modal size="lg" show={showChat} onHide={handleCloseChat}>
+        <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
             <Modal.Header>
                 <Modal.Title>Chat với ?</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>

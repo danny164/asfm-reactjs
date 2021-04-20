@@ -56,12 +56,15 @@
     margin-bottom: 20px;
 }
 
-.chat-item:first-child {
-    margin-top: 20px;
-}
-
 .chat-content {
     display: grid;
+
+    img {
+        border-radius: 100%;
+        height: 40px;
+        width: 40px;
+        grid-row: span 2;
+    }
 }
 
 .chat-input {
@@ -118,15 +121,6 @@
     }
 }
 
-.chat-content {
-    img {
-        border-radius: 100%;
-        height: 40px;
-        width: 40px;
-        grid-row: span 2;
-    }
-}
-
 .message-text {
     padding: 9px;
     font-size: 1rem;
@@ -152,6 +146,16 @@
         color: #fff;
         border-radius: 18px 0 18px 18px;
     }
+}
+
+.modal-backdrop {
+    &__chat {
+        z-index: 1051 !important;
+    }
+}
+
+.modal-chat {
+    z-index: 1051 !important;
 }
 
 ::-webkit-scrollbar {
