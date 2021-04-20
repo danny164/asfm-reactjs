@@ -9,8 +9,10 @@ import ForgotPw from './ForgotPw';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
 import Register from './SignUp';
+import CheckRoute from './CheckRoute'
 
 function Application() {
+    
     return (
         <Router>
             <AuthProvider>
@@ -18,10 +20,10 @@ function Application() {
                     <PrivateRoute exact path="/home" component={HomePage} />
                     <PrivateRoute exact path="/profile" component={Profile} />
                     <PrivateRoute exact path="/changepw" component={ChangePw} />
-                    <Route exact path="/register" component={Register} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/forgotpw" component={ForgotPw} />
-                    <Route exact path="/post-order" component={PostOrder} />
+                    <CheckRoute exact path="/register" component={Register} />
+                    <CheckRoute exact path="/login" component={Login} />
+                    <CheckRoute exact path="/forgotpw" component={ForgotPw} />
+                    <PrivateRoute exact path="/post-order" component={PostOrder} />
                 </Switch>
             </AuthProvider>
             <Switch>

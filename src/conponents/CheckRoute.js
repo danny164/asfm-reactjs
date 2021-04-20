@@ -3,7 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import PropTypes from 'prop-types';
  
-function PrivateRoute({ component: Component, ...rest }) {
+function CheckRoute({ component: Component, ...rest }) {
    
     const { currentUser } = useAuth();
 
@@ -11,10 +11,10 @@ function PrivateRoute({ component: Component, ...rest }) {
       <Route
         {...rest}
         render={props => {
-           return currentUser ? <Component {...props} /> : <Redirect to="/login?message=loginRequired" />
+           return currentUser ? <Redirect to="/home" />: <Component {...props} />
         }}
       ></Route>
     );
 }
 
-export default PrivateRoute;
+export default CheckRoute;
