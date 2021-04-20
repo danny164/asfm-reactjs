@@ -9,6 +9,7 @@ import Cancelled from '../labels/Cancelled';
 import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
+import ChatModal from './Chat';
 
 MainHomePage.propTypes = {
     datas: PropTypes.object,
@@ -72,6 +73,15 @@ function MainHomePage(props) {
             setShow(false);
         }
     }
+
+    const [showChat, setShowChat] = useState(false);
+
+    const handleClickChat = () => {
+        setShowChat(true);
+    };
+    const handleCloseChat = () => {
+        setShowChat(false);
+    };
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -170,6 +180,9 @@ function MainHomePage(props) {
                                     <section className="card-info content">
                                         <div className="mb-5">
                                             <p>
+                                                Tên khách hàng:<span className="font-weight-bold ml-2">{dataModal.ten_nguoi_nhan}</span>
+                                            </p>
+                                            <p>
                                                 Số điện thoại:<span className="font-weight-bold ml-2">{dataModal.sdt_nguoi_nhan}</span>
                                             </p>
                                             <p>
@@ -215,7 +228,7 @@ function MainHomePage(props) {
                                     <div className="mr-5">Nguyễn Văn Quỳnh</div>
                                     <span>0344 063 164</span>
                                 </div>
-                                <span className="cursor-pointer">
+                                <span className="cursor-pointer" onClick={handleClickChat}>
                                     <i className="fad fa-comments fa-2x"></i>
                                 </span>
                             </div>
@@ -237,6 +250,8 @@ function MainHomePage(props) {
                             </Button>
                         </Modal.Footer>
                     </Modal>
+
+                    <ChatModal showChat={showChat} onHandleCloseChat={handleCloseChat} />
                 </div>
             </section>
             <Footer />
