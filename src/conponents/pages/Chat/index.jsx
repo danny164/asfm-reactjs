@@ -64,9 +64,6 @@ function ChatModal(props) {
                                 <span className="btn-icon">
                                     <i className="fad fa-image"></i>
                                 </span>
-                                <span className="btn-icon ml-2">
-                                    <i className="fad fa-paperclip"></i>
-                                </span>
                             </div>
                         </div>
                     </form>

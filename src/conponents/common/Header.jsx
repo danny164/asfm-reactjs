@@ -29,7 +29,7 @@ function Header(props) {
                             <ul className="menu-nav">
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('all')}>
-                                        <span className="menu menu-recent active">Đơn gần đây</span>
+                                        <span className="menu menu-recent">Đơn gần đây</span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
