@@ -1,10 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import "./styles.scss";
-import Avatar from "../../../assets/media/avatar.png";
-import { useState } from "react";
+import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Avatar from '../../../assets/media/avatar.png';
+import './styles.scss';
 
 ChatModal.propTypes = {
     showChat: PropTypes.bool,
@@ -21,29 +20,21 @@ ChatModal.defaultProps = {
     onHandleCloseChat: null,
     submitMessage: null,
     chats: [],
-    shipperName: "",
-    shopName: "",
-    idShop: "",
+    shipperName: '',
+    shopName: '',
+    idShop: '',
 };
 
 function ChatModal(props) {
-    const {
-        showChat,
-        onHandleCloseChat,
-        chats,
-        submitMessage,
-        shopInfo,
-        shipperName,
-        idShop,
-    } = props;
+    const { showChat, onHandleCloseChat, chats, submitMessage, shopInfo, shipperName, idShop } = props;
 
     const [newchat, setNewchat] = useState({
-        id: "",
-        imgmessage: "",
-        message: "",
-        timemessage: "",
-        isseen: "0",
-        name: "",
+        id: '',
+        imgmessage: '',
+        message: '',
+        timemessage: '',
+        isseen: '0',
+        name: '',
     });
 
     console.log(chats);
@@ -65,29 +56,37 @@ function ChatModal(props) {
         }
         setNewchat({
             ...newchat,
-            message: "",
-            timemessage: "",
-            isseen: "0",
-            imgmessage: "",
-            name: "",
+            message: '',
+            timemessage: '',
+            isseen: '0',
+            imgmessage: '',
+            name: '',
         });
     };
 
+    ///////////////////////////////////////////////
+    // ! Check ID
     const checkingID = (id) => {
-        console.log("id chat: " + id);
-        console.log("shop id: " + idShop);
-        if (id === idShop) return "chat-item you-message";
-        return "chat-item other-message";
+        console.log('id chat: ' + id);
+        console.log('shop id: ' + idShop);
+        if (id === idShop) return 'chat-item you-message';
+        return 'chat-item other-message';
     };
 
+    ///////////////////////////////////////////////
+    // ! Scroll to bottom and point to user view
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [chats]);
+
     return (
-        <Modal
-            size="lg"
-            show={showChat}
-            onHide={handleCloseChat}
-            backdropClassName="modal-backdrop__chat"
-            className="modal-chat"
-        >
+        <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
             <Modal.Header>
                 <Modal.Title>Chat với {shipperName}</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>
@@ -102,30 +101,20 @@ function ChatModal(props) {
                         </div>
 
                         <span className="shipper-name">{shipperName}</span>
-                        <span className="note">
-                            Hãy trò chuyện với shipper để trao đổi thêm nhé
-                        </span>
+                        <span className="note">Hãy trò chuyện với shipper để trao đổi thêm nhé</span>
                     </div>
                     <div className="chat-body">
                         {chats &&
                             chats.map((item, idx) => (
                                 <div key={idx} className={checkingID(item.id)}>
                                     <div className="chat-content">
-                                        {item.id !== idShop &&
-                                            <img
-                                                src={Avatar}
-                                                alt="The Night Owl"
-                                            />
-                                        }
-                                        <div className="message-text">
-                                            {item.message}
-                                        </div>
-                                        <div className="message-time">
-                                            {item.timemessage}
-                                        </div>
+                                        {item.id !== idShop && <img src={Avatar} alt="The Night Owl" />}
+                                        <div className="message-text">{item.message}</div>
+                                        <div className="message-time">{item.timemessage}</div>
                                     </div>
                                 </div>
                             ))}
+                        <div ref={messagesEndRef} />
                     </div>
                 </section>
             </Modal.Body>
@@ -151,10 +140,7 @@ function ChatModal(props) {
                         </div>
                     </form>
                     <div className="chat-icon-action">
-                        <i
-                            className="fad fa-paper-plane"
-                            onClick={handleSubmitMessage}
-                        ></i>
+                        <i className="fad fa-paper-plane" onClick={handleSubmitMessage}></i>
                     </div>
                 </div>
             </Modal.Footer>
