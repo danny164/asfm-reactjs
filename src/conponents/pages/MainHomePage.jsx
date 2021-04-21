@@ -25,9 +25,10 @@ MainHomePage.defaultProps = {
     datas: null,
     ChangeOrderStatus: null,
     DeleteOrder: null,
-    idShop: ''
+    idShop: "",
 };
-
+var renderStatus = [];
+var sortStatus = [];
 function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
 
@@ -63,14 +64,15 @@ function MainHomePage(props) {
         status === "3" && setTitleStatus("bị hủy");
     };
 
-    //  if (datas) {
-    const renderStatus = Object.values(datas).filter(
-        (data) => filteredStatus === "all" || filteredStatus === data.status
-    );
+    if (datas) {
+        renderStatus = Object.values(datas).filter(
+            (data) => filteredStatus === "all" || filteredStatus === data.status
+        );
 
-    const sortStatus = renderStatus.sort((a, b) =>
-        a.thoi_gian < b.thoi_gian ? 1 : -1
-    );
+        sortStatus = renderStatus.sort((a, b) =>
+            a.thoi_gian < b.thoi_gian ? 1 : -1
+        );
+    }
     //  }
 
     // const test = Object.values(newStatus).map((data) => {
@@ -100,7 +102,7 @@ function MainHomePage(props) {
                 .ref("Transaction/" + idPost)
                 .on("value", (snapshot) => {
                     setTransactionInfor(snapshot.val());
-                    console.log(snapshot.val())
+                    console.log(snapshot.val());
                 });
         } catch (error) {
             console.log(error);
