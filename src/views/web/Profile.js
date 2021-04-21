@@ -88,7 +88,7 @@ export default function Profile() {
             }
         }
         fetchUserInfor();
-    }, []);
+    }, [isShowEdit, isShowProfile]);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
