@@ -21,12 +21,12 @@ function AsideLeft(props) {
                     </li>
                     <li className="nav-item mb-2">
                         <Link to="#" className="nav-link btn btn-icon btn-lg btn-borderless">
-                            <i className="fad fa-comments-alt" />
+                            <i className="fad fa-chart-pie" />
                         </Link>
                     </li>
                     <li className="nav-item mb-2">
                         <Link to="#" className="nav-link btn btn-icon btn-lg btn-borderless">
-                            <i className="fad fa-chart-pie" />
+                            <i className="fad fa-rocket-launch"></i>
                         </Link>
                     </li>
                 </ul>
