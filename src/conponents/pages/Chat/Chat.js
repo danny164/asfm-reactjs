@@ -11,7 +11,7 @@ Chat.propTypes = {
     shopInfo: PropTypes.object,
     shipperName: PropTypes.string,
     idRoom: PropTypes.string,
-    idShop: PropTypes.string
+    idShop: PropTypes.string,
 };
 
 Chat.defaultProps = {
@@ -20,21 +20,21 @@ Chat.defaultProps = {
     shopInfo: null,
     shipperName: '',
     idRoom: '',
-    idShop: ''
-}
+    idShop: '',
+};
 
 function Chat(props) {
-    const { shopInfo, showChat, onHandleCloseChat, shipperName, idRoom, idShop } = props
+    const { shopInfo, showChat, onHandleCloseChat, shipperName, idRoom, idShop } = props;
     const [chats, setChats] = useState([]);
-    const [newchat, setNewchat] = useState({ id: shopInfo.id, imgmessage: '', message: '', timemessage: "", isseen: "", name: '' });
+    const [newchat, setNewchat] = useState({ id: shopInfo.id, imgmessage: '', message: '', timemessage: '', isseen: '', name: '' });
 
-    
     useEffect(() => {
         const fetchData = async () => {
-                realtime.ref('Chatroom/' +  idRoom).on('value', resp => {
-                setChats([]);
-                setChats(snapshotToArray(resp));
-                console.log(chats)
+            idRoom &&
+                realtime.ref('Chatroom/' + idRoom).on('value', (resp) => {
+                    setChats([]);
+                    setChats(snapshotToArray(resp));
+                    console.log(chats);
                 });
         };
         fetchData();
@@ -48,7 +48,7 @@ function Chat(props) {
             returnArr.push(item);
         });
         return returnArr;
-    }
+    };
 
     const submitMessage = (newestChat) => {
         // setNewchat(newestChat)
@@ -58,12 +58,14 @@ function Chat(props) {
         chat.timemessage = Moment(new Date()).format('HH:mm');
         const newMessage = realtime.ref('Chatroom/' + idRoom).push();
         newMessage.set(chat);
-        setNewchat({ ...newchat, message: '',name: '', timemessage: "", isseen: "" , imgmessage: '' });
+        setNewchat({ ...newchat, message: '', name: '', timemessage: '', isseen: '', imgmessage: '' });
     };
 
     return (
         <div>
-            <ChatModal showChat={showChat} onHandleCloseChat={onHandleCloseChat}
+            <ChatModal
+                showChat={showChat}
+                onHandleCloseChat={onHandleCloseChat}
                 submitMessage={submitMessage}
                 chats={chats}
                 shipperName={shipperName}

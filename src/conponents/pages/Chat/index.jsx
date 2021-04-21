@@ -78,12 +78,12 @@ function ChatModal(props) {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        messagesEndRef.current?.scrollIntoView();
     };
 
     useEffect(() => {
         scrollToBottom();
-    }, [chats]);
+    }, [chats, showChat]);
 
     return (
         <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
