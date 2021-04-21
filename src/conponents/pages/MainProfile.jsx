@@ -18,6 +18,7 @@ MainProfile.defaultProps = {
 function MainProfile(props) {
     const { user, onChange} = props;
 
+  
     // Dữ liệu các quận trong thành phố Đà Nẵng
 
     // *** This is for test data
@@ -83,7 +84,7 @@ function MainProfile(props) {
                                     </button>
                                 </div>
                             </header>
-                            <h3 style={{ align: 'center' }}>{user.error && <Alert style={{ color: user.alert }}>{user.error}</Alert>}</h3>
+                            <h3 style={{ align: 'center' }}>{user.error  && alert(user.error)}</h3>
                             <div className="card-body">
                                 {/* avatar */}
                                 <div className="form-group row">

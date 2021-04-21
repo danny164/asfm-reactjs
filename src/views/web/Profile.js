@@ -7,26 +7,16 @@ import MainProfile from '../../conponents/pages/MainProfile';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
 
-var input = {
-    fullname: '',
-    phone: '',
-    address: '',
-    district: '',
-    ward: '',
-    detailAddress: ''
-}
 
 export default function Profile() {
     const { currentUser } = useAuth();
     const [isShowProfile, setIsShowProfile] = useState(true);
     const [isShowEdit, setIsShowEdit] = useState(false);
 
-   
     const [userInfor, setUserInfor] = useState({
         email: currentUser.email,
         uid: currentUser.uid,
         error: '',
-        alert: '',
         input: {
             fullname: '',
             phone: '',
@@ -49,7 +39,6 @@ export default function Profile() {
         setUserInfor({
             ...userInfor,
             error: 'edit success !',
-            alert:  'green'
         })
     }
 
@@ -88,7 +77,7 @@ export default function Profile() {
             }
         }
         fetchUserInfor();
-    }, [isShowEdit, isShowProfile]);
+    }, [isShowProfile]);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
