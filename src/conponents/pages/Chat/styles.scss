@@ -1,3 +1,9 @@
+body.modal-open {
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+}
+
 .chat {
     padding: 0 !important;
 }
