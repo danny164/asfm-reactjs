@@ -37,7 +37,8 @@ function HomePage() {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            setInput(doc.data());
+                            setInput(
+                                doc.data());
                         } else {
                             console.log('No such document!');
                         }
@@ -73,11 +74,12 @@ function HomePage() {
             console.log(e);
         }
     }
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} />
+                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid}/>
                 <AsideRight name={input.fullname} />
             </div>
         </div>

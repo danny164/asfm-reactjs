@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import HeaderMobile from './HeaderMobile';
 import PropTypes from 'prop-types';
 
@@ -13,10 +13,14 @@ Header.defaultProps = {
 
 function Header(props) {
     const { onClickFilterStatus } = props;
-    
+    const history = useHistory();
+
     const handleFilterStatus = (status) => {
         if (!onClickFilterStatus) return;
-        onClickFilterStatus(status);
+        else{
+         
+            onClickFilterStatus(status);
+        }
     };
 
     return (
@@ -33,7 +37,7 @@ function Header(props) {
                                     </Link>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('0')}>
+                                    <Link to="/home"  className="menu-link" onClick={() => handleFilterStatus('0')}>
                                         <span className="menu menu-in-progress">Đang xử lý</span>
                                     </Link>
                                 </li>

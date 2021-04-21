@@ -6,16 +6,19 @@ import AsideLeft from "../../conponents/pages/AsideLeft";
 import { useAuth } from "../../context/AuthContext";
 import { db, realtime } from "../../firebase";
 
+
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
 
     const [userInfor, setUserInfor] = useState({
-        fullname: "",
-        phone: "",
-        address: "",
-    });
-    
+        fullname: '',
+        phone: '',
+        address: '',
+        district: '',
+        ward: '',
+        detailAddress: ''
+    })
     //post order function
     async function PostOrder(dataPostOrder) {
         try {
@@ -79,9 +82,8 @@ function PostOrder(props) {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            setUserInfor(
-                                doc.data()
-                                );
+                            setUserInfor(doc.data());
+                            console.log(userInfor)
                         } else {
                             console.log("No such document!");
                         }
@@ -92,6 +94,7 @@ function PostOrder(props) {
         }
         fetchUserInfor();
     }, []);
+
 
     return (
         <div className="header-fixed sidebar-enabled bg">
