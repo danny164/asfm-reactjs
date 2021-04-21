@@ -85,7 +85,7 @@ function Login1(props) {
                                         className={checkingEmail}
                                         type="text"
                                         placeholder="Email"
-                                        value={localStorage.getItem('username')}
+                                        defaultValue={localStorage.getItem('username')}
                                         {...register('email')}
                                         autoComplete="off"
                                         ref={emailRef}
@@ -98,7 +98,7 @@ function Login1(props) {
                                         className={checkingPw}
                                         type="password"
                                         placeholder="Mật khẩu"
-                                        value={localStorage.getItem('password')}
+                                        defaultValue={localStorage.getItem('password')}
                                         {...register('password')}
                                         ref={passwordRef}
                                     />
