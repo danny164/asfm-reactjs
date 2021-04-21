@@ -11,12 +11,12 @@ MainProfile.propTypes = {
 };
 
 MainProfile.defaultProps = {
-    user: '',
+    user: null,
     onChange: null,
 };
 
 function MainProfile(props) {
-    const { user, onChange } = props;
+    const { user, onChange} = props;
 
     // Dữ liệu các quận trong thành phố Đà Nẵng
 

@@ -1,22 +1,95 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import './styles.scss';
-import Avatar from '../../../assets/media/avatar.png';
+import React from "react";
+import PropTypes from "prop-types";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import "./styles.scss";
+import Avatar from "../../../assets/media/avatar.png";
+import { useState } from "react";
+
+ChatModal.propTypes = {
+    showChat: PropTypes.bool,
+    onHandleCloseChat: PropTypes.func,
+    submitMessage: PropTypes.func,
+    chats: PropTypes.array,
+    shipperName: PropTypes.string,
+    shopName: PropTypes.string,
+    idShop: PropTypes.string,
+};
+
+ChatModal.defaultProps = {
+    showChat: false,
+    onHandleCloseChat: null,
+    submitMessage: null,
+    chats: [],
+    shipperName: "",
+    shopName: "",
+    idShop: "",
+};
 
 function ChatModal(props) {
-    const { showChat, onHandleCloseChat } = props;
+    const {
+        showChat,
+        onHandleCloseChat,
+        chats,
+        submitMessage,
+        shopInfo,
+        shipperName,
+        idShop,
+    } = props;
+
+    const [newchat, setNewchat] = useState({
+        id: "",
+        imgmessage: "",
+        message: "",
+        timemessage: "",
+        isseen: "0",
+        name: "",
+    });
+
+    console.log(chats);
 
     const handleCloseChat = () => {
         if (!onHandleCloseChat) return;
         onHandleCloseChat(false);
     };
 
+    const onChange = (e) => {
+        e.persist();
+        setNewchat({ ...newchat, message: e.target.value });
+    };
+
+    const handleSubmitMessage = (e) => {
+        e.preventDefault();
+        if (submitMessage) {
+            submitMessage(newchat);
+        }
+        setNewchat({
+            ...newchat,
+            message: "",
+            timemessage: "",
+            isseen: "0",
+            imgmessage: "",
+            name: "",
+        });
+    };
+
+    const checkingID = (id) => {
+        console.log("id chat: " + id);
+        console.log("shop id: " + idShop);
+        if (id === idShop) return "chat-item you-message";
+        return "chat-item other-message";
+    };
+
     return (
-        <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
+        <Modal
+            size="lg"
+            show={showChat}
+            onHide={handleCloseChat}
+            backdropClassName="modal-backdrop__chat"
+            className="modal-chat"
+        >
             <Modal.Header>
-                <Modal.Title>Chat với ?</Modal.Title>
+                <Modal.Title>Chat với {shipperName}</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>
                     Đóng
                 </Button>
@@ -28,37 +101,47 @@ function ChatModal(props) {
                             <img src={Avatar} alt="Avatar Shipper" />
                         </div>
 
-                        <span className="shipper-name">Nguyễn Văn Quỳnh</span>
-                        <span className="note">Hãy trò chuyện với shipper để trao đổi thêm nhé</span>
+                        <span className="shipper-name">{shipperName}</span>
+                        <span className="note">
+                            Hãy trò chuyện với shipper để trao đổi thêm nhé
+                        </span>
                     </div>
                     <div className="chat-body">
-                        <div className="chat-item other-message">
-                            <div className="chat-content">
-                                <img src={Avatar} alt="The Night Owl" />
-                                <div className="message-text">Tao nghĩ dòng này đủ dài để hiển thị nội dung tín mập địt đéo thể tả đc</div>
-                                <div className="message-time">12 Aug</div>
-                            </div>
-                        </div>
-                        <div className="chat-item you-message">
-                            <div className="chat-content">
-                                <div className="message-text">Ok then</div>
-                                <div className="message-time">
-                                    12 Aug
-                                    <span className="ml-2">
-                                        <i className="fad fa-check-circle fa-sm pallette-primary"></i>
-                                    </span>
+                        {chats &&
+                            chats.map((item, idx) => (
+                                <div key={idx} className={checkingID(item.id)}>
+                                    <div className="chat-content">
+                                        {item.id !== idShop &&
+                                            <img
+                                                src={Avatar}
+                                                alt="The Night Owl"
+                                            />
+                                        }
+                                        <div className="message-text">
+                                            {item.message}
+                                        </div>
+                                        <div className="message-time">
+                                            {item.timemessage}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            ))}
                     </div>
                 </section>
             </Modal.Body>
 
             <Modal.Footer className="d-flex justify-content-start">
                 <div className="chat-input">
-                    <form className="chat-form">
+                    <form className="chat-form" onSubmit={handleSubmitMessage}>
                         <div className="form-group mb-1">
-                            <textarea className="form-control" id="chat-text-area" cols="100" rows="2"></textarea>
+                            <input
+                                className="form-control"
+                                id="chat-text-area"
+                                cols="100"
+                                rows="2"
+                                value={newchat.message}
+                                onChange={onChange}
+                            ></input>
 
                             <div className="chat-icon-group">
                                 <span className="btn-icon">
@@ -68,22 +151,15 @@ function ChatModal(props) {
                         </div>
                     </form>
                     <div className="chat-icon-action">
-                        <i className="fad fa-paper-plane"></i>
+                        <i
+                            className="fad fa-paper-plane"
+                            onClick={handleSubmitMessage}
+                        ></i>
                     </div>
                 </div>
             </Modal.Footer>
         </Modal>
     );
 }
-
-ChatModal.propTypes = {
-    showChat: PropTypes.bool,
-    onHandleCloseChat: PropTypes.func,
-};
-
-ChatModal.defaultProps = {
-    showChat: false,
-    onHandleCloseChat: null,
-};
 
 export default ChatModal;

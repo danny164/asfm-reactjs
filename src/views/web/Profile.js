@@ -7,11 +7,21 @@ import MainProfile from '../../conponents/pages/MainProfile';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
 
+var input = {
+    fullname: '',
+    phone: '',
+    address: '',
+    district: '',
+    ward: '',
+    detailAddress: ''
+}
+
 export default function Profile() {
     const { currentUser } = useAuth();
     const [isShowProfile, setIsShowProfile] = useState(true);
     const [isShowEdit, setIsShowEdit] = useState(false);
 
+   
     const [userInfor, setUserInfor] = useState({
         email: currentUser.email,
         uid: currentUser.uid,
@@ -25,7 +35,8 @@ export default function Profile() {
             ward: '',
             detailAddress: ''
         },
-    });
+    })
+
 
     function changeToEdit() {
         setIsShowEdit(true);
@@ -38,8 +49,8 @@ export default function Profile() {
         setUserInfor({
             ...userInfor,
             error: 'edit success !',
-            alert: 'green',
-        });
+            alert:  'green'
+        })
     }
 
     async function editProfile(fullName, phone, address, district, ward, detailAddress) {
@@ -65,17 +76,13 @@ export default function Profile() {
                     .collection('ShopProfile')
                     .doc(userInfor.uid)
                     .get()
-                    .then((doc) => {
-                        if (doc.exists) {
-                            setUserInfor({
-                                ...userInfor,
-                                input: doc.data(),
-                            });
-                            console.log(setUserInfor.input);
-                        } else {
-                            console.log('No such document!');
-                        }
-                    });
+                    .then((doc) => {              
+                        setUserInfor({
+                            ...userInfor,
+                            input: doc.data()
+                        }) 
+                        console.log(userInfor)
+                    });   
             } catch (error) {
                 console.log(error);
             }
@@ -88,7 +95,7 @@ export default function Profile() {
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
                 {isShowProfile && <MainProfile onChange={changeToEdit} user={userInfor} />}
-                {isShowEdit && <EditProfile user={userInfor} edit={editProfile} />}
+                {isShowEdit && <EditProfile user={userInfor}  edit={editProfile} />}
                 <AsideRight name={userInfor.input.fullname} />
             </div>
         </div>
