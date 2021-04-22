@@ -16,14 +16,14 @@ export default function Profile() {
     const [userInfor, setUserInfor] = useState({
         email: currentUser.email,
         uid: currentUser.uid,
-        error: '',
+        error: "",
         input: {
-            fullname: '',
-            phone: '',
-            address: '',
-            district: '',
-            ward: '',
-            detailAddress: ''
+            fullname: "",
+            phone: "",
+            address: "",
+            district: "",
+            ward: "",
+            detailAddress: "",
         },
     })
 
@@ -38,7 +38,7 @@ export default function Profile() {
         setIsShowProfile(true);
         setUserInfor({
             ...userInfor,
-            error: 'edit success !',
+            error: 'chỉnh sửa thông tin thành công !',
         })
     }
 
@@ -65,26 +65,31 @@ export default function Profile() {
                     .collection('ShopProfile')
                     .doc(userInfor.uid)
                     .get()
-                    .then((doc) => {              
-                        setUserInfor({
-                            ...userInfor,
-                            input: doc.data()
-                        }) 
-                        console.log(userInfor)
-                    });   
+                    .then((doc) => {
+                        if (doc.exists) {
+                            setUserInfor({
+                                ...userInfor,
+                                input: doc.data()
+                            })
+                            console.log(doc.data())
+                        }
+
+                    });
             } catch (error) {
+                setUserInfor({ ...userInfor })
                 console.log(error);
             }
         }
         fetchUserInfor();
     }, [isShowProfile]);
 
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
                 {isShowProfile && <MainProfile onChange={changeToEdit} user={userInfor} />}
-                {isShowEdit && <EditProfile user={userInfor}  edit={editProfile} />}
+                {isShowEdit && <EditProfile user={userInfor} edit={editProfile} />}
                 <AsideRight name={userInfor.input.fullname} />
             </div>
         </div>

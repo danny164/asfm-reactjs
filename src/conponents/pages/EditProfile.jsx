@@ -110,16 +110,20 @@ function EditProfile(props) {
         const items = [];
 
         for (const district in dataList) {
-            if (user.input.district === district) {
-                save = user.input.district;
-                console.log(save)
-                items.push(
-                    <option selected="selected" value={district}>
-                        {district}
-                    </option>
-                );
+            if (user.input.district) {
+                if (user.input.district === district) {
+                    save = user.input.district;
+                    console.log(save);
+                    items.push(
+                        <option selected="selected" value={district}>
+                            {district}
+                        </option>
+                    );
+                } else {
+                    items.push(<option value={district}>{district}</option>);
+                }
             } else {
-                items.push(<option value={district}>{district}</option>);
+            items.push(<option value={district}>{district}</option>);
             }
         }
         return items;
@@ -130,36 +134,53 @@ function EditProfile(props) {
     //////////////////////////////////////////////////////
     const wardList = () => {
         const items = [];
-        if (save === user.input.district) {
-            console.log(save);
-            Object.values(dataList[save]).map((data, index) => {
-                if (user.input.ward === data) {
-                    items.push(
-                        <option selected="selected" key={index} value={data}>
-                            {data}
-                        </option>
-                    );
-                } else {
-                    items.push(
-                        <option key={index} value={data}>
-                            {data}
-                        </option>
-                    );
-                }
-            });
-        } else {
-            if (!district) return;
-            else {
-                console.log("district " + district)
-                Object.values(dataList[district]).map((data, index) => {
-                    items.push(
-                        <option key={index} value={data}>
-                            {data}
-                        </option>
-                    );
+        if (user.input.district) {
+            if (save === user.input.district) {
+                console.log(save);
+                Object.values(dataList[save]).map((data, index) => {
+                    if (user.input.ward === data) {
+                        items.push(
+                            <option
+                                selected="selected"
+                                key={index}
+                                value={data}
+                            >
+                                {data}
+                            </option>
+                        );
+                    } else {
+                        items.push(
+                            <option key={index} value={data}>
+                                {data}
+                            </option>
+                        );
+                    }
                 });
+            } else {
+                if (!district) return;
+                else {
+                    console.log("district " + district);
+                    Object.values(dataList[district]).map((data, index) => {
+                        items.push(
+                            <option key={index} value={data}>
+                                {data}
+                            </option>
+                        );
+                    });
+                }
             }
-        }
+        } else {
+        if (!district) return;
+        else {
+            console.log("district " + district);
+            Object.values(dataList[district]).map((data, index) => {
+                items.push(
+                    <option key={index} value={data}>
+                        {data}
+                    </option>
+                );
+            });
+        }}
         return items;
     };
 
@@ -167,11 +188,11 @@ function EditProfile(props) {
     // ! Reset old selection
     //////////////////////////////////////////////////////
     const handleDistrictChange = (e) => {
-        user.input.district = " "
+        user.input.district = " ";
         if (e.target.value || e.target.value === "") {
             setDistrict(e.target.value);
             setWard("");
-            console.log("ward "+ ward)
+            console.log("ward " + ward);
         }
     };
 

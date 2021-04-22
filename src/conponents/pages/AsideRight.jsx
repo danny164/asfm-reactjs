@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import AbstractTwo from '../../assets/media/abstract-2.svg';
 import AbstractThree from '../../assets/media/abstract-3.svg';
 import Avatar from '../../assets/media/avatar.png';
+import { useAuth } from '../../context/AuthContext';
 import Signout from '../LogOut';
 
 AsideRight.propTypes = {
@@ -16,6 +17,7 @@ AsideRight.defaultProps = {
 
 function AsideRight(props) {
     const { name } = props;
+    const {currentUser} = useAuth()
 
     return (
         <aside className="sidebar d-flex flex-row-auto flex-column">
@@ -35,7 +37,8 @@ function AsideRight(props) {
                                 />
                                 <i className="symbol-badge symbol-badge-bottom bg-success" />
                             </div>
-                            <h4 className="font-weight-bold my-2">{name}</h4>
+
+                            <h4 className="font-weight-bold my-2">{name ? name : currentUser.email}</h4>
                             <div className="text-muted mb-2">Shop Owner</div>
                             <span className="label label-light-warning label-inline font-weight-bold label-lg">Hoạt động</span>
                             <div className="mt-10">
