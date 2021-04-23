@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {  useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../assets/css/portal.css';
-import { useAuth, UseAuth } from '../context/AuthContext';
+import { useAuth} from '../context/AuthContext';
 import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import StoreUser from './storeUser';
 
 function Login1(props) {
 
@@ -25,7 +24,7 @@ function Login1(props) {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { signin } = UseAuth();
+    const { signin } = useAuth();
 
     const {
         register,

@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { Alert } from "react-bootstrap";
 import Avatar from "../../assets/media/avatar.png";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
@@ -44,13 +43,13 @@ function MainProfile(props) {
                                         <Toast
                                             show={true}
                                             delay={6000000}
-                                            
+                                            autohide
                                         >
                                             <Toast.Header>
                                                 Thông báo
                                             </Toast.Header>
                                             <Toast.Body>
-                                                {user.error}sss
+                                                {user.error}
                                             </Toast.Body>
                                         </Toast>
                                     </Col>

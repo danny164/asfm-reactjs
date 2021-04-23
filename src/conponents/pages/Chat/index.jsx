@@ -37,8 +37,6 @@ function ChatModal(props) {
         name: '',
     });
 
-    console.log(chats);
-
     const handleCloseChat = () => {
         if (!onHandleCloseChat) return;
         onHandleCloseChat(false);

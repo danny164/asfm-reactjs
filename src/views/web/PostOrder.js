@@ -6,7 +6,7 @@ import AsideLeft from "../../conponents/pages/AsideLeft";
 import { useAuth } from "../../context/AuthContext";
 import { db, realtime } from "../../firebase";
 
-
+var address = ''
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
@@ -20,13 +20,19 @@ function PostOrder(props) {
         detailAddress: ''
     })
     //post order function
-    async function PostOrder(dataPostOrder) {
+    async function PostOrder(dataPostOrder, newAddress) {
+        if (newAddress.district !== '') {
+            address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
+        } else {
+            address = userInfor.address;
+        }
+
         try {
             //tao bảng newsfeed
             await realtime.ref("newsfeed/" + dataPostOrder.idPost).set({
                 id_post: dataPostOrder.idPost,
                 noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: userInfor.address,
+                noi_nhan: address,
                 ghi_chu: dataPostOrder.ghi_chu,
                 km: dataPostOrder.km,
                 thoi_gian: dataPostOrder.thoi_gian,
@@ -41,12 +47,12 @@ function PostOrder(props) {
             });
 
             //tạo bảng orderstatus
-            await realtime.ref("OrderStatus/"+  currentUser.uid + "/" + dataPostOrder.idPost).set({
+            await realtime.ref("OrderStatus/" + currentUser.uid + "/" + dataPostOrder.idPost).set({
                 id_post: dataPostOrder.idPost,
                 id_shop: currentUser.uid,
                 status: "0",
                 noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: userInfor.address,
+                noi_nhan: address,
                 ghi_chu: dataPostOrder.ghi_chu,
                 km: dataPostOrder.km,
                 thoi_gian: dataPostOrder.thoi_gian,
@@ -57,15 +63,16 @@ function PostOrder(props) {
                 phi_giao: dataPostOrder.phi_giao,
                 phi_ung: dataPostOrder.phi_ung,
             });
-            
+
             //tạo bảng transaction
             await realtime.ref("Transaction/" + dataPostOrder.idPost).set({
                 id_post: dataPostOrder.idPost,
+                id_shop: currentUser.uid,
                 id_shipper: '',
                 id_roomchat: dataPostOrder.id_roomchat,
                 status: "0"
             });
-            
+
             //tạo bảng chatroom
             history.push("/home");
         } catch (error) {
@@ -100,8 +107,8 @@ function PostOrder(props) {
         <div className="header-fixed sidebar-enabled bg">
             <section className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainPostOrder postOrder={PostOrder}/>
-                <AsideRight name={userInfor.fullname}/>
+                <MainPostOrder postOrder={PostOrder} />
+                <AsideRight name={userInfor.fullname} />
             </section>
         </div>
     );

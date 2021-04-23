@@ -68,11 +68,14 @@ function MainHomePage(props) {
         renderStatus = Object.values(datas).filter(
             (data) => filteredStatus === "all" || filteredStatus === data.status
         );
+        
 
         sortStatus = renderStatus.sort((a, b) =>
             a.thoi_gian < b.thoi_gian ? 1 : -1
         );
     }
+
+    console.log(sortStatus)
     //  }
 
     // const test = Object.values(newStatus).map((data) => {
@@ -171,7 +174,7 @@ function MainHomePage(props) {
                         </div>
                     </header>
 
-                    {datas ? (
+                    {datas && sortStatus !== [] ? ( 
                         Object.values(sortStatus).map((data, index) => (
                             <article
                                 className="card-body order"

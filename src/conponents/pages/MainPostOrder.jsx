@@ -20,8 +20,9 @@ MainPostOrder.defaultProps = {
 function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const { postOrder } = props;
-
-    //////////////////////////////////////////////////////
+    const newAddress = { district: '', ward: '', address: '' };
+    const [receiveAddress, setReceiveAddress] = useState(false);
+    ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
     // console.log(dateTime);
     // const test = moment().subtract(1, 'day').format('X');
@@ -51,10 +52,15 @@ function MainPostOrder(props) {
     const shipDistrcitRef = useRef();
     const shipWardRef = useRef();
     const shipAddressRef = useRef();
+    const receiveDistrictRef = useRef();
+    const receiveWardRef = useRef();
+    const receiveAddressRef = useRef();
 
     //////////////////////////////////////////////////////
     const [district, setDistrict] = useState();
     const [ward, setWard] = useState();
+    const [districtReceive, setDistrictReceive] = useState();
+    const [wardReceive, setWardReceive] = useState();
 
     //////////////////////////////////////////////////////
     const dataList = {
@@ -140,6 +146,18 @@ function MainPostOrder(props) {
         return items;
     };
 
+    const wardReceiveList = () => {
+        if (!districtReceive) return;
+        const items = [];
+        Object.values(dataList[districtReceive]).map((data, index) => {
+            items.push(
+                <option key={index} value={data}>
+                    {data}
+                </option>
+            );
+        });
+        return items;
+    };
     //////////////////////////////////////////////////////
     // ! Reset old selection
     //////////////////////////////////////////////////////
@@ -147,6 +165,13 @@ function MainPostOrder(props) {
         if (e.target.value || e.target.value === '') {
             setDistrict(e.target.value);
             setWard('');
+        }
+    };
+
+    const handleDistrictReceiveChange = (e) => {
+        if (e.target.value || e.target.value === '') {
+            setDistrictReceive(e.target.value);
+            setWardReceive('');
         }
     };
     //////////////////////////////////////////////////////
@@ -159,11 +184,17 @@ function MainPostOrder(props) {
             .required('Vui lòng điền số điện thoại khách hàng'),
         shipFee: yup
             .string()
-            .matches(/^[0-9]+$/, { message: 'Chỉ được phép nhập số', excludeEmptyString: true })
+            .matches(/^[0-9]+$/, {
+                message: 'Chỉ được phép nhập số',
+                excludeEmptyString: true,
+            })
             .required('Vui lòng nhập phí giao hàng bạn muốn trả'),
         tempFee: yup
             .string()
-            .matches(/^[0-9]+$/, { message: 'Chỉ được phép nhập số', excludeEmptyString: true })
+            .matches(/^[0-9]+$/, {
+                message: 'Chỉ được phép nhập số',
+                excludeEmptyString: true,
+            })
             .max(7, 'Số tiền cho phép dưới 9 999 999 VND'),
         note: yup.string().max(150, 'Vượt quá ${max} kí tự được cho phép'),
         shipAddress: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
@@ -180,6 +211,15 @@ function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     // Handle submitForm
     const onSubmit = (e) => {
+        const newAddress = { district: '', ward: '', address: '' };
+        if (receiveAddress !== false) {
+            newAddress.district = receiveDistrictRef.current.value;
+            newAddress.ward = receiveWardRef.current.value;
+            newAddress.address = receiveAddressRef.current.value;
+        }
+
+      
+
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
@@ -194,7 +234,16 @@ function MainPostOrder(props) {
         };
 
         if (postOrder) {
-            postOrder(dataPostOrder);
+            postOrder(dataPostOrder, newAddress)
+        }
+    };
+
+    const handleDefaultAddressChange = (e) => {
+        console.log(e.target.checked);
+        if (e.target.checked === true) {
+            setReceiveAddress(false);
+        } else {
+            setReceiveAddress(true);
         }
     };
 
@@ -334,12 +383,96 @@ function MainPostOrder(props) {
                                     <div className="col-xl-9 col-lg-8">
                                         <span className="switch">
                                             <label>
-                                                <input type="checkbox" defaultChecked="checked" name="select" />
+                                                <input type="checkbox" defaultChecked="checked" name="select" onChange={handleDefaultAddressChange} />
                                                 <span />
                                             </label>
                                         </span>
                                     </div>
                                 </div>
+
+                                {receiveAddress && (
+                                    <div>
+                                        <div className="row">
+                                            <label className="col-xl-3 col-lg-4" />
+                                            <div className="col-xl-9 col-lg-8">
+                                                <h5 className="font-weight-normal mt-10 mb-6">Địa chỉ nhận hàng</h5>
+                                            </div>
+                                        </div>
+                                        {/* Tỉnh/Thành phố */}
+                                        <div className="form-group row">
+                                            <label htmlFor="city" className="col-xl-3 col-lg-4 col-form-label">
+                                                Tỉnh/Thành phố
+                                            </label>
+                                            <div className="col-xl-9 col-lg-8">
+                                                <input
+                                                    className="form-control form-control-lg form-control-solid"
+                                                    type="text"
+                                                    id="city"
+                                                    defaultValue="Thành phố Đà Nẵng"
+                                                    readOnly
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Huyện */}
+                                        <div className="form-group row">
+                                            <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
+                                                Quận/Huyện
+                                            </label>
+                                            <div className="col-xl-9 col-lg-8">
+                                                <select
+                                                    className="form-control form-control-lg"
+                                                    id="district"
+                                                    value={districtReceive}
+                                                    ref={receiveDistrictRef}
+                                                    onChange={handleDistrictReceiveChange}
+                                                >
+                                                    <option value="">Chọn Quận/Huyện</option>
+                                                    {districtList()}
+                                                </select>
+                                                <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Xã */}
+                                        <div className="form-group row">
+                                            <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
+                                                Phường/Xã
+                                            </label>
+                                            <div className="col-xl-9 col-lg-8">
+                                                <select
+                                                    className="form-control form-control-lg"
+                                                    id="ward"
+                                                    value={wardReceive}
+                                                    ref={receiveWardRef}
+                                                    onChange={(e) => setWardReceive(e.target.value)}
+                                                >
+                                                    <option value="">Chọn Phường/Xã</option>
+                                                    {wardReceiveList()}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {/* Địa chỉ */}
+                                        <div className="form-group row">
+                                            <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
+                                                Địa chỉ
+                                            </label>
+                                            <div className="col-xl-9 col-lg-8">
+                                                <input
+                                                    className="form-control form-control-lg"
+                                                    type="text"
+                                                    // {...register('shipAddress')}
+                                                    maxLength={50}
+                                                    id="address"
+                                                    placeholder="Số nhà, tên đường"
+                                                    ref={receiveAddressRef}
+                                                />
+                                                <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="row">
                                     <label className="col-xl-3 col-lg-4" />
