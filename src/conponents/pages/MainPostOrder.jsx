@@ -209,6 +209,13 @@ function MainPostOrder(props) {
         resolver: yupResolver(schema),
     });
 
+    const checkingFullname = `form-control form-control-lg ${errors.fullname ? 'is-invalid' : ''}`;
+    const checkingPhone = `form-control form-control-lg ${errors.phone ? 'is-invalid' : ''}`;
+    const checkingShipFee = `form-control form-control-lg ${errors.shipFee ? 'is-invalid' : ''}`;
+    const checkingTempFee = `form-control form-control-lg ${errors.tempFee ? 'is-invalid' : ''}`;
+    const checkingNote = `form-control form-control-lg ${errors.note ? 'is-invalid' : ''}`;
+    const checkingShipAddress = `form-control form-control-lg ${errors.shipAddress ? 'is-invalid' : ''}`;
+
     //////////////////////////////////////////////////////
     // Handle submitForm
     const onSubmit = (e) => {
@@ -277,7 +284,7 @@ function MainPostOrder(props) {
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <input
-                                            className="form-control form-control-lg"
+                                            className={checkingFullname}
                                             type="text"
                                             {...register('fullname')}
                                             id="fullname"
@@ -295,7 +302,7 @@ function MainPostOrder(props) {
                                     <div className="col-xl-9 col-lg-8">
                                         <InputMask
                                             mask="9999 999 999"
-                                            className="form-control form-control-lg"
+                                            className={checkingPhone}
                                             type="text"
                                             {...register('phone')}
                                             id="phone_inputmask"
@@ -314,7 +321,7 @@ function MainPostOrder(props) {
                                         <div className="input-group">
                                             <input
                                                 type="text"
-                                                className="form-control"
+                                                className={checkingShipFee}
                                                 {...register('shipFee')}
                                                 id="ship_inputmask"
                                                 placeholder={0}
@@ -337,7 +344,7 @@ function MainPostOrder(props) {
                                         <div className="input-group">
                                             <input
                                                 type="text"
-                                                className="form-control"
+                                                className={checkingTempFee}
                                                 {...register('tempFee')}
                                                 id="temp_inputmask"
                                                 placeholder={0}
@@ -358,7 +365,7 @@ function MainPostOrder(props) {
                                     <div className="col-xl-9 col-lg-8 input-group">
                                         <div className="input-group">
                                             <textarea
-                                                className="form-control"
+                                                className={checkingNote}
                                                 id="note_maxlength"
                                                 rows={3}
                                                 {...register('note')}
@@ -534,7 +541,7 @@ function MainPostOrder(props) {
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <input
-                                            className="form-control form-control-lg"
+                                            className={checkingShipAddress}
                                             type="text"
                                             {...register('shipAddress')}
                                             maxLength={50}

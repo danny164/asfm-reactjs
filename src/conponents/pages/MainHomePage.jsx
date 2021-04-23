@@ -177,13 +177,18 @@ function MainHomePage(props) {
                                             </span>
                                         </header>
                                         <section className="card-info content">
-                                            <p>
-                                                <span className="font-weight-bold">{data.phi_giao} - Tiền mặt</span>
-                                                <br />
-                                                <span>
-                                                    {data.ten_nguoi_nhan} - {data.sdt_nguoi_nhan}
-                                                </span>
-                                            </p>
+                                            <div className="mb-3">
+                                                <div className="mb-3">
+                                                    <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
+                                                    <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
+                                                </div>
+                                                <div className="mb-1">
+                                                    Chi phí giao hàng: <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
+                                                </div>
+                                                <div className="mb-1">
+                                                    Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
+                                                </div>
+                                            </div>
                                             <span className="delivery">Giao hàng tới</span>
                                             <div className="d-flex align-items-center justify-content-between">
                                                 <address className="mb-0 pl-0">{data.noi_giao}</address>
