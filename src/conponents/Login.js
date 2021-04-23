@@ -10,15 +10,12 @@ import * as yup from 'yup';
 import StoreUser from './storeUser';
 
 function Login1(props) {
-
     const schema = yup.object().shape({
         email: yup.string().email('Email không hợp lệ').required('Bạn chưa nhập địa chỉ email'),
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
     });
 
-
-
-    const checkRef = useRef()
+    const checkRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
 
@@ -53,16 +50,16 @@ function Login1(props) {
     };
 
     const isRemember = (e) => {
-        if(e.target.checked === true){
-            localStorage.setItem("check", e.target.checked)
-            localStorage.setItem("username", emailRef.current.value)
-            localStorage.setItem("password", passwordRef.current.value)
+        if (e.target.checked === true) {
+            localStorage.setItem('check', e.target.checked);
+            localStorage.setItem('username', emailRef.current.value);
+            localStorage.setItem('password', passwordRef.current.value);
         } else {
-            localStorage.removeItem("check")
-            localStorage.removeItem("username" )
-            localStorage.removeItem("password")
+            localStorage.removeItem('check');
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
         }
-    }
+    };
 
     return (
         <main className="d-flex flex-column flex-root">
@@ -108,7 +105,12 @@ function Login1(props) {
                                 <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
                                     <div className="checkbox-inline">
                                         <label className="checkbox m-0 text-muted">
-                                            <input type="checkbox" defaultChecked={localStorage.getItem('check')} ref={checkRef} onClick={isRemember}  />
+                                            <input
+                                                type="checkbox"
+                                                defaultChecked={localStorage.getItem('check')}
+                                                ref={checkRef}
+                                                onClick={isRemember}
+                                            />
                                             <span />
                                             Ghi nhớ đăng nhập
                                         </label>
