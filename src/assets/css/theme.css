@@ -21,11 +21,24 @@ body {
     background-position: right calc(0.375em + 0.325rem) center;
     background-size: calc(0.75em + 0.65rem) calc(0.75em + 0.65rem);
 }
+
 .was-validated .form-control-solid:invalid:focus,
 .form-control-solid.is-invalid:focus {
     border: 1px solid #f2994a;
     -webkit-box-shadow: 0 0 0 0.2rem rgba(246, 78, 96, 0.25);
     box-shadow: 0 0 0 0.2rem rgba(246, 78, 96, 0.25);
+}
+
+.empty-order {
+    display: flex;
+    justify-content: center;
+
+    border: 1px dashed #d3d6da;
+    border-radius: 0.5rem;
+
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 3rem;
 }
 
 .bg {
