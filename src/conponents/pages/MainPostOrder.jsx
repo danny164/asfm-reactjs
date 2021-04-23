@@ -197,7 +197,7 @@ function MainPostOrder(props) {
                 excludeEmptyString: true,
             })
             .max(7, 'Số tiền cho phép dưới 9 999 999 VND'),
-        note: yup.string().max(150, 'Vượt quá ${max} kí tự được cho phép'),
+        note: yup.string().max(100, 'Vượt quá ${max} kí tự được cho phép'),
         shipAddress: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
     });
 
