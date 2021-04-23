@@ -14,13 +14,18 @@ function MainChangePw(props) {
 
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
+    const oldPasswordRef = useRef();
 
-    const { updatePassword } = useAuth();
+    const { updatePassword, currentUser } = useAuth();
 
     async function changePassWord(e) {
         e.preventDefault();
-
-        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+        // if (currentUser.password !== oldPasswordRef.current.value) {
+        //     console.log('old pw: ' + currentUser.password);
+        //     setAlert('red');
+        //     return setMessage('Xác nhận mật khẩu cũ chưa chính xác !');
+        // }
+        if (passwordRef.current.value !== confirmPasswordRef.current.value || passwordRef.current.value < 6) {
             setAlert('red');
             return setMessage('Xác nhận mật khẩu chưa chính xác !');
         }
@@ -97,6 +102,7 @@ function MainChangePw(props) {
                                             type="password"
                                             id="current-password"
                                             placeholder="Nhập mật khẩu cũ"
+                                            ref={oldPasswordRef}
                                         />
                                         {/* <span class="form-text text-muted">Some help content goes here</span> */}
                                     </div>
