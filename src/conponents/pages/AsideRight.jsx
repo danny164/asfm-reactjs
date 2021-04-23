@@ -59,10 +59,9 @@ function AsideRight(props) {
                     className="card card-custom bgi-no-repeat gutter-b"
                     style={{ backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbstractTwo})` }}
                 >
-                    <div className="card-header border-0 pt-5 px-5">
+                    <div className="card-header card-notify">
                         <h3 className="card-title align-items-start flex-column">
                             <span className="title">Thông báo trong ngày gần đây</span>
-                            <span className="text-time mt-2 font-size-sm">trong ngày</span>
                         </h3>
                     </div>
                     <div className="card-body pt-2 px-5">
