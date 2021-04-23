@@ -88,6 +88,7 @@ body {
 
 .text-time {
     color: #b5b5c3;
+    white-space: nowrap;
 }
 
 .text-team {
@@ -226,16 +227,19 @@ body {
 .card-bottom {
     margin-bottom: 30px;
 }
+.card.card-custom > .card-header.card-notify {
+    min-height: 55px;
+    border: 0;
 
-.line {
-    margin-top: 1rem;
-    border-bottom: 0.5px dashed #ebedf3;
+    padding-top: 1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
 }
 
 .title {
     font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 15px;
     line-height: 20px;
     color: #181c32;
 }

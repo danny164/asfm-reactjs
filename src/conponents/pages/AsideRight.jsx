@@ -17,7 +17,7 @@ AsideRight.defaultProps = {
 
 function AsideRight(props) {
     const { name } = props;
-    const {currentUser} = useAuth()
+    const { currentUser } = useAuth();
 
     return (
         <aside className="sidebar d-flex flex-row-auto flex-column">
@@ -59,25 +59,29 @@ function AsideRight(props) {
                     className="card card-custom bgi-no-repeat gutter-b"
                     style={{ backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbstractTwo})` }}
                 >
-                    <div className="card-header border-0 pt-5">
+                    <div className="card-header card-notify">
                         <h3 className="card-title align-items-start flex-column">
-                            <span className="title">Thông báo gần đây</span>
-                            <span className="text-time mt-2 font-size-sm">in 7 days</span>
+                            <span className="title">Thông báo trong ngày gần đây</span>
                         </h3>
                     </div>
-                    <div className="card-body pt-2">
-                        <p className="line pb-4">
-                            Thông báo thứ nhất <span className="font-size-sm text-time">5 phút trước</span>
-                        </p>
-                        <p className="line pb-4">
-                            Thông báo thứ hai <span className="font-size-sm text-time">8 phút trước</span>
-                        </p>
-                        <p className="line pb-4">
-                            Thông báo thứ ba <span className="font-size-sm text-time">12 phút trước</span>
-                        </p>
-                        <p className="line pb-4">
-                            Thông báo thứ bốn <span className="font-size-sm text-time">25 phút trước</span>
-                        </p>
+                    <div className="card-body pt-2 px-5">
+                        <div className="py-1">
+                            Đơn hàng <span className="font-weight-bold menu-in-progress">#20210421-202348057193</span> đã{' '}
+                            <span className="font-weight-bold text-primary-2">giao thành công</span>.{' '}
+                            <span className="font-size-sm text-time">5 phút trước</span>
+                        </div>
+                        <div className="separator separator-dashed my-2" />
+                        <div className="py-1">
+                            Đơn hàng <span className="font-weight-bold menu-in-progress">#20210421-212548057193</span> đã{' '}
+                            <span className="font-weight-bold text-purple">được xác nhận</span> và tài xế đang trên đường tới bạn.{' '}
+                            <span className="font-size-sm text-time">5 phút trước</span>
+                        </div>
+                        <div className="separator separator-dashed my-2" />
+                        <div className="py-1">
+                            Đơn hàng <span className="font-weight-bold menu-in-progress">#20210423-165311577617</span> đã{' '}
+                            <span className="font-weight-bold text-chartjs">bị hủy</span>.{' '}
+                            <span className="font-size-sm text-time">5 phút trước</span>
+                        </div>
                     </div>
                 </section>
             </div>
