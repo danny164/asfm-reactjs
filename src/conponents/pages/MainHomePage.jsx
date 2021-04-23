@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Link } from 'react-router-dom';
 import { realtime, db } from '../../firebase';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
@@ -136,19 +137,19 @@ function MainHomePage(props) {
                         <div className="card-toolbar">
                             <ul className="nav nav-pills">
                                 <li className="nav-item">
-                                    <a href="#month" className="nav-link py-2 px-4">
+                                    <Link to="#month" className="nav-link py-2 px-4">
                                         <span className="nav-text">Tháng</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#week" className="nav-link py-2 px-4">
+                                    <Link to="#week" className="nav-link py-2 px-4">
                                         <span className="nav-text">Tuần</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#day" className="nav-link py-2 px-4 active">
+                                    <Link to="#day" className="nav-link py-2 px-4 active">
                                         <span className="nav-text">Ngày</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

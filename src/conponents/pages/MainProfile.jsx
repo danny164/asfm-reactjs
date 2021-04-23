@@ -1,10 +1,11 @@
-import PropTypes from "prop-types";
-import React, { useState } from "react";
-import Avatar from "../../assets/media/avatar.png";
-import Footer from "../common/Footer";
-import Header from "../common/Header";
-import Toast from "react-bootstrap/Toast";
-import {Row, Col} from 'react-bootstrap'
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import Avatar from '../../assets/media/avatar.png';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
+import Toast from 'react-bootstrap/Toast';
+import { Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 MainProfile.propTypes = {
     user: PropTypes.object,
     onChange: PropTypes.func,
@@ -37,7 +38,7 @@ function MainProfile(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-               {/* {user.error && (
+            {/* {user.error && (
                                 <Row>
                                     <Col xs={6}>
                                         <Toast
@@ -55,7 +56,7 @@ function MainProfile(props) {
                                     </Col>
                                 </Row>
                             )}  */}
-                            {user.error && alert(user.error)}
+            {user.error && alert(user.error)}
             <Header />
 
             <section className="content d-flex flex-column flex-column-fluid">
@@ -65,26 +66,18 @@ function MainProfile(props) {
                         {/* wrap breadcrumb */}
                         <div className="d-flex align-items-center flex-wrap mr-1">
                             <div className="d-flex align-items-baseline flex-wrap mr-5">
-                                <h5 className="text-dark font-weight-bold my-1 mr-5">
-                                    Cài đặt tài khoản
-                                </h5>
+                                <h5 className="text-dark font-weight-bold my-1 mr-5">Cài đặt tài khoản</h5>
                                 {/* breadcrumb */}
                                 <ul className="breadcrumb font-weight-bold p-0 my-2 font-size-sm">
                                     <li className="breadcrumb-item">
-                                        <a
-                                            href="homepage.html"
-                                            className="text-muted"
-                                        >
+                                        <Link to="/home" className="text-muted">
                                             Trang chủ
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="breadcrumb-item active">
-                                        <a
-                                            href="profile.html"
-                                            className="text-muted"
-                                        >
+                                        <Link to="/profile" className="text-muted">
                                             Xem hồ sơ
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -101,19 +94,11 @@ function MainProfile(props) {
                         <div className="card card-custom">
                             <header className="card-header py-3">
                                 <div className="card-title align-items-start flex-column">
-                                    <h3 className="card-label">
-                                        Thông tin cá nhân
-                                    </h3>
-                                    <span className="text-muted font-size-sm mt-1">
-                                        Cập nhật thông tin cá nhân của bạn
-                                    </span>
+                                    <h3 className="card-label">Thông tin cá nhân</h3>
+                                    <span className="text-muted font-size-sm mt-1">Cập nhật thông tin cá nhân của bạn</span>
                                 </div>
                                 <div className="card-toolbar">
-                                    <button
-                                        type="submit"
-                                        className="btn btn-chartjs mr-2"
-                                        onClick={handleChangeEdit}
-                                    >
+                                    <button type="submit" className="btn btn-chartjs mr-2" onClick={handleChangeEdit}>
                                         Chỉnh sửa
                                     </button>
                                 </div>
@@ -122,9 +107,7 @@ function MainProfile(props) {
                             <div className="card-body">
                                 {/* avatar */}
                                 <div className="form-group row">
-                                    <label className="col-xl-3 col-lg-4 col-form-label">
-                                        Ảnh đại diện
-                                    </label>
+                                    <label className="col-xl-3 col-lg-4 col-form-label">Ảnh đại diện</label>
                                     <div className="col-xl-9 col-lg-8">
                                         <div
                                             className="image-input image-input-outline"
@@ -139,10 +122,7 @@ function MainProfile(props) {
                                 </div>
                                 {/* email */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="email"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="email" className="col-xl-3 col-lg-4 col-form-label">
                                         Email
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -159,10 +139,7 @@ function MainProfile(props) {
                                 </div>
                                 {/* full name */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="fullname"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="fullname" className="col-xl-3 col-lg-4 col-form-label">
                                         Họ và tên
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -179,10 +156,7 @@ function MainProfile(props) {
                                 <div className="separator separator-dashed my-5" />
                                 {/* phone number */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="phone"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="phone" className="col-xl-3 col-lg-4 col-form-label">
                                         Số điện thoại
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -199,10 +173,7 @@ function MainProfile(props) {
                                 </div>
                                 {/* address */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="address"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
                                         Địa chỉ
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
