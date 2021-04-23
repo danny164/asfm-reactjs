@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import InputMask from 'react-input-mask';
+import Expand from 'react-expand-animated';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -218,8 +219,6 @@ function MainPostOrder(props) {
             newAddress.address = receiveAddressRef.current.value;
         }
 
-      
-
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
@@ -234,7 +233,7 @@ function MainPostOrder(props) {
         };
 
         if (postOrder) {
-            postOrder(dataPostOrder, newAddress)
+            postOrder(dataPostOrder, newAddress);
         }
     };
 
@@ -370,14 +369,12 @@ function MainPostOrder(props) {
                                         <span className="form-text text-muted text-chartjs">{errors.note?.message}</span>
                                     </div>
                                 </div>
-
                                 <div className="row">
                                     <label className="col-xl-3 col-lg-4" />
                                     <div className="col-xl-9 col-lg-8">
                                         <h5 className="font-weight-normal mt-0 mb-6">Địa chỉ lấy hàng mặc định</h5>
                                     </div>
                                 </div>
-
                                 <div className="form-group row">
                                     <label className="col-xl-3 col-lg-4 col-form-label"></label>
                                     <div className="col-xl-9 col-lg-8">
@@ -390,89 +387,87 @@ function MainPostOrder(props) {
                                     </div>
                                 </div>
 
-                                {receiveAddress && (
-                                    <div>
-                                        <div className="row">
-                                            <label className="col-xl-3 col-lg-4" />
-                                            <div className="col-xl-9 col-lg-8">
-                                                <h5 className="font-weight-normal mt-10 mb-6">Địa chỉ nhận hàng</h5>
-                                            </div>
-                                        </div>
-                                        {/* Tỉnh/Thành phố */}
-                                        <div className="form-group row">
-                                            <label htmlFor="city" className="col-xl-3 col-lg-4 col-form-label">
-                                                Tỉnh/Thành phố
-                                            </label>
-                                            <div className="col-xl-9 col-lg-8">
-                                                <input
-                                                    className="form-control form-control-lg form-control-solid"
-                                                    type="text"
-                                                    id="city"
-                                                    defaultValue="Thành phố Đà Nẵng"
-                                                    readOnly
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Huyện */}
-                                        <div className="form-group row">
-                                            <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
-                                                Quận/Huyện
-                                            </label>
-                                            <div className="col-xl-9 col-lg-8">
-                                                <select
-                                                    className="form-control form-control-lg"
-                                                    id="district"
-                                                    value={districtReceive}
-                                                    ref={receiveDistrictRef}
-                                                    onChange={handleDistrictReceiveChange}
-                                                >
-                                                    <option value="">Chọn Quận/Huyện</option>
-                                                    {districtList()}
-                                                </select>
-                                                <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Xã */}
-                                        <div className="form-group row">
-                                            <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
-                                                Phường/Xã
-                                            </label>
-                                            <div className="col-xl-9 col-lg-8">
-                                                <select
-                                                    className="form-control form-control-lg"
-                                                    id="ward"
-                                                    value={wardReceive}
-                                                    ref={receiveWardRef}
-                                                    onChange={(e) => setWardReceive(e.target.value)}
-                                                >
-                                                    <option value="">Chọn Phường/Xã</option>
-                                                    {wardReceiveList()}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        {/* Địa chỉ */}
-                                        <div className="form-group row">
-                                            <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
-                                                Địa chỉ
-                                            </label>
-                                            <div className="col-xl-9 col-lg-8">
-                                                <input
-                                                    className="form-control form-control-lg"
-                                                    type="text"
-                                                    // {...register('shipAddress')}
-                                                    maxLength={50}
-                                                    id="address"
-                                                    placeholder="Số nhà, tên đường"
-                                                    ref={receiveAddressRef}
-                                                />
-                                                <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
-                                            </div>
+                                <Expand open={receiveAddress}>
+                                    <div className="row">
+                                        <label className="col-xl-3 col-lg-4" />
+                                        <div className="col-xl-9 col-lg-8">
+                                            <h5 className="font-weight-normal mt-10 mb-6">Thay đổi địa chỉ lấy hàng</h5>
                                         </div>
                                     </div>
-                                )}
+                                    {/* Tỉnh/Thành phố */}
+                                    <div className="form-group row">
+                                        <label htmlFor="city" className="col-xl-3 col-lg-4 col-form-label">
+                                            Tỉnh/Thành phố
+                                        </label>
+                                        <div className="col-xl-9 col-lg-8">
+                                            <input
+                                                className="form-control form-control-lg form-control-solid"
+                                                type="text"
+                                                id="city"
+                                                defaultValue="Thành phố Đà Nẵng"
+                                                readOnly
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Huyện */}
+                                    <div className="form-group row">
+                                        <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
+                                            Quận/Huyện
+                                        </label>
+                                        <div className="col-xl-9 col-lg-8">
+                                            <select
+                                                className="form-control form-control-lg"
+                                                id="district"
+                                                value={districtReceive}
+                                                ref={receiveDistrictRef}
+                                                onChange={handleDistrictReceiveChange}
+                                            >
+                                                <option value="">Chọn Quận/Huyện</option>
+                                                {districtList()}
+                                            </select>
+                                            <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Xã */}
+                                    <div className="form-group row">
+                                        <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
+                                            Phường/Xã
+                                        </label>
+                                        <div className="col-xl-9 col-lg-8">
+                                            <select
+                                                className="form-control form-control-lg"
+                                                id="ward"
+                                                value={wardReceive}
+                                                ref={receiveWardRef}
+                                                onChange={(e) => setWardReceive(e.target.value)}
+                                            >
+                                                <option value="">Chọn Phường/Xã</option>
+                                                {wardReceiveList()}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* Địa chỉ */}
+                                    <div className="form-group row">
+                                        <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
+                                            Địa chỉ
+                                        </label>
+                                        <div className="col-xl-9 col-lg-8">
+                                            <input
+                                                className="form-control form-control-lg"
+                                                type="text"
+                                                // {...register('shipAddress')}
+                                                maxLength={50}
+                                                id="address"
+                                                placeholder="Số nhà, tên đường"
+                                                ref={receiveAddressRef}
+                                            />
+                                            <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
+                                        </div>
+                                    </div>
+                                </Expand>
 
                                 <div className="row">
                                     <label className="col-xl-3 col-lg-4" />
@@ -495,7 +490,6 @@ function MainPostOrder(props) {
                                         />
                                     </div>
                                 </div>
-
                                 {/* Huyện */}
                                 <div className="form-group row">
                                     <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
@@ -515,7 +509,6 @@ function MainPostOrder(props) {
                                         <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
                                     </div>
                                 </div>
-
                                 {/* Xã */}
                                 <div className="form-group row">
                                     <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
@@ -534,7 +527,6 @@ function MainPostOrder(props) {
                                         </select>
                                     </div>
                                 </div>
-
                                 {/* Địa chỉ */}
                                 <div className="form-group row">
                                     <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
