@@ -77,16 +77,13 @@ body.modal-open {
     display: grid;
     width: 100%;
     grid-template-columns: 1fr 30px;
-    grid-template-rows: 53.59px;
+    grid-template-rows: calc(1.5em + 1.3rem + 2px) 1fr;
     grid-column-gap: 10px;
 }
 
 .chat-form {
     position: relative;
 
-    textarea {
-        padding-right: 3.75rem;
-    }
     .chat-icon-group {
         position: absolute;
         top: 9px;
