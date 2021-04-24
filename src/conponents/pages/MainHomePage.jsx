@@ -135,7 +135,7 @@ function MainHomePage(props) {
         try {
             await db
                 .collection('ProfileShipper')
-                .doc('363159770')
+                .doc(transactionInfor.id_shipper)
                 .get()
                 .then((doc) => {
                     if (doc.exists) {
@@ -347,9 +347,9 @@ function MainHomePage(props) {
                         onHandleCloseChat={handleCloseChat}
                         shopInfo={shopInfo}
                         idPost={dataModal.id_post}
-                        shipperName={shipperInfor.name}
                         idRoom={transactionInfor.id_roomchat}
                         idShop={idShop}
+                        shipperInfor={shipperInfor}
                     />
                 </div>
             </section>
