@@ -146,6 +146,14 @@ function MainHomePage(props) {
                                 console.log('Không fetch được dữ liệu !');
                             }
                         });
+                } else {
+                    setShipperInfor({
+                        id_post: '',
+                        id_roomchat: '',
+                        id_shipper: '',
+                        id_shop: '',
+                        status: '',
+                    });
                 }
             });
         } catch (error) {
