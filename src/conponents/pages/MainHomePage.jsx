@@ -151,7 +151,7 @@ function MainHomePage(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            <Header onClickFilterStatus={handleFilterStatus} />
+            <Header onClickFilterStatus={handleFilterStatus} filteredStatus={filteredStatus} />
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">
                     <header className="card-header border-0">

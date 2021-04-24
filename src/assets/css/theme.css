@@ -110,8 +110,8 @@ body {
 
 .menu-item {
     position: relative;
-    padding: 0.75rem 0.75rem;
-    margin-right: 0.75rem;
+    padding: 0.75rem 0;
+    margin-right: 2.75rem;
 }
 
 .menu-link {
