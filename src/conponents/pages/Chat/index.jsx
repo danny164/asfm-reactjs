@@ -65,8 +65,6 @@ function ChatModal(props) {
     ///////////////////////////////////////////////
     // ! Check ID
     const checkingID = (id) => {
-        console.log('id chat: ' + id);
-        console.log('shop id: ' + idShop);
         if (id === idShop) return 'chat-item you-message';
         return 'chat-item other-message';
     };

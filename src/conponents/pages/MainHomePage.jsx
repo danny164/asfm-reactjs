@@ -1,6 +1,6 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ MainHomePage.defaultProps = {
 };
 
 var renderStatus = [];
+var lastStatus = [];
 var sortStatus = [];
 
 function MainHomePage(props) {
@@ -37,8 +38,13 @@ function MainHomePage(props) {
 
     const [filteredStatus, setFilteredStatus] = useState('all');
     const [titleStatus, setTitleStatus] = useState('tất cả');
+
+    const [sortByRange, setSortByRange] = useState('1');
+    const [subTitleStatus, setSubTitleStatus] = useState('trong ngày');
+
     const [shipperInfor, setShipperInfor] = useState({});
     const [transactionInfor, setTransactionInfor] = useState({});
+
     const [dataModal, setDataModal] = useState({});
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -58,6 +64,7 @@ function MainHomePage(props) {
         });
     };
 
+    /////////////////////////////////////////////////////////
     const handleFilterStatus = (status) => {
         setFilteredStatus(status);
         status === 'all' && setTitleStatus('gần đây');
@@ -67,19 +74,37 @@ function MainHomePage(props) {
         status === '3' && setTitleStatus('bị hủy');
     };
 
+    const last24hrs = (sortByRange, dataTime) => {
+        if (sortByRange === '7') {
+            return dataTime >= moment().subtract(7, 'days').format('X');
+        }
+        if (sortByRange === '30') return dataTime >= moment().subtract(1, 'month').format('X');
+        return dataTime >= moment().subtract(1, 'day').format('X');
+    };
+
+    useEffect(() => {
+        if (sortByRange === '1') setSubTitleStatus('trong ngày');
+        if (sortByRange === '7') setSubTitleStatus('trong tuần');
+        if (sortByRange === '30') setSubTitleStatus('trong tháng');
+    }, [sortByRange]);
+
+    const handleSortByRange = (range) => {
+        setSortByRange(range);
+    };
+
+    console.log(sortByRange);
+
+    /////////////////////////////////////////////////////////
     if (datas) {
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
 
-        sortStatus = renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
+        lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
+
+        sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
     }
 
-    console.log(sortStatus);
-    //  }
+    // console.log(sortStatus);
 
-    // const test = Object.values(newStatus).map((data) => {
-    //     console.log(data.thoi_gian);
-    //     console.log(moment.unix(data.thoi_gian).subtract(1, 'day').format('X'));
-    // });
     const handleDeleteOrder = (id) => {
         if (DeleteOrder) {
             DeleteOrder(id);
@@ -116,7 +141,7 @@ function MainHomePage(props) {
                     if (doc.exists) {
                         setShipperInfor(doc.data());
                     } else {
-                        console.log('No such document!');
+                        console.log('Không fetch được dữ liệu !');
                     }
                 });
         } catch (error) {
@@ -133,25 +158,34 @@ function MainHomePage(props) {
                         <div className="card-title py-4">
                             <h3 className="card-label">
                                 <span className="d-block title">Danh sách đơn {titleStatus}</span>
-                                <span className="d-block text-time mt-2 font-size-sm">trong ngày</span>
+                                <span className="d-block text-time mt-2 font-size-sm">{subTitleStatus}</span>
                             </h3>
                         </div>
                         <div className="card-toolbar">
                             <ul className="nav nav-pills">
                                 <li className="nav-item">
-                                    <Link to="#month" className="nav-link py-2 px-4">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '30' ? 'active' : ''}`}
+                                        onClick={() => handleSortByRange('30')}
+                                    >
                                         <span className="nav-text">Tháng</span>
-                                    </Link>
+                                    </div>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="#week" className="nav-link py-2 px-4">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '7' ? 'active' : ''}`}
+                                        onClick={() => handleSortByRange('7')}
+                                    >
                                         <span className="nav-text">Tuần</span>
-                                    </Link>
+                                    </div>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="#day" className="nav-link py-2 px-4 active">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '1' ? 'active' : ''}`}
+                                        onClick={() => handleSortByRange('1')}
+                                    >
                                         <span className="nav-text">Ngày</span>
-                                    </Link>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -208,7 +242,9 @@ function MainHomePage(props) {
                     ) : (
                         <article className="card-body">
                             <div className="empty-order">
-                                <span className="text menu-in-progress">Bạn không có đơn nào {titleStatus} !</span>
+                                <span className="text menu-in-progress">
+                                    Bạn không có đơn nào {titleStatus} {subTitleStatus} !
+                                </span>
                             </div>
                         </article>
                     )}

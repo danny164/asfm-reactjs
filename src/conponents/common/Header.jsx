@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import HeaderMobile from './HeaderMobile';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import HeaderMobile from './HeaderMobile';
 
 Header.propTypes = {
     onClickFilterStatus: PropTypes.func,
@@ -13,12 +13,12 @@ Header.defaultProps = {
 
 function Header(props) {
     const { onClickFilterStatus } = props;
-    const history = useHistory();
+    const [currentStatus, setCurrentStatus] = useState();
 
     const handleFilterStatus = (status) => {
         if (!onClickFilterStatus) return;
-        else{
-         
+        else {
+            setCurrentStatus(status);
             onClickFilterStatus(status);
         }
     };
@@ -33,27 +33,27 @@ function Header(props) {
                             <ul className="menu-nav">
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('all')}>
-                                        <span className="menu menu-recent">Đơn gần đây</span>
+                                        <span className={`menu menu-recent ${currentStatus === 'all' ? 'active' : ''}`}>Đơn gần đây</span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home"  className="menu-link" onClick={() => handleFilterStatus('0')}>
-                                        <span className="menu menu-in-progress">Đang xử lý</span>
+                                    <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('0')}>
+                                        <span className={`menu menu-in-progress ${currentStatus === '0' ? 'active' : ''}`}>Đang xử lý</span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('1')}>
-                                        <span className="menu menu-picked">Đã nhận đơn</span>
+                                        <span className={`menu menu-picked ${currentStatus === '1' ? 'active' : ''}`}>Đã nhận đơn</span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('2')}>
-                                        <span className="menu menu-completed">Hoàn thành</span>
+                                        <span className={`menu menu-completed ${currentStatus === '2' ? 'active' : ''}`}>Hoàn thành</span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('3')}>
-                                        <span className="menu menu-canceled">Đơn hủy</span>
+                                        <span className={`menu menu-canceled ${currentStatus === '3' ? 'active' : ''}`}>Đơn hủy</span>
                                     </Link>
                                 </li>
                             </ul>
