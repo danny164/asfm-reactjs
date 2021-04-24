@@ -67,11 +67,11 @@ export default function Profile() {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
+                            localStorage.setItem("fullname", doc.data().fullname)
                             setUserInfor({
                                 ...userInfor,
                                 input: doc.data()
                             })
-                            console.log(doc.data())
                         }
 
                     });

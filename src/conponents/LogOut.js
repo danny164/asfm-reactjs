@@ -11,8 +11,8 @@ function Signout() {
         setError('');
         try {
             await logout();
-            await localStorage.removeItem('currentUser')
             history.push('/login');
+            await localStorage.removeItem('fullname')
         } catch {
             setError('failed to logout !');
             console.log(error);

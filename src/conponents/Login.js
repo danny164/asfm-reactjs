@@ -38,9 +38,6 @@ function Login1(props) {
         try {
             setLoading(true);
             await signin(emailRef.current.value, passwordRef.current.value);
-            // if (checkRef.current.checked === true) {
-            //     <StoreUser storeUser='luu' />
-            // }
         } catch {
             setError('Đăng nhập không thành công!');
         }
