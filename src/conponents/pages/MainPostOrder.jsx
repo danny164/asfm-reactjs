@@ -187,7 +187,11 @@ function MainPostOrder(props) {
     //////////////////////////////////////////////////////
 
     const schema = yup.object().shape({
-        fullname: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng điền tên khách hàng'),
+        fullname: yup
+            .string()
+            .required('Vui lòng điền tên khách hàng')
+            .max(50, 'Vượt quá ${max} kí tự được cho phép')
+            .min(5, 'Tối thiểu ${min} kí tự'),
         phone: yup
             .string()
             .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
@@ -423,10 +427,9 @@ function MainPostOrder(props) {
                                     <label className="col-xl-3 col-lg-4" />
                                     <div className="col-xl-9 col-lg-8">
                                         <h5 className="font-weight-normal mt-0 mb-6">Địa chỉ lấy hàng mặc định</h5>
-                                        <span className="form-text text-muted text-chartjs">{defaultAddressError && defaultAddressError}</span>
                                     </div>
                                 </div>
-                               
+
                                 <div className="form-group row">
                                     <label className="col-xl-3 col-lg-4 col-form-label"></label>
                                     <div className="col-xl-9 col-lg-8">
@@ -436,6 +439,7 @@ function MainPostOrder(props) {
                                                 <span />
                                             </label>
                                         </span>
+                                        <span className="form-text text-muted text-chartjs">{defaultAddressError && defaultAddressError}</span>
                                     </div>
                                 </div>
 

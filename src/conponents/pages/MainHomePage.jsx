@@ -37,7 +37,7 @@ function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
 
     const [filteredStatus, setFilteredStatus] = useState('all');
-    const [titleStatus, setTitleStatus] = useState('tất cả');
+    const [titleStatus, setTitleStatus] = useState('gần đây');
 
     const [sortByRange, setSortByRange] = useState('1');
     const [subTitleStatus, setSubTitleStatus] = useState('trong ngày');
