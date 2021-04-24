@@ -12,7 +12,7 @@ function Signout() {
         try {
             await logout();
             history.push('/login');
-            await localStorage.removeItem('fullname')
+            localStorage.removeItem('fullname')
         } catch {
             setError('failed to logout !');
             console.log(error);

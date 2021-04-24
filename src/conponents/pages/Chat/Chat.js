@@ -9,22 +9,22 @@ Chat.propTypes = {
     showChat: PropTypes.bool,
     onHandleCloseChat: PropTypes.func,
     shopInfo: PropTypes.object,
-    shipperName: PropTypes.string,
     idRoom: PropTypes.string,
     idShop: PropTypes.string,
+    shipperInfor: PropTypes.object
 };
 
 Chat.defaultProps = {
     showChat: false,
     onHandleCloseChat: null,
     shopInfo: null,
-    shipperName: '',
     idRoom: '',
     idShop: '',
+    shipperInfor: null
 };
 
 function Chat(props) {
-    const { shopInfo, showChat, onHandleCloseChat, shipperName, idRoom, idShop } = props;
+    const { shopInfo, showChat, onHandleCloseChat, idRoom, idShop, shipperInfor } = props;
     const [chats, setChats] = useState([]);
     const [newchat, setNewchat] = useState({ id: shopInfo.id, imgmessage: '', message: '', timemessage: '', isseen: '', name: '' });
 
@@ -68,7 +68,7 @@ function Chat(props) {
                 onHandleCloseChat={onHandleCloseChat}
                 submitMessage={submitMessage}
                 chats={chats}
-                shipperName={shipperName}
+                shipperInfor={shipperInfor}
                 shopInfo={shopInfo}
                 idShop={idShop}
             />

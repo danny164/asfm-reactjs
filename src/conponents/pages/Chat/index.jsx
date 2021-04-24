@@ -10,9 +10,9 @@ ChatModal.propTypes = {
     onHandleCloseChat: PropTypes.func,
     submitMessage: PropTypes.func,
     chats: PropTypes.array,
-    shipperName: PropTypes.string,
     shopName: PropTypes.string,
     idShop: PropTypes.string,
+    shipperInfor: PropTypes.object,
 };
 
 ChatModal.defaultProps = {
@@ -20,13 +20,13 @@ ChatModal.defaultProps = {
     onHandleCloseChat: null,
     submitMessage: null,
     chats: [],
-    shipperName: '',
     shopName: '',
     idShop: '',
+    shipperInfor: null,
 };
 
 function ChatModal(props) {
-    const { showChat, onHandleCloseChat, chats, submitMessage, shopInfo, shipperName, idShop } = props;
+    const { showChat, onHandleCloseChat, chats, submitMessage, idShop, shipperInfor } = props;
 
     const [newchat, setNewchat] = useState({
         id: '',
@@ -84,7 +84,7 @@ function ChatModal(props) {
     return (
         <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
             <Modal.Header>
-                <Modal.Title>Chat với {shipperName}</Modal.Title>
+                <Modal.Title>Chat với {shipperInfor.name}</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>
                     Đóng
                 </Button>
@@ -93,10 +93,10 @@ function ChatModal(props) {
                 <section className="chat-module">
                     <div className="chat-intro">
                         <div className="avatar-shipper">
-                            <img src={Avatar} alt="Avatar Shipper" />
+                            <img src={shipperInfor.avatar} alt="Avatar Shipper" />
                         </div>
 
-                        <span className="shipper-name">{shipperName}</span>
+                        <span className="shipper-name">{shipperInfor.name}</span>
                         <span className="note">Hãy trò chuyện với shipper để trao đổi thêm nhé</span>
                     </div>
                     <div className="chat-body">
@@ -104,7 +104,8 @@ function ChatModal(props) {
                             chats.map((item, idx) => (
                                 <div key={idx} className={checkingID(item.id)}>
                                     <div className="chat-content">
-                                        {item.id !== idShop && <img src={Avatar} alt="The Night Owl" />}
+                                        {item.id !== idShop && <img src={shipperInfor.avatar} alt="The Night Owl" />}
+                                        {item.imgmessage !== ''}
                                         <div className="message-text">{item.message}</div>
                                         <div className="message-time">{item.timemessage}</div>
                                     </div>
