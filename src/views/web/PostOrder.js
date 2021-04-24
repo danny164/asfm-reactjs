@@ -10,6 +10,7 @@ var address = ''
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
+    const [defaultAddressError, setDefaultAddressError] = useState()
 
     const [userInfor, setUserInfor] = useState({
         fullname: '',
@@ -24,7 +25,12 @@ function PostOrder(props) {
         if (newAddress.district !== '') {
             address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
         } else {
+            if(userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress ==='' ){
+                setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !')
+                return
+            }
             address = userInfor.address;
+            
         }
 
         try {
@@ -106,7 +112,7 @@ function PostOrder(props) {
         <div className="header-fixed sidebar-enabled bg">
             <section className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainPostOrder postOrder={PostOrder} />
+                <MainPostOrder postOrder={PostOrder} defaultAddressError={defaultAddressError}/>
                 <AsideRight name={userInfor.fullname} />
             </section>
         </div>

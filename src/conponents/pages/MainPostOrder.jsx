@@ -12,16 +12,19 @@ import Expand from 'react-expand-animated';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
+    defaultAddressError: PropTypes.string,
 };
 
 MainPostOrder.defaultProps = {
     postOrder: null,
+    defaultAddressError: '',
 };
 
 function MainPostOrder(props) {
     //////////////////////////////////////////////////////
-    const { postOrder } = props;
+    const { postOrder, defaultAddressError } = props;
     const newAddress = { district: '', ward: '', address: '' };
+
     const [receiveAddress, setReceiveAddress] = useState(false);
     ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
@@ -420,8 +423,10 @@ function MainPostOrder(props) {
                                     <label className="col-xl-3 col-lg-4" />
                                     <div className="col-xl-9 col-lg-8">
                                         <h5 className="font-weight-normal mt-0 mb-6">Địa chỉ lấy hàng mặc định</h5>
+                                        <span className="form-text text-muted text-chartjs">{defaultAddressError && defaultAddressError}</span>
                                     </div>
                                 </div>
+                               
                                 <div className="form-group row">
                                     <label className="col-xl-3 col-lg-4 col-form-label"></label>
                                     <div className="col-xl-9 col-lg-8">
