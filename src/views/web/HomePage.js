@@ -39,6 +39,7 @@ function HomePage() {
                         if (doc.exists) {
                             setInput(
                                 doc.data());
+                             localStorage.setItem("fullname", doc.data().fullname)
                         } else {
                             console.log('No such document!');
                         }
@@ -79,7 +80,7 @@ function HomePage() {
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid}/>
+                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
                 <AsideRight name={input.fullname} />
             </div>
         </div>

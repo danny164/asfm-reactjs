@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AbstractTwo from '../../assets/media/abstract-2.svg';
 import AbstractThree from '../../assets/media/abstract-3.svg';
 import Avatar from '../../assets/media/avatar.png';
 import { useAuth } from '../../context/AuthContext';
+import { db } from '../../firebase';
 import Signout from '../LogOut';
 
 AsideRight.propTypes = {
     name: PropTypes.string,
+    name2: PropTypes.object
 };
 
 AsideRight.defaultProps = {
     name: '',
+    name2: null
 };
 
 function AsideRight(props) {
@@ -38,7 +41,9 @@ function AsideRight(props) {
                                 <i className="symbol-badge symbol-badge-bottom bg-success" />
                             </div>
 
-                            <h4 className="font-weight-bold my-2">{name ? name : currentUser.email}</h4>
+                            <h4 className="font-weight-bold my-2">
+                                {localStorage.getItem('fullname') ? localStorage.getItem('fullname') : currentUser.email}
+                            </h4>
                             <div className="text-muted mb-2">Shop Owner</div>
                             <span className="label label-light-warning label-inline font-weight-bold label-lg">Hoạt động</span>
                             <div className="mt-10">
