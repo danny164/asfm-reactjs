@@ -122,8 +122,7 @@ function ChatModal(props) {
                             <input
                                 className="form-control"
                                 id="chat-text-area"
-                                cols="100"
-                                rows="2"
+                                placeholder="Nhập nội dung tin nhắn..."
                                 value={newchat.message}
                                 onChange={onChange}
                             ></input>
@@ -138,6 +137,7 @@ function ChatModal(props) {
                     <div className="chat-icon-action">
                         <i className="fad fa-paper-plane" onClick={handleSubmitMessage}></i>
                     </div>
+                    {/* <span className="form-text text-muted"></span> */}
                 </div>
             </Modal.Footer>
         </Modal>
