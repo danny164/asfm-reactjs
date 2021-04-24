@@ -58,11 +58,15 @@ function MainPostOrder(props) {
     const receiveAddressRef = useRef();
 
     //////////////////////////////////////////////////////
-    const [district, setDistrict] = useState();
-    const [ward, setWard] = useState();
-    const [districtReceive, setDistrictReceive] = useState();
-    const [wardReceive, setWardReceive] = useState();
-
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
+    const [districtReceive, setDistrictReceive] = useState('');
+    const [wardReceive, setWardReceive] = useState('');
+    const [addressReceiveError, setAddressReceiveError] = useState();
+    const [districtReceiveError, setDistrictReceiveError] = useState();
+    const [wardReceiveError, setWardReceiveError] = useState();
+    const [districtError, setDistrictError] = useState();
+    const [wardError, setWardError] = useState();
     //////////////////////////////////////////////////////
     const dataList = {
         'Quận Cẩm Lệ': ['Phường Hòa An', 'Phường Hòa Phát', 'Phường Hòa Thọ Đông', 'Phường Hòa Thọ Tây', 'Phường Hòa Xuân', 'Phường Khuê Trung'],
@@ -165,6 +169,7 @@ function MainPostOrder(props) {
     const handleDistrictChange = (e) => {
         if (e.target.value || e.target.value === '') {
             setDistrict(e.target.value);
+            setDistrictError('');
             setWard('');
         }
     };
@@ -172,6 +177,7 @@ function MainPostOrder(props) {
     const handleDistrictReceiveChange = (e) => {
         if (e.target.value || e.target.value === '') {
             setDistrictReceive(e.target.value);
+            setDistrictReceiveError('');
             setWardReceive('');
         }
     };
@@ -221,9 +227,43 @@ function MainPostOrder(props) {
     const onSubmit = (e) => {
         const newAddress = { district: '', ward: '', address: '' };
         if (receiveAddress !== false) {
+            if (
+                receiveAddressRef.current.value === '' ||
+                receiveWardRef.current.value === '' ||
+                receiveDistrictRef.current.value === '' ||
+                shipDistrcitRef.current.value === '' ||
+                shipWardRef.current.value === ''
+            ) {
+                if (receiveAddressRef.current.value === '') {
+                    setAddressReceiveError('Vui lòng cung cấp số nhà, tên đường !');
+                }
+                if (receiveWardRef.current.value === '') {
+                    setWardReceiveError('Vui lòng chọn phường/xã !');
+                }
+                if (receiveDistrictRef.current.value === '') {
+                    setDistrictReceiveError('Vui lòng chọn quận/huyện ');
+                }
+                if (shipDistrcitRef.current.value === '') {
+                    setDistrictError('Vui lòng chọn quận/huyện  !');
+                }
+                if (shipWardRef.current.value === '') {
+                    setWardError('Vui lòng chọn phường/xã  !');
+                }
+                return;
+            }
             newAddress.district = receiveDistrictRef.current.value;
             newAddress.ward = receiveWardRef.current.value;
             newAddress.address = receiveAddressRef.current.value;
+        }
+
+        if (shipDistrcitRef.current.value === '' || shipWardRef.current.value === '') {
+            if (shipDistrcitRef.current.value === '') {
+                setDistrictError('Vui lòng chọn quận/huyện  !');
+            }
+            if (shipWardRef.current.value === '') {
+                setWardError('Vui lòng chọn phường/xã  !');
+            }
+            return;
         }
 
         const dataPostOrder = {
@@ -270,7 +310,7 @@ function MainPostOrder(props) {
                                     <button type="submit" className="btn btn-chartjs mr-2">
                                         Đăng ngay
                                     </button>
-                                    <button type="button" className="btn btn-light mr-2">
+                                    <button type="reset" className="btn btn-light mr-2">
                                         Làm lại
                                     </button>
                                 </div>
@@ -433,7 +473,7 @@ function MainPostOrder(props) {
                                                 <option value="">Chọn Quận/Huyện</option>
                                                 {districtList()}
                                             </select>
-                                            <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
+                                            <span className="form-text text-muted text-chartjs">{districtReceiveError && districtReceiveError}</span>
                                         </div>
                                     </div>
 
@@ -448,11 +488,15 @@ function MainPostOrder(props) {
                                                 id="ward"
                                                 value={wardReceive}
                                                 ref={receiveWardRef}
-                                                onChange={(e) => setWardReceive(e.target.value)}
+                                                onChange={(e) => {
+                                                    setWardReceive(e.target.value);
+                                                    setWardReceiveError('');
+                                                }}
                                             >
                                                 <option value="">Chọn Phường/Xã</option>
                                                 {wardReceiveList()}
                                             </select>
+                                            <span className="form-text text-muted text-chartjs">{wardReceiveError && wardReceiveError}</span>
                                         </div>
                                     </div>
 
@@ -469,9 +513,12 @@ function MainPostOrder(props) {
                                                 maxLength={50}
                                                 id="address"
                                                 placeholder="Số nhà, tên đường"
+                                                onChange={() => {
+                                                    setAddressReceiveError('');
+                                                }}
                                                 ref={receiveAddressRef}
                                             />
-                                            <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
+                                            <span className="form-text text-muted text-chartjs">{addressReceiveError && addressReceiveError}</span>
                                         </div>
                                     </div>
                                 </Expand>
@@ -513,7 +560,7 @@ function MainPostOrder(props) {
                                             <option value="">Chọn Quận/Huyện</option>
                                             {districtList()}
                                         </select>
-                                        <span className="form-text text-muted text-chartjs">{errors.district?.message}</span>
+                                        <span className="form-text text-muted text-chartjs">{districtError && districtError}</span>
                                     </div>
                                 </div>
                                 {/* Xã */}
@@ -526,12 +573,16 @@ function MainPostOrder(props) {
                                             className="form-control form-control-lg"
                                             id="ward"
                                             value={ward}
-                                            onChange={(e) => setWard(e.target.value)}
+                                            onChange={(e) => {
+                                                setWard(e.target.value);
+                                                setWardError('');
+                                            }}
                                             ref={shipWardRef}
                                         >
                                             <option value="">Chọn Phường/Xã</option>
                                             {wardList()}
                                         </select>
+                                        <span className="form-text text-muted text-chartjs">{wardError && wardError}</span>
                                     </div>
                                 </div>
                                 {/* Địa chỉ */}
