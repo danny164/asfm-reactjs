@@ -28,8 +28,10 @@ MainHomePage.defaultProps = {
     DeleteOrder: null,
     idShop: '',
 };
+
 var renderStatus = [];
 var sortStatus = [];
+
 function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
 
@@ -78,12 +80,12 @@ function MainHomePage(props) {
     //     console.log(data.thoi_gian);
     //     console.log(moment.unix(data.thoi_gian).subtract(1, 'day').format('X'));
     // });
-    function handleDeleteOrder(id) {
+    const handleDeleteOrder = (id) => {
         if (DeleteOrder) {
             DeleteOrder(id);
             setShow(false);
         }
-    }
+    };
 
     const [showChat, setShowChat] = useState(false);
 
@@ -155,7 +157,7 @@ function MainHomePage(props) {
                         </div>
                     </header>
 
-                    {datas && sortStatus !== [] ? (
+                    {datas && sortStatus.length !== 0 ? (
                         Object.values(sortStatus).map((data, index) => (
                             <article
                                 className="card-body order"
