@@ -27,6 +27,14 @@ function HomePage() {
         ghi_chu: '',
     });
 
+    const [notification, setNotification] = useState({
+        id_post: '',
+        id_roomchat: '',
+        id_shipper: '',
+        id_shop: '',
+        status: '',
+    });
+
     //fetch user infor
     useEffect(() => {
         async function fetchUserInfor() {
@@ -37,9 +45,10 @@ function HomePage() {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
+                            localStorage.setItem("fullname", doc.data().fullname)
+                            console.log("check check: " + doc.data().fullname)
                             setInput(
                                 doc.data());
-                             localStorage.setItem("fullname", doc.data().fullname)
                         } else {
                             console.log('No such document!');
                         }
@@ -58,6 +67,11 @@ function HomePage() {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     setData(snapshot.val());
                     console.log(snapshot.val());
+                });
+
+                realtime.ref('Transaction/').orderByChild("id_shop").equalTo(id).once('value').then((snapshot) => {
+                    setNotification(snapshot.val());
+                    console.log(snapshot.val())
                 });
             } catch (error) {
                 console.log(error);
@@ -80,7 +94,7 @@ function HomePage() {
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
+                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} Notification={Notification} />
                 <AsideRight name={input.fullname} />
             </div>
         </div>

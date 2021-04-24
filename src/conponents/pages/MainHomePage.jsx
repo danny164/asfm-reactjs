@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Link } from 'react-router-dom';
 import { realtime, db } from '../../firebase';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
@@ -19,6 +18,7 @@ MainHomePage.propTypes = {
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
     DeleteOrder: PropTypes.func,
+    Notification: PropTypes.object
 };
 
 MainHomePage.defaultProps = {
@@ -27,6 +27,7 @@ MainHomePage.defaultProps = {
     ChangeOrderStatus: null,
     DeleteOrder: null,
     idShop: '',
+    Notification: null
 };
 
 var renderStatus = [];
@@ -34,7 +35,7 @@ var lastStatus = [];
 var sortStatus = [];
 
 function MainHomePage(props) {
-    const { datas, DeleteOrder, shopInfo, idShop } = props;
+    const { datas, DeleteOrder, shopInfo, idShop, Notification } = props;
 
     const [filteredStatus, setFilteredStatus] = useState('all');
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -132,8 +133,6 @@ function MainHomePage(props) {
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
                 setTransactionInfor(snapshot.val());
-                console.log(transactionInfor);
-
                 if (snapshot.val().id_shipper !== '') {
                     db.collection('ProfileShipper')
                         .doc(snapshot.val().id_shipper)
@@ -141,7 +140,6 @@ function MainHomePage(props) {
                         .then((doc) => {
                             if (doc.exists) {
                                 setShipperInfor(doc.data());
-                                console.log(doc.data());
                             } else {
                                 console.log('Không fetch được dữ liệu !');
                             }
@@ -161,7 +159,6 @@ function MainHomePage(props) {
         }
     };
 
-    console.log(transactionInfor);
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">

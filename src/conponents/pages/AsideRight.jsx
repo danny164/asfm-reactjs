@@ -42,7 +42,7 @@ function AsideRight(props) {
                             </div>
 
                             <h4 className="font-weight-bold my-2">
-                                {localStorage.getItem('fullname') !== '' ? localStorage.getItem('fullname') : currentUser.email}
+                                {localStorage.getItem('fullname') ? localStorage.getItem('fullname') : currentUser.email}
                             </h4>
                             <div className="text-muted mb-2">Shop Owner</div>
                             <span className="label label-light-warning label-inline font-weight-bold label-lg">Hoạt động</span>

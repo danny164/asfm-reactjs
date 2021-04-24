@@ -3,19 +3,14 @@ import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Signout() {
-    const [error, setError] = useState('');
     const { logout } = useAuth();
-    const history = useHistory();
 
     async function handleLogout() {
-        setError('');
         try {
-            await logout();
-            history.push('/login');
-            localStorage.removeItem('fullname')
-        } catch {
-            setError('failed to logout !');
-            console.log(error);
+            await logout()
+            localStorage.removeItem("fullname")
+        } catch (e) {
+            console.log(e);
         }
     }
 
