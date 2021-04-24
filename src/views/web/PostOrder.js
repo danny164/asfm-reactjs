@@ -90,7 +90,6 @@ function PostOrder(props) {
                     .then((doc) => {
                         if (doc.exists) {
                             setUserInfor(doc.data());
-                            console.log(userInfor)
                         } else {
                             console.log("No such document!");
                         }
