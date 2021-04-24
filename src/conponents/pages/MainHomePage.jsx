@@ -60,9 +60,9 @@ function MainHomePage(props) {
 
     const handleFilterStatus = (status) => {
         setFilteredStatus(status);
-        status === 'all' && setTitleStatus('tất cả');
+        status === 'all' && setTitleStatus('gần đây');
         status === '0' && setTitleStatus('đang xử lý');
-        status === '1' && setTitleStatus('shipper đã nhận');
+        status === '1' && setTitleStatus('đã nhận');
         status === '2' && setTitleStatus('hoàn thành');
         status === '3' && setTitleStatus('bị hủy');
     };
@@ -133,7 +133,7 @@ function MainHomePage(props) {
                         <div className="card-title py-4">
                             <h3 className="card-label">
                                 <span className="d-block title">Danh sách đơn {titleStatus}</span>
-                                <span className="d-block text-time mt-2 font-size-sm">trong 24 giờ</span>
+                                <span className="d-block text-time mt-2 font-size-sm">trong ngày</span>
                             </h3>
                         </div>
                         <div className="card-toolbar">
@@ -208,7 +208,7 @@ function MainHomePage(props) {
                     ) : (
                         <article className="card-body">
                             <div className="empty-order">
-                                <span className="text menu-in-progress">Bạn chưa có đơn nào !</span>
+                                <span className="text menu-in-progress">Bạn không có đơn nào {titleStatus} !</span>
                             </div>
                         </article>
                     )}
