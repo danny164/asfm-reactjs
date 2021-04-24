@@ -43,10 +43,17 @@ function MainHomePage(props) {
     const [subTitleStatus, setSubTitleStatus] = useState('trong ngày');
 
     const [shipperInfor, setShipperInfor] = useState({});
-    const [transactionInfor, setTransactionInfor] = useState({});
+    const [transactionInfor, setTransactionInfor] = useState({
+        id_post: '',
+        id_roomchat: '',
+        id_shipper: '',
+        id_shop: '',
+        status: '',
+    });
 
     const [dataModal, setDataModal] = useState({});
     const [show, setShow] = useState(false);
+
     const handleClose = () => setShow(false);
 
     const dateToFromNowDaily = (date) => {
@@ -92,8 +99,6 @@ function MainHomePage(props) {
         setSortByRange(range);
     };
 
-    console.log(sortByRange);
-
     /////////////////////////////////////////////////////////
     if (datas) {
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
@@ -123,31 +128,32 @@ function MainHomePage(props) {
     };
 
     const fetchDataShipper = async (idPost) => {
+        console.log('idpost: ' + idPost);
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
                 setTransactionInfor(snapshot.val());
-                console.log(snapshot.val());
+                console.log(transactionInfor);
+
+                if (snapshot.val().id_shipper !== '') {
+                    db.collection('ProfileShipper')
+                        .doc(snapshot.val().id_shipper)
+                        .get()
+                        .then((doc) => {
+                            if (doc.exists) {
+                                setShipperInfor(doc.data());
+                                console.log(doc.data());
+                            } else {
+                                console.log('Không fetch được dữ liệu !');
+                            }
+                        });
+                }
             });
         } catch (error) {
             console.log(error);
         }
-
-        try {
-            await db
-                .collection('ProfileShipper')
-                .doc(transactionInfor.id_shipper)
-                .get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        setShipperInfor(doc.data());
-                    } else {
-                        console.log('Không fetch được dữ liệu !');
-                    }
-                });
-        } catch (error) {
-            console.log(error);
-        }
     };
+
+    console.log(transactionInfor);
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">

@@ -30,9 +30,11 @@ function PostOrder(props) {
                 return
             }
             address = userInfor.address;
-            
         }
-
+        const tamung = '0';
+        if(dataPostOrder.phi_ung !== ''){
+            tamung = dataPostOrder.phi_ung
+        }
         try {
             //tao bảng newsfeed
             await realtime.ref("newsfeed/" + dataPostOrder.idPost).set({
@@ -47,7 +49,7 @@ function PostOrder(props) {
                 sdt_nguoi_gui: userInfor.phone,
                 ten_nguoi_gui: userInfor.fullname,
                 phi_giao: dataPostOrder.phi_giao,
-                phi_ung: dataPostOrder.phi_ung,
+                phi_ung: tamung,
                 id_shop: currentUser.uid,
                 status: ""
             });
@@ -67,7 +69,7 @@ function PostOrder(props) {
                 sdt_nguoi_gui: userInfor.phone,
                 ten_nguoi_gui: userInfor.fullname,
                 phi_giao: dataPostOrder.phi_giao,
-                phi_ung: dataPostOrder.phi_ung,
+                phi_ung: tamung,
             });
 
             //tạo bảng transaction

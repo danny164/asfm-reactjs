@@ -395,6 +395,7 @@ function MainPostOrder(props) {
                                                 {...register('tempFee')}
                                                 id="temp_inputmask"
                                                 placeholder={0}
+                                                defaultValue="0"
                                                 ref={depositFeeRef}
                                             />
                                             <div className="input-group-append">

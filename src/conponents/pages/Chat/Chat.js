@@ -29,12 +29,13 @@ function Chat(props) {
     const [newchat, setNewchat] = useState({ id: shopInfo.id, imgmessage: '', message: '', timemessage: '', isseen: '', name: '' });
 
     useEffect(() => {
+
         const fetchData = async () => {
             idRoom &&
                 realtime.ref('Chatroom/' + idRoom).on('value', (resp) => {
                     setChats([]);
                     setChats(snapshotToArray(resp));
-                    console.log(chats);
+                    console.log(snapshotToArray(resp));
                 });
         };
         fetchData();
