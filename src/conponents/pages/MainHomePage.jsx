@@ -12,6 +12,8 @@ import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
 import TheNightOwl from '../../assets/media/avatar.png';
+import SkeletonCard from './Skeleton';
+import Expand from 'react-expand-animated';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -36,7 +38,7 @@ var lastStatus = [];
 var sortStatus = [];
 
 function MainHomePage(props) {
-    const { datas, DeleteOrder, shopInfo, idShop, Notification } = props;
+    const { datas, DeleteOrder, shopInfo, idShop } = props;
 
     const [filteredStatus, setFilteredStatus] = useState('all');
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -50,7 +52,6 @@ function MainHomePage(props) {
         id_roomchat: '',
         id_shipper: '',
         id_shop: '',
-        status: '',
     });
 
     const [dataModal, setDataModal] = useState({});
@@ -102,13 +103,25 @@ function MainHomePage(props) {
     };
 
     /////////////////////////////////////////////////////////
+
+    const [loading, setLoading] = useState(false);
+
     if (datas) {
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
-
         lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
-
         sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
     }
+
+    useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+            console.log(loading);
+        }, 1000);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, []);
 
     // console.log(sortStatus);
 
@@ -151,7 +164,6 @@ function MainHomePage(props) {
                         id_roomchat: '',
                         id_shipper: '',
                         id_shop: '',
-                        status: '',
                     });
                 }
             });
@@ -201,64 +213,74 @@ function MainHomePage(props) {
                             </ul>
                         </div>
                     </header>
-
-                    {datas && sortStatus.length !== 0 ? (
-                        Object.values(sortStatus).map((data, index) => (
-                            <article
-                                className="card-body order"
-                                key={index}
-                                onClick={() => {
-                                    setShow(true);
-                                    fetchDataShipper(data.id_post);
-                                    setDataModal(data);
-                                }}
-                            >
-                                <div className="d-flex align-items-start">
-                                    <span className="bullet bullet-bar bg-orange align-self-stretch" />
-                                    <div className="d-flex flex-column flex-grow-1 ml-4">
-                                        <header className="card-title content">
-                                            <span>#{data.id_post}</span>
-                                            <span className="flex-shrink-0">
-                                                {dateToFromNowDaily(data.thoi_gian)}
-                                                {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
-                                            </span>
-                                        </header>
-                                        <section className="card-info content">
-                                            <div className="mb-3">
-                                                <div className="mb-3">
-                                                    <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
-                                                    <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
-                                                </div>
-                                                <div className="mb-1">
-                                                    Chi phí giao hàng: <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
-                                                </div>
-                                                <div className="mb-1">
-                                                    Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
-                                                </div>
+                    <section className="card-body">
+                        {loading && <SkeletonCard />}
+                        {sortStatus.map((data, index) => (
+                            <>
+                                {loading && <SkeletonCard />}
+                                {!loading && (
+                                    <article
+                                        className="order"
+                                        key={index}
+                                        onClick={() => {
+                                            setShow(true);
+                                            fetchDataShipper(data.id_post);
+                                            setDataModal(data);
+                                        }}
+                                    >
+                                        <div className="d-flex align-items-start">
+                                            <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                            <div className="d-flex flex-column flex-grow-1 ml-4">
+                                                <header className="card-title content">
+                                                    <span>#{data.id_post}</span>
+                                                    <span className="flex-shrink-0">
+                                                        {dateToFromNowDaily(data.thoi_gian)}
+                                                        {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
+                                                    </span>
+                                                </header>
+                                                <section className="card-info content">
+                                                    <div className="mb-3">
+                                                        <div className="mb-3">
+                                                            <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
+                                                            <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
+                                                        </div>
+                                                        <div className="mb-1">
+                                                            Chi phí giao hàng:{' '}
+                                                            <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
+                                                        </div>
+                                                        <div className="mb-1">
+                                                            Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
+                                                        </div>
+                                                    </div>
+                                                    <span className="delivery">Giao hàng tới</span>
+                                                    <div className="d-flex align-items-center justify-content-between">
+                                                        <address className="mb-0 pl-0">{data.noi_giao}</address>
+                                                        {data.status === '0' && <InProcessing />}
+                                                        {data.status === '1' && <Picked />}
+                                                        {data.status === '2' && <Completed />}
+                                                        {data.status === '3' && <Cancelled />}
+                                                    </div>
+                                                </section>
                                             </div>
-                                            <span className="delivery">Giao hàng tới</span>
-                                            <div className="d-flex align-items-center justify-content-between">
-                                                <address className="mb-0 pl-0">{data.noi_giao}</address>
-                                                {data.status === '0' && <InProcessing />}
-                                                {data.status === '1' && <Picked />}
-                                                {data.status === '2' && <Completed />}
-                                                {data.status === '3' && <Cancelled />}
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                                <div className="separator separator-dashed my-5" />
-                            </article>
-                        ))
-                    ) : (
-                        <article className="card-body">
-                            <div className="empty-order">
-                                <span className="text menu-in-progress">
-                                    Bạn không có đơn nào {titleStatus} {subTitleStatus} !
-                                </span>
-                            </div>
-                        </article>
-                    )}
+                                        </div>
+                                        <div className="separator separator-dashed my-5" />
+                                    </article>
+                                )}
+                            </>
+                        ))}
+                        {sortStatus.length === 0 && (
+                            <>
+                                {!loading && (
+                                    <article className="empty-order">
+                                        <span className="text menu-in-progress">
+                                            Bạn không có đơn nào {titleStatus} {subTitleStatus} !
+                                        </span>
+                                    </article>
+                                )}
+                                {console.log(loading)}
+                            </>
+                        )}
+                    </section>
 
                     <Modal size="lg" show={show} onHide={handleClose}>
                         <Modal.Header closeButton>

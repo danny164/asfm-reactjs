@@ -1,11 +1,12 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
+import Expand from 'react-expand-animated';
 
 function SkeletonCard() {
     return (
-        <article className="card-body order">
+        <article className="order">
             <div className="d-flex align-items-start">
-                <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                <span className="bullet bullet-bar bg-orange align-self-stretch height-fixed" />
                 <div className="d-flex flex-column flex-grow-1 ml-4">
                     <section className="card-info content">
                         <Skeleton duration={1} height={11} width={`35%`} />
@@ -15,9 +16,14 @@ function SkeletonCard() {
                             <Skeleton height={12} width={`60%`} />
                         </div>
                         <Skeleton height={11} width={`30%`} />
+                        <div>
+                            <Skeleton height={11} width={`20%`} />
+                        </div>
+                        <Skeleton height={11} width={`40%`} />
                     </section>
                 </div>
             </div>
+            <div className="separator separator-dashed my-5" />
         </article>
     );
 }
