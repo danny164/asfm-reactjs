@@ -12,6 +12,22 @@ body {
     text-align: left;
 }
 
+.shipper-info {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-column-gap: 6px;
+}
+
+.shipper-info .avatar-shipper-sm {
+    grid-row: span 2;
+}
+
+.avatar-shipper-sm img {
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+}
+
 .was-validated .form-control-solid:invalid,
 .form-control-solid.is-invalid {
     border: 1px solid #f2994a;

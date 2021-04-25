@@ -1,9 +1,9 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { realtime, db } from '../../firebase';
+import { db, realtime } from '../../firebase';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Cancelled from '../labels/Cancelled';
@@ -11,6 +11,7 @@ import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
+import TheNightOwl from '../../assets/media/avatar.png';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -18,7 +19,7 @@ MainHomePage.propTypes = {
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
     DeleteOrder: PropTypes.func,
-    Notification: PropTypes.object
+    Notification: PropTypes.object,
 };
 
 MainHomePage.defaultProps = {
@@ -27,7 +28,7 @@ MainHomePage.defaultProps = {
     ChangeOrderStatus: null,
     DeleteOrder: null,
     idShop: '',
-    Notification: null
+    Notification: null,
 };
 
 var renderStatus = [];
@@ -158,7 +159,6 @@ function MainHomePage(props) {
             console.log(error);
         }
     };
-
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -325,8 +325,11 @@ function MainHomePage(props) {
                             <p className="font-weight-bold">Người nhận đơn:</p>
 
                             <div className="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div className="mr-5">{shipperInfor.name}</div>
+                                <div className="shipper-info">
+                                    <div className="avatar-shipper-sm">
+                                        {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
+                                    </div>
+                                    <div className="mr-5 font-weight-bold text-chartjs">{shipperInfor.name}</div>
                                     <span>{shipperInfor.phone}</span>
                                 </div>
                                 {dataModal.status !== '0' && (
