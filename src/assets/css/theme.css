@@ -12,6 +12,11 @@ body {
     text-align: left;
 }
 
+.bullet.bullet-bar {
+    -ms-flex-negative: 0 !important;
+    flex-shrink: 0 !important;
+}
+
 .bullet.bullet-bar.height-fixed {
     height: 134px;
 }
@@ -234,10 +239,6 @@ body {
     align-items: center;
     margin: 0.5rem 0;
     flex-wrap: wrap;
-}
-
-.card.card-custom > .card-body.order {
-    padding: 0.5rem 2.25rem;
 }
 
 .card.card-custom {
@@ -591,7 +592,7 @@ body {
 
 @media (max-width: 767.98px) {
     .card.card-custom > .card-header,
-    .card.card-custom > .card-body.order {
+    .card.card-custom > .card-body.newsfeed {
         padding: 0.5rem 1rem;
     }
 }
