@@ -46,7 +46,6 @@ function HomePage() {
                     .then((doc) => {
                         if (doc.exists) {
                             localStorage.setItem("fullname", doc.data().fullname)
-                            console.log("check check: " + doc.data().fullname)
                             setInput(
                                 doc.data());
                         } else {

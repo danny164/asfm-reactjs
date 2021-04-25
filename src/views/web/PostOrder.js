@@ -6,11 +6,14 @@ import AsideLeft from "../../conponents/pages/AsideLeft";
 import { useAuth } from "../../context/AuthContext";
 import { db, realtime } from "../../firebase";
 
-var address = ''
+
+
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
     const [defaultAddressError, setDefaultAddressError] = useState()
+    let tamung = '0'
+    let address = ''
 
     const [userInfor, setUserInfor] = useState({
         fullname: '',
@@ -25,14 +28,15 @@ function PostOrder(props) {
         if (newAddress.district !== '') {
             address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
         } else {
-            if(userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress ==='' ){
+            if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
                 setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !')
                 return
             }
             address = userInfor.address;
         }
-        const tamung = '0';
-        if(dataPostOrder.phi_ung !== ''){
+
+        console.log(dataPostOrder.phi_ung)
+        if (dataPostOrder.phi_ung !== '') {
             tamung = dataPostOrder.phi_ung
         }
         try {
@@ -114,7 +118,7 @@ function PostOrder(props) {
         <div className="header-fixed sidebar-enabled bg">
             <section className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainPostOrder postOrder={PostOrder} defaultAddressError={defaultAddressError}/>
+                <MainPostOrder postOrder={PostOrder} defaultAddressError={defaultAddressError} />
                 <AsideRight name={userInfor.fullname} />
             </section>
         </div>
