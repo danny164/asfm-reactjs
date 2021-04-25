@@ -72,14 +72,19 @@ function ChatModal(props) {
     ///////////////////////////////////////////////
     // ! Scroll to bottom and point to user view
     const messagesEndRef = useRef(null);
+    const [focusInput, setForcusInput] = useState(false);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView();
     };
 
+    const handleFocusInput = () => {
+        setForcusInput(true);
+    };
+
     useEffect(() => {
         scrollToBottom();
-    }, [chats, showChat]);
+    }, [chats, showChat, focusInput]);
 
     return (
         <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
@@ -126,6 +131,7 @@ function ChatModal(props) {
                                 placeholder="Nhập nội dung tin nhắn..."
                                 value={newchat.message}
                                 onChange={onChange}
+                                onClick={handleFocusInput}
                             ></input>
 
                             <div className="chat-icon-group">
