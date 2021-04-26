@@ -195,6 +195,20 @@ body {
     border-radius: 0.675rem;
 }
 
+.card .card-label {
+    font-weight: 500;
+    font-size: 1.333rem;
+    color: #181c32;
+}
+
+.card .card-header .card-title {
+    justify-content: center;
+}
+
+h3.card-label {
+    margin-bottom: 0;
+}
+
 .order {
     cursor: pointer;
 }

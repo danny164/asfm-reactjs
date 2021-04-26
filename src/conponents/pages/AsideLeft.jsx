@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TheNightOwl from '../../assets/media/the-night-owl.png';
 
 function AsideLeft(props) {
+    const { onHandleMenu } = props;
 
-    
     return (
-        <aside className="aside aside-left d-flex flex-column">
+        <aside className={`aside aside-left d-flex flex-column ${onHandleMenu ? 'aside-on' : ''}`}>
             <header className="d-flex flex-column align-items-center flex-column-auto py-9">
                 <div>
                     <Link to="/home">
@@ -43,5 +44,13 @@ function AsideLeft(props) {
         </aside>
     );
 }
+
+AsideLeft.propTypes = {
+    onHandleMenu: PropTypes.bool,
+};
+
+AsideLeft.defaultProps = {
+    onHandleMenu: false,
+};
 
 export default AsideLeft;
