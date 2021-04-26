@@ -210,7 +210,7 @@ function MainHomePage(props) {
                             <ul className="nav nav-pills">
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '30' ? 'active' : ''}`}
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '30' ? 'active' : 'btn-outline-secondary'}`}
                                         onClick={() => handleSortByRange('30')}
                                     >
                                         <span className="nav-text">Tháng</span>
@@ -218,7 +218,7 @@ function MainHomePage(props) {
                                 </li>
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '7' ? 'active' : ''}`}
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '7' ? 'active' : 'btn-outline-secondary'}`}
                                         onClick={() => handleSortByRange('7')}
                                     >
                                         <span className="nav-text">Tuần</span>
@@ -226,7 +226,7 @@ function MainHomePage(props) {
                                 </li>
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '1' ? 'active' : ''}`}
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '1' ? 'active' : 'btn-outline-secondary'}`}
                                         onClick={() => handleSortByRange('1')}
                                     >
                                         <span className="nav-text">Ngày</span>
@@ -235,7 +235,7 @@ function MainHomePage(props) {
                             </ul>
                         </div>
                     </header>
-                    <section className="card-body">
+                    <section className="card-body newsfeed">
                         {loading && <SkeletonCard />}
                         {sortStatus.map((data, index) => (
                             <>

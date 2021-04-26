@@ -1,8 +1,8 @@
-body.modal-open {
-    overflow: hidden;
-    width: 100%;
-    position: fixed;
-}
+// body.modal-open {
+//     overflow: hidden;
+//     width: 100%;
+//     position: fixed;
+// }
 
 .chat {
     padding: 0 !important;
@@ -126,9 +126,12 @@ body.modal-open {
 
 .message-text {
     padding: 8px 12px;
+    margin-bottom: 5px;
+
     font-size: 1rem;
     line-height: 1.5rem;
-    margin-bottom: 5px;
+
+    word-break: break-word;
 }
 
 .message-time {

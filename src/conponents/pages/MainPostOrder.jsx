@@ -309,11 +309,11 @@ function MainPostOrder(props) {
                     <div className="card card-custom card-sticky" id="on_page_sticky_card">
                         <form className="form" onSubmit={handleSubmit(onSubmit)}>
                             <header className="card-header py-3">
-                                <div className="card-title align-items-start flex-column">
+                                <div className="card-title align-items-start flex-column mb-1">
                                     <h3 className="card-label">Đăng đơn</h3>
                                     <span className="text-muted font-size-sm mt-1">Hãy tạo đơn mới ngay bây giờ nhé!</span>
                                 </div>
-                                <div className="card-toolbar">
+                                <div className="card-toolbar align-self-center">
                                     <button type="submit" className="btn btn-chartjs mr-2">
                                         Đăng ngay
                                     </button>

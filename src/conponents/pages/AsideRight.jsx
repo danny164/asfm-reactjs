@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import AbstractTwo from '../../assets/media/abstract-2.svg';
 import AbstractThree from '../../assets/media/abstract-3.svg';
 import Avatar from '../../assets/media/avatar.png';
 import { useAuth } from '../../context/AuthContext';
-import { db } from '../../firebase';
 import Signout from '../LogOut';
 
 AsideRight.propTypes = {
