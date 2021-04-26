@@ -238,7 +238,7 @@ function MainHomePage(props) {
                             </ul>
                         </div>
                     </header>
-                    <section className="card-body newsfeed">
+                    <section className="card-body pt-1 newsfeed">
                         {loading && <SkeletonCard />}
                         {sortStatus.map((data, index) => (
                             <>
