@@ -163,7 +163,10 @@ function MainHomePage(props) {
         console.log('idpost: ' + idPost);
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
-                if (dataModal.id_post !== '' || dataModal.status !== snapshot.val().status) {
+                /* kiểm tra lần đầu nếu chưa có dataModel thì k chạy setDataModal 
+                và kiểm tra nếu có thay đổi status thì mới set k thì thôi */
+                if (dataModal.id_post !== '' && dataModal.status !== snapshot.val().status) {
+                    console.log('alo');
                     setDataModal({ ...dataModal, status: snapshot.val().status });
                 }
 
@@ -307,7 +310,6 @@ function MainHomePage(props) {
                     <Modal size="lg" show={show} onHide={handleClose}>
                         {/* {Object.values(dataModal).map((data, index) => (
                             <> */}
-                        {console.log('render lại' + dataModal.id_post + ' ' + dataModal.status)}
                         <Modal.Header closeButton>
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
                         </Modal.Header>
