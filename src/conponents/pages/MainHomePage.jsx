@@ -92,6 +92,7 @@ function MainHomePage(props) {
     };
 
     /////////////////////////////////////////////////////////
+    // ! Lọc theo sự kiện click trên header
     const handleFilterStatus = (status) => {
         setFilteredStatus(status);
         status === 'all' && setTitleStatus('gần đây');
@@ -101,6 +102,7 @@ function MainHomePage(props) {
         status === '3' && setTitleStatus('bị hủy');
     };
 
+    // * Lọc theo phạm vi, trả về kết quả theo ngày, tháng, tuần cho lastStatus []
     const last24hrs = (sortByRange, dataTime) => {
         if (sortByRange === '7') {
             return dataTime >= moment().subtract(7, 'days').format('X');
@@ -109,18 +111,20 @@ function MainHomePage(props) {
         return dataTime >= moment().subtract(1, 'day').format('X');
     };
 
+    // * Khi Sort by Range thay đổi, thì Title cũng cần update theo
     useEffect(() => {
         if (sortByRange === '1') setSubTitleStatus('trong ngày');
         if (sortByRange === '7') setSubTitleStatus('trong tuần');
         if (sortByRange === '30') setSubTitleStatus('trong tháng');
     }, [sortByRange]);
 
+    // * Nhận loại sort từ sự kiện click
     const handleSortByRange = (range) => {
         setSortByRange(range);
     };
 
     /////////////////////////////////////////////////////////
-
+    // ! delay loading chờ lấy thông tin
     const [loading, setLoading] = useState(false);
 
     if (datas) {
@@ -133,7 +137,7 @@ function MainHomePage(props) {
         setLoading(true);
         const timer = setTimeout(() => {
             setLoading(false);
-            console.log(loading);
+            // console.log(loading);
         }, 1000);
         return () => {
             clearTimeout(timer);
@@ -142,6 +146,8 @@ function MainHomePage(props) {
 
     // console.log(sortStatus);
 
+    /////////////////////////////////////////////////////////
+    // ! Xóa đơn
     const handleDeleteOrder = (id) => {
         if (DeleteOrder) {
             DeleteOrder(id);
@@ -149,6 +155,8 @@ function MainHomePage(props) {
         }
     };
 
+    /////////////////////////////////////////////////////////
+    // ! Chat
     const [showChat, setShowChat] = useState(false);
 
     const handleClickChat = () => {
@@ -159,6 +167,9 @@ function MainHomePage(props) {
         setShowChat(false);
     };
 
+    /////////////////////////////////////////////////////////
+    // ! Fetch thông tin của shipper khi nhận đơn
+
     const fetchDataShipper = async (idPost, data) => {
         console.log('idpost: ' + idPost);
         try {
@@ -167,7 +178,6 @@ function MainHomePage(props) {
                 và kiểm tra nếu có thay đổi status thì mới set k thì thôi */
 
                 // if (dataModal.id_post !== '') {
-                //     //     console.log('alo');
                 //     setDataModal({ ...dataModal, status: snapshot.val().status });
                 // }
                 realtime
@@ -206,14 +216,15 @@ function MainHomePage(props) {
         }
     };
 
+    // * Lấy key và value trong object lồng { id : { key: value}}
     const snapshotToObject = (snapshot) => {
-        let item1 = {};
+        let box = {};
         snapshot.forEach((childSnapshot) => {
             const item = childSnapshot.val();
             item.key = childSnapshot.key;
-            item1 = item;
+            box = item;
         });
-        return item1;
+        return box;
     };
 
     return (
@@ -327,8 +338,6 @@ function MainHomePage(props) {
                     </section>
 
                     <Modal size="lg" show={show} onHide={handleClose}>
-                        {/* {Object.values(dataModal).map((data, index) => (
-                            <> */}
                         <Modal.Header closeButton>
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
                         </Modal.Header>

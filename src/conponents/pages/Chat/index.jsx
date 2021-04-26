@@ -128,11 +128,11 @@ function ChatModal(props) {
                                 onChange={onChange}
                             ></input>
 
-                            <div className="chat-icon-group">
+                            {/* <div className="chat-icon-group">
                                 <span className="btn-icon">
                                     <i className="fad fa-image"></i>
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
                     <div className="chat-icon-action">
