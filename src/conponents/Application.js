@@ -9,10 +9,10 @@ import ForgotPw from './ForgotPw';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
 import Register from './SignUp';
-import CheckRoute from './CheckRoute'
+import CheckRoute from './CheckRoute';
+import NotFoundPage from './pages/NotFound/NotFoundPage';
 
 function Application() {
-    
     return (
         <Router>
             <AuthProvider>
@@ -24,6 +24,7 @@ function Application() {
                     <CheckRoute exact path="/login" component={Login} />
                     <CheckRoute exact path="/forgotpw" component={ForgotPw} />
                     <PrivateRoute exact path="/post-order" component={PostOrder} />
+                    <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>
             <Switch>

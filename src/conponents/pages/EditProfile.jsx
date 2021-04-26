@@ -1,9 +1,13 @@
-import PropTypes from "prop-types";
-import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import Avatar from "../../assets/media/avatar.png";
-import Footer from "../common/Footer";
-import Header from "../common/Header";
+import PropTypes from 'prop-types';
+import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Avatar from '../../assets/media/avatar.png';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import InputMask from 'react-input-mask';
 
 EditProfile.propTypes = {
     user: PropTypes.object,
@@ -15,7 +19,7 @@ EditProfile.defaultProps = {
     edit: null,
 };
 
-var save = "";
+var save = '';
 function EditProfile(props) {
     const { user, edit } = props;
 
@@ -31,75 +35,57 @@ function EditProfile(props) {
 
     //////////////////////////////////////////////////////
     const dataList = {
-        "Quận Cẩm Lệ": [
-            "Phường Hòa An",
-            "Phường Hòa Phát",
-            "Phường Hòa Thọ Đông",
-            "Phường Hòa Thọ Tây",
-            "Phường Hòa Xuân",
-            "Phường Khuê Trung",
+        'Quận Cẩm Lệ': ['Phường Hòa An', 'Phường Hòa Phát', 'Phường Hòa Thọ Đông', 'Phường Hòa Thọ Tây', 'Phường Hòa Xuân', 'Phường Khuê Trung'],
+        'Quận Hải Châu': [
+            'Phường Bình Hiên',
+            'Phường Bình Thuận',
+            'Phường Hải Châu 1',
+            'Phường Hải Châu 2',
+            'Phường Hòa Cương Bắc',
+            'Phường Hòa Cường Nam',
+            'Phường Hòa Thuận Đông',
+            'Phường Hòa Thuận Tây',
+            'Phường Nam Dương',
+            'Phường Phước Ninh',
+            'Phường Thạch Thang',
+            'Phường Thạnh Bình',
+            'Phường Thuận Phước',
         ],
-        "Quận Hải Châu": [
-            "Phường Bình Hiên",
-            "Phường Bình Thuận",
-            "Phường Hải Châu 1",
-            "Phường Hải Châu 2",
-            "Phường Hòa Cương Bắc",
-            "Phường Hòa Cường Nam",
-            "Phường Hòa Thuận Đông",
-            "Phường Hòa Thuận Tây",
-            "Phường Nam Dương",
-            "Phường Phước Ninh",
-            "Phường Thạch Thang",
-            "Phường Thạnh Bình",
-            "Phường Thuận Phước",
+        'Quận Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam', 'Phường Hòa Khánh Bắc', 'Phường Hòa Khánh Nam', 'Phường Hòa Minh'],
+        'Quận Ngũ Hành Sơn': ['Phường Hòa Hải', 'Phường Hòa Quý', 'Phường Khuê Mỹ', 'Phường Mỹ An'],
+        'Quận Sơn Trà': [
+            'Phường An Hải Bắc',
+            'Phường An Hải Đông',
+            'Phường An Hải Tây',
+            'Phường Mân Thái',
+            'Phường Nại Hiên Đông',
+            'Phường Phước Mỹ',
+            'Phường Thọ Quang',
         ],
-        "Quận Liên Chiểu": [
-            "Phường Hòa Hiệp Bắc",
-            "Phường Hòa Hiệp Nam",
-            "Phường Hòa Khánh Bắc",
-            "Phường Hòa Khánh Nam",
-            "Phường Hòa Minh",
+        'Quận Thanh Khê': [
+            'Phường An Khê',
+            'Phường Chính Gián',
+            'Phường Hòa Khê',
+            'Phường Tam Thuận',
+            'Phường Tân Chính',
+            'Phường Thạc Gián',
+            'Phường Thanh Khê Đông',
+            'Phường Thanh Khê Tây',
+            'Phường Vĩnh Trung',
+            'Phường Xuân Hà',
         ],
-        "Quận Ngũ Hành Sơn": [
-            "Phường Hòa Hải",
-            "Phường Hòa Quý",
-            "Phường Khuê Mỹ",
-            "Phường Mỹ An",
-        ],
-        "Quận Sơn Trà": [
-            "Phường An Hải Bắc",
-            "Phường An Hải Đông",
-            "Phường An Hải Tây",
-            "Phường Mân Thái",
-            "Phường Nại Hiên Đông",
-            "Phường Phước Mỹ",
-            "Phường Thọ Quang",
-        ],
-        "Quận Thanh Khê": [
-            "Phường An Khê",
-            "Phường Chính Gián",
-            "Phường Hòa Khê",
-            "Phường Tam Thuận",
-            "Phường Tân Chính",
-            "Phường Thạc Gián",
-            "Phường Thanh Khê Đông",
-            "Phường Thanh Khê Tây",
-            "Phường Vĩnh Trung",
-            "Phường Xuân Hà",
-        ],
-        "Huyện Hòa Vang": [
-            "Xã Hòa Bắc",
-            "Xã Hòa Châu",
-            "Xã Hòa Khương",
-            "Xã Hòa Liên",
-            "Xã Hòa Nhơn",
-            "Xã Hòa Ninh",
-            "Xã Hòa Phong",
-            "Xã Hòa Phú",
-            "Xã Hòa Phước",
-            "Xã Hòa Sơn",
-            "Xã Hòa Tiến",
+        'Huyện Hòa Vang': [
+            'Xã Hòa Bắc',
+            'Xã Hòa Châu',
+            'Xã Hòa Khương',
+            'Xã Hòa Liên',
+            'Xã Hòa Nhơn',
+            'Xã Hòa Ninh',
+            'Xã Hòa Phong',
+            'Xã Hòa Phú',
+            'Xã Hòa Phước',
+            'Xã Hòa Sơn',
+            'Xã Hòa Tiến',
         ],
     };
 
@@ -123,7 +109,7 @@ function EditProfile(props) {
                     items.push(<option value={district}>{district}</option>);
                 }
             } else {
-            items.push(<option value={district}>{district}</option>);
+                items.push(<option value={district}>{district}</option>);
             }
         }
         return items;
@@ -140,11 +126,7 @@ function EditProfile(props) {
                 Object.values(dataList[save]).map((data, index) => {
                     if (user.input.ward === data) {
                         items.push(
-                            <option
-                                selected="selected"
-                                key={index}
-                                value={data}
-                            >
+                            <option selected="selected" key={index} value={data}>
                                 {data}
                             </option>
                         );
@@ -159,7 +141,7 @@ function EditProfile(props) {
             } else {
                 if (!district) return;
                 else {
-                    console.log("district " + district);
+                    console.log('district ' + district);
                     Object.values(dataList[district]).map((data, index) => {
                         items.push(
                             <option key={index} value={data}>
@@ -170,17 +152,18 @@ function EditProfile(props) {
                 }
             }
         } else {
-        if (!district) return;
-        else {
-            console.log("district " + district);
-            Object.values(dataList[district]).map((data, index) => {
-                items.push(
-                    <option key={index} value={data}>
-                        {data}
-                    </option>
-                );
-            });
-        }}
+            if (!district) return;
+            else {
+                console.log('district ' + district);
+                Object.values(dataList[district]).map((data, index) => {
+                    items.push(
+                        <option key={index} value={data}>
+                            {data}
+                        </option>
+                    );
+                });
+            }
+        }
         return items;
     };
 
@@ -188,33 +171,52 @@ function EditProfile(props) {
     // ! Reset old selection
     //////////////////////////////////////////////////////
     const handleDistrictChange = (e) => {
-        user.input.district = " ";
-        if (e.target.value || e.target.value === "") {
+        user.input.district = ' ';
+        if (e.target.value || e.target.value === '') {
             setDistrict(e.target.value);
-            setWard("");
-            console.log("ward " + ward);
+            setWard('');
+            console.log('ward ' + ward);
         }
     };
 
-    //form handle
-    function handleSubmit(e) {
-        e.preventDefault();
-        if (edit) {
-            edit(
-                fullNameRef.current.value,
-                phoneRef.current.value,
-                addressRef.current.value +
-                    ", " +
-                    wardRef.current.value +
-                    ", " +
-                    districtRef.current.value +
-                    ", Thành phố Đà Nẵng",
-                districtRef.current.value,
-                wardRef.current.value,
-                addressRef.current.value
-            );
-        }
-    }
+    //////////////////////////////////////////////////////
+
+    const schema = yup.object().shape({
+        fullname: yup
+            .string()
+            .required('Vui lòng nhập họ và tên của bạn')
+            .max(50, 'Vượt quá ${max} kí tự được cho phép')
+            .min(5, 'Tối thiểu ${min} kí tự'),
+        phone: yup
+            .string()
+            .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
+            .required('Vui lòng điền số điện thoại của bạn'),
+        address: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    ////////////////////////////////////
+    const onSubmit = (e) => {
+        edit(
+            fullNameRef.current.value,
+            phoneRef.current.value,
+            addressRef.current.value + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
+            districtRef.current.value,
+            wardRef.current.value,
+            addressRef.current.value
+        );
+    };
+
+    const checkingFullname = `form-control form-control-lg ${errors.fullname ? 'is-invalid' : ''}`;
+    const checkingPhone = `form-control form-control-lg ${errors.phone ? 'is-invalid' : ''}`;
+    const checkingAddress = `form-control form-control-lg ${errors.address ? 'is-invalid' : ''}`;
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -226,9 +228,7 @@ function EditProfile(props) {
                         {/* wrap breadcrumb */}
                         <div className="d-flex align-items-center flex-wrap mr-1">
                             <div className="d-flex align-items-baseline flex-wrap mr-5">
-                                <h5 className="text-dark font-weight-bold my-1 mr-5">
-                                    Cài đặt tài khoản
-                                </h5>
+                                <h5 className="text-dark font-weight-bold my-1 mr-5">Cài đặt tài khoản</h5>
                                 {/* breadcrumb */}
                                 <ul className="breadcrumb font-weight-bold p-0 my-2 font-size-sm">
                                     <li className="breadcrumb-item">
@@ -237,10 +237,7 @@ function EditProfile(props) {
                                         </Link>
                                     </li>
                                     <li className="breadcrumb-item active">
-                                        <Link
-                                            to="/profile"
-                                            className="text-muted"
-                                        >
+                                        <Link to="/profile" className="text-muted">
                                             Xem hồ sơ
                                         </Link>
                                     </li>
@@ -254,22 +251,15 @@ function EditProfile(props) {
                     </div>
                 </div>
                 <div className="core d-flex flex-column flex-row-fluid container">
-                    <form className="form" onSubmit={handleSubmit}>
+                    <form className="form" onSubmit={handleSubmit(onSubmit)}>
                         <div className="card card-custom">
                             <header className="card-header py-3">
                                 <div className="card-title align-items-start flex-column">
-                                    <h3 className="card-label">
-                                        Thông tin cá nhân
-                                    </h3>
-                                    <span className="text-muted font-size-sm mt-1">
-                                        Cập nhật thông tin cá nhân của bạn
-                                    </span>
+                                    <h3 className="card-label">Thông tin cá nhân</h3>
+                                    <span className="text-muted font-size-sm mt-1">Cập nhật thông tin cá nhân của bạn</span>
                                 </div>
                                 <div className="card-toolbar">
-                                    <button
-                                        type="submit"
-                                        className="btn btn-chartjs mr-2"
-                                    >
+                                    <button type="submit" className="btn btn-chartjs mr-2">
                                         Lưu thay đổi
                                     </button>
                                 </div>
@@ -277,9 +267,7 @@ function EditProfile(props) {
                             <div className="card-body">
                                 {/* avatar */}
                                 <div className="form-group row">
-                                    <label className="col-xl-3 col-lg-4 col-form-label">
-                                        Ảnh đại diện
-                                    </label>
+                                    <label className="col-xl-3 col-lg-4 col-form-label">Ảnh đại diện</label>
                                     <div className="col-xl-9 col-lg-8">
                                         <div
                                             className="image-input image-input-outline"
@@ -296,15 +284,8 @@ function EditProfile(props) {
                                                 data-original-title="Change avatar"
                                             >
                                                 <i className="fa fa-pen icon-sm text-muted" />
-                                                <input
-                                                    type="file"
-                                                    name="profile_avatar"
-                                                    accept=".png, .jpg, .jpeg"
-                                                />
-                                                <input
-                                                    type="hidden"
-                                                    name="profile_avatar_remove"
-                                                />
+                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" />
+                                                <input type="hidden" name="profile_avatar_remove" />
                                             </label>
                                             <span
                                                 className="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
@@ -323,17 +304,12 @@ function EditProfile(props) {
                                                 <i className="fas fa-times text-muted" />
                                             </span>
                                         </div>
-                                        <span className="form-text text-muted">
-                                            Định dạng cho phép: png, jpg, jpeg.
-                                        </span>
+                                        <span className="form-text text-muted">Định dạng cho phép: png, jpg, jpeg.</span>
                                     </div>
                                 </div>
                                 {/* email */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="email"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="email" className="col-xl-3 col-lg-4 col-form-label">
                                         Email
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -350,58 +326,51 @@ function EditProfile(props) {
                                 </div>
                                 {/* full name */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="fullname"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="fullname" className="col-xl-3 col-lg-4 col-form-label">
                                         Họ và tên
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <input
-                                            className="form-control form-control-lg"
+                                            className={checkingFullname}
                                             type="text"
                                             id="fullname"
                                             placeholder="Vui lòng nhập họ và tên của bạn"
                                             defaultValue={user.input.fullname}
+                                            {...register('fullname')}
                                             ref={fullNameRef}
                                         />
+                                        <span className="form-text text-muted text-chartjs">{errors.fullname?.message}</span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
                                 {/* phone number */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="phone"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="phone" className="col-xl-3 col-lg-4 col-form-label">
                                         Số điện thoại
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
-                                        <input
-                                            className="form-control form-control-lg"
+                                        <InputMask
+                                            mask="9999 999 999"
+                                            className={checkingPhone}
                                             type="text"
                                             id="phone"
                                             placeholder="Số điện thoại của bạn"
                                             defaultValue={user.input.phone}
+                                            {...register('phone')}
                                             ref={phoneRef}
                                         />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted text-chartjs">{errors.phone?.message}</span>{' '}
                                     </div>
                                 </div>
                                 <div className="row">
                                     <label className="col-xl-3 col-lg-4" />
                                     <div className="col-xl-9 col-lg-8">
-                                        <h5 className="font-weight-normal mt-10 mb-6">
-                                            Địa chỉ
-                                        </h5>
+                                        <h5 className="font-weight-normal mt-10 mb-6">Địa chỉ</h5>
                                     </div>
                                 </div>
                                 {/* Tỉnh/Thành phố */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="city"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="city" className="col-xl-3 col-lg-4 col-form-label">
                                         Tỉnh/Thành phố
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -417,10 +386,7 @@ function EditProfile(props) {
 
                                 {/* Huyện */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="district"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
                                         Quận/Huyện
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -430,59 +396,49 @@ function EditProfile(props) {
                                             onClick={handleDistrictChange}
                                             ref={districtRef}
                                         >
-                                            <option value="">
-                                                Chọn Quận/Huyện
-                                            </option>
+                                            <option value="">Chọn Quận/Huyện</option>
                                             {districtList()}
                                         </select>
+                                        <span className="form-text text-muted text-chartjs"></span>
                                     </div>
                                 </div>
 
                                 {/* Xã */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="ward"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
                                         Phường/Xã
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <select
                                             className="form-control form-control-lg"
                                             id="ward"
-                                            onClick={(e) =>
-                                                setWard(e.target.value)
-                                            }
+                                            onClick={(e) => setWard(e.target.value)}
                                             ref={wardRef}
                                         >
-                                            <option value="">
-                                                Chọn Phường/Xã
-                                            </option>
+                                            <option value="">Chọn Phường/Xã</option>
                                             {wardList()}
                                         </select>
+                                        <span className="form-text text-muted text-chartjs"></span>
                                     </div>
                                 </div>
 
                                 {/* Địa chỉ */}
                                 <div className="form-group row">
-                                    <label
-                                        htmlFor="address"
-                                        className="col-xl-3 col-lg-4 col-form-label"
-                                    >
+                                    <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
                                         Địa chỉ
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <input
-                                            className="form-control form-control-lg"
+                                            className={checkingAddress}
                                             type="text"
-                                            defaultValue={
-                                                user.input.detailAddress
-                                            }
+                                            defaultValue={user.input.detailAddress}
+                                            {...register('address')}
                                             maxLength={50}
                                             id="address"
                                             placeholder="Số nhà, tên đường"
                                             ref={addressRef}
                                         />
+                                        <span className="form-text text-muted text-chartjs">{errors.address?.message}</span>
                                     </div>
                                 </div>
                             </div>
