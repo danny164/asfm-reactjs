@@ -14,6 +14,7 @@ import Chat from './Chat/Chat';
 import TheNightOwl from '../../assets/media/avatar.png';
 import SkeletonCard from './Skeleton';
 import Expand from 'react-expand-animated';
+import { useAuth } from '../../context/AuthContext';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -39,6 +40,7 @@ var sortStatus = [];
 
 function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
+    const { currentUser } = useAuth();
 
     const [filteredStatus, setFilteredStatus] = useState('all');
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -54,7 +56,22 @@ function MainHomePage(props) {
         id_shop: '',
     });
 
-    const [dataModal, setDataModal] = useState({});
+    const [dataModal, setDataModal] = useState({
+        ghi_chu: '',
+        id_post: '',
+        id_shop: '',
+        km: '',
+        noi_giao: '',
+        noi_nhan: '',
+        phi_giao: '',
+        phi_ung: '',
+        sdt_nguoi_gui: '',
+        sdt_nguoi_nhan: '',
+        status: '',
+        ten_nguoi_gui: '',
+        ten_nguoi_nhan: '',
+        thoi_gian: '',
+    });
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -146,7 +163,12 @@ function MainHomePage(props) {
         console.log('idpost: ' + idPost);
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
+                if (dataModal.id_post !== '' || dataModal.status !== snapshot.val().status) {
+                    setDataModal({ ...dataModal, status: snapshot.val().status });
+                }
+
                 setTransactionInfor(snapshot.val());
+
                 if (snapshot.val().id_shipper !== '') {
                     db.collection('ProfileShipper')
                         .doc(snapshot.val().id_shipper)
@@ -223,9 +245,9 @@ function MainHomePage(props) {
                                         className="order"
                                         key={index}
                                         onClick={() => {
-                                            setShow(true);
                                             fetchDataShipper(data.id_post);
                                             setDataModal(data);
+                                            setShow(true);
                                         }}
                                     >
                                         <div className="d-flex align-items-start">
@@ -283,6 +305,9 @@ function MainHomePage(props) {
                     </section>
 
                     <Modal size="lg" show={show} onHide={handleClose}>
+                        {/* {Object.values(dataModal).map((data, index) => (
+                            <> */}
+                        {console.log('render lại' + dataModal.id_post + ' ' + dataModal.status)}
                         <Modal.Header closeButton>
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
                         </Modal.Header>
@@ -291,7 +316,7 @@ function MainHomePage(props) {
                                 <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                 <div className="d-flex flex-column flex-grow-1 ml-4">
                                     <header className="card-title content mb-4">
-                                        <span>Order ID: {dataModal.id_post}</span>
+                                        <span>Order ID: {dataModal.status}</span>
                                         <span>
                                             {dateToFromNowDaily(dataModal.thoi_gian)}
                                             {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
@@ -354,7 +379,7 @@ function MainHomePage(props) {
                                     <div className="mr-5 font-weight-bold text-chartjs">{shipperInfor.name}</div>
                                     <span>{shipperInfor.phone}</span>
                                 </div>
-                                {dataModal.status !== '0' && (
+                                {dataModal.status === '1' && (
                                     <span className="cursor-pointer" onClick={handleClickChat}>
                                         <i className="fad fa-comments fa-2x"></i>
                                     </span>
@@ -377,6 +402,8 @@ function MainHomePage(props) {
                                 Đóng
                             </Button>
                         </Modal.Footer>
+                        {/* </>
+                        ))} */}
                     </Modal>
                     <Chat
                         showChat={showChat}

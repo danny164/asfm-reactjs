@@ -35,7 +35,6 @@ function PostOrder(props) {
             address = userInfor.address;
         }
 
-        console.log(dataPostOrder.phi_ung)
         if (dataPostOrder.phi_ung !== '') {
             tamung = dataPostOrder.phi_ung
         }
