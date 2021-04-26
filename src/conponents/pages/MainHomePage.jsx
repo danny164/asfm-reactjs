@@ -159,16 +159,25 @@ function MainHomePage(props) {
         setShowChat(false);
     };
 
-    const fetchDataShipper = async (idPost) => {
+    const fetchDataShipper = async (idPost, data) => {
         console.log('idpost: ' + idPost);
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
                 /* kiểm tra lần đầu nếu chưa có dataModel thì k chạy setDataModal 
                 và kiểm tra nếu có thay đổi status thì mới set k thì thôi */
-                if (dataModal.id_post !== '' && dataModal.status !== snapshot.val().status) {
-                    console.log('alo');
-                    setDataModal({ ...dataModal, status: snapshot.val().status });
-                }
+
+                // if (dataModal.id_post !== '') {
+                //     //     console.log('alo');
+                //     setDataModal({ ...dataModal, status: snapshot.val().status });
+                // }
+                realtime
+                    .ref('OrderStatus/' + currentUser.uid)
+                    .orderByChild('id_post')
+                    .equalTo(idPost)
+                    .once('value')
+                    .then((snapshot) => {
+                        setDataModal(snapshotToObject(snapshot));
+                    });
 
                 setTransactionInfor(snapshot.val());
 
@@ -195,6 +204,16 @@ function MainHomePage(props) {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const snapshotToObject = (snapshot) => {
+        let item1 = {};
+        snapshot.forEach((childSnapshot) => {
+            const item = childSnapshot.val();
+            item.key = childSnapshot.key;
+            item1 = item;
+        });
+        return item1;
     };
 
     return (
@@ -248,8 +267,8 @@ function MainHomePage(props) {
                                         className="order"
                                         key={index}
                                         onClick={() => {
-                                            fetchDataShipper(data.id_post);
                                             setDataModal(data);
+                                            fetchDataShipper(data.id_post);
                                             setShow(true);
                                         }}
                                     >
@@ -318,7 +337,7 @@ function MainHomePage(props) {
                                 <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                 <div className="d-flex flex-column flex-grow-1 ml-4">
                                     <header className="card-title content mb-4">
-                                        <span>Order ID: {dataModal.status}</span>
+                                        <span>Order ID: {dataModal.id_post}</span>
                                         <span>
                                             {dateToFromNowDaily(dataModal.thoi_gian)}
                                             {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
