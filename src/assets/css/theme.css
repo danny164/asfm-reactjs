@@ -260,10 +260,6 @@ h3.card-label {
     border: 0;
 }
 
-.card.card-custom > .card-body {
-    padding: 0rem 2.25rem;
-}
-
 .card-bottom {
     margin-bottom: 30px;
 }
