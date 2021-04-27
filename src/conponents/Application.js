@@ -9,9 +9,9 @@ import ForgotPw from './ForgotPw';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
 import Register from './SignUp';
-import CheckRoute from './CheckRoute'
-import Map from './pages/Map/Map'
-import NotFoundPage from './pages/NotFound/NotFoundPage';
+import CheckRoute from './CheckRoute';
+import NotFoundPage from './pages/NotFound/index';
+import Map from './pages/Map/Map';
 
 function Application() {
     return (

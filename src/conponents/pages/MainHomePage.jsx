@@ -142,7 +142,7 @@ function MainHomePage(props) {
         const timer = setTimeout(() => {
             setLoading(false);
             // console.log(loading);
-        }, 1000);
+        }, 2000);
         return () => {
             clearTimeout(timer);
         };
