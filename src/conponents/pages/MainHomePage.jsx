@@ -19,36 +19,59 @@ import { useAuth } from '../../context/AuthContext';
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
     idShop: PropTypes.string,
-    datas: PropTypes.object,
-    ChangeOrderStatus: PropTypes.func,
-    DeleteOrder: PropTypes.func,
-    Notification: PropTypes.object,
+    data: PropTypes.array,
+    loading: PropTypes.bool,
+
+    onFilteredStatus: PropTypes.func,
+    onSortByRange: PropTypes.func,
+
+    titleStatus: PropTypes.string,
+    subTitleStatus: PropTypes.string,
+
+    deleteOrder: PropTypes.func,
+    notification: PropTypes.object,
+
+    filteredStatus: PropTypes.string,
+    sortByRange: PropTypes.string,
 };
 
 MainHomePage.defaultProps = {
     shopInfo: null,
-    datas: null,
-    ChangeOrderStatus: null,
-    DeleteOrder: null,
     idShop: '',
-    Notification: null,
+    data: [],
+    loading: false,
+
+    onFilteredStatus: null,
+    onSortByRange: null,
+
+    titleStatus: '',
+    subTitleStatus: '',
+
+    deleteOrder: null,
+    notification: null,
+
+    filteredStatus: '',
+    sortByRange: '',
 };
 
-var renderStatus = [];
-var lastStatus = [];
-var sortStatus = [];
-
 function MainHomePage(props) {
-    const { datas, DeleteOrder, shopInfo, idShop } = props;
+    const {
+        data,
+        loading,
+        onFilteredStatus,
+        onSortByRange,
+        titleStatus,
+        subTitleStatus,
+        filteredStatus,
+        sortByRange,
+        deleteOrder,
+        shopInfo,
+        idShop,
+    } = props;
     const { currentUser } = useAuth();
 
-    const [filteredStatus, setFilteredStatus] = useState('all');
-    const [titleStatus, setTitleStatus] = useState('gần đây');
-
-    const [sortByRange, setSortByRange] = useState('1');
-    const [subTitleStatus, setSubTitleStatus] = useState('trong ngày');
-
     const [shipperInfor, setShipperInfor] = useState({});
+
     const [transactionInfor, setTransactionInfor] = useState({
         id_post: '',
         id_roomchat: '',
@@ -94,67 +117,12 @@ function MainHomePage(props) {
     };
 
     /////////////////////////////////////////////////////////
-    // ! Lọc theo sự kiện click trên header
-    const handleFilterStatus = (status) => {
-        setFilteredStatus(status);
-        status === 'all' && setTitleStatus('gần đây');
-        status === '0' && setTitleStatus('đang xử lý');
-        status === '1' && setTitleStatus('đã nhận');
-        status === '2' && setTitleStatus('hoàn thành');
-        status === '3' && setTitleStatus('bị hủy');
-    };
-
-    // * Lọc theo phạm vi, trả về kết quả theo ngày, tháng, tuần cho lastStatus []
-    const last24hrs = (sortByRange, dataTime) => {
-        if (sortByRange === '7') {
-            return dataTime >= moment().subtract(7, 'days').format('X');
-        }
-        if (sortByRange === '30') return dataTime >= moment().subtract(1, 'month').format('X');
-        return dataTime >= moment().subtract(1, 'day').format('X');
-    };
-
-    // * Khi Sort by Range thay đổi, thì Title cũng cần update theo
-    useEffect(() => {
-        if (sortByRange === '1') setSubTitleStatus('trong ngày');
-        if (sortByRange === '7') setSubTitleStatus('trong tuần');
-        if (sortByRange === '30') setSubTitleStatus('trong tháng');
-    }, [sortByRange]);
-
-    // * Nhận loại sort từ sự kiện click
-    const handleSortByRange = (range) => {
-        setSortByRange(range);
-    };
-
-    /////////////////////////////////////////////////////////
-    // ! delay loading chờ lấy thông tin
-    const [loading, setLoading] = useState(false);
-
-    if (datas) {
-        renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
-        lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
-        sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
-    } else {
-        sortStatus = [];
-    }
-
-    useEffect(() => {
-        setLoading(true);
-        const timer = setTimeout(() => {
-            setLoading(false);
-            // console.log(loading);
-        }, 2000);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, []);
-
-    // console.log(sortStatus);
 
     /////////////////////////////////////////////////////////
     // ! Xóa đơn
     const handleDeleteOrder = async (id) => {
-        if (DeleteOrder) {
-            await DeleteOrder(id);
+        if (deleteOrder) {
+            await deleteOrder(id);
             setShow(false);
         }
     };
@@ -243,9 +211,14 @@ function MainHomePage(props) {
         return box;
     };
 
+    const handleSortByRange = (value) => {
+        if (!onSortByRange) return;
+        onSortByRange(value);
+    };
+
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            <Header onClickFilterStatus={handleFilterStatus} filteredStatus={filteredStatus} />
+            <Header onClickFilterStatus={onFilteredStatus} filteredStatus={filteredStatus} />
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">
                     <header className="card-header border-0">
@@ -285,8 +258,8 @@ function MainHomePage(props) {
                         </div>
                     </header>
                     <section className="card-body pt-1 newsfeed">
-                        {loading && sortStatus.length === 0 && <SkeletonCard />}
-                        {sortStatus.map((data, index) => (
+                        {loading && data.length === 0 && <SkeletonCard />}
+                        {data.map((data, index) => (
                             <>
                                 {loading && <SkeletonCard />}
                                 {!loading && (
@@ -299,7 +272,6 @@ function MainHomePage(props) {
                                             setShow(true);
                                         }}
                                     >
-                                        {console.log('render lai')}
                                         <div className="d-flex align-items-start">
                                             <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                             <div className="d-flex flex-column flex-grow-1 ml-4">
@@ -340,7 +312,7 @@ function MainHomePage(props) {
                                 )}
                             </>
                         ))}
-                        {sortStatus.length === 0 && (
+                        {data.length === 0 && (
                             <>
                                 {!loading && (
                                     <article className="empty-order">

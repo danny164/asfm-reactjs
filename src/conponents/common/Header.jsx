@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import HeaderMobile from './HeaderMobile';
 
@@ -16,10 +16,10 @@ Header.defaultProps = {
 function Header(props) {
     const { onClickFilterStatus, filteredStatus } = props;
 
-    const handleFilterStatus = (status) => {
+    const handleFilterStatus = (value) => {
         if (!onClickFilterStatus) return;
         else {
-            onClickFilterStatus(status);
+            onClickFilterStatus(value);
         }
     };
 

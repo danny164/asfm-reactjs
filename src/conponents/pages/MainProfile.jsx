@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '../../assets/media/avatar.png';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-import Toast from 'react-bootstrap/Toast';
-import { Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 MainProfile.propTypes = {
     user: PropTypes.object,
     onChange: PropTypes.func,
