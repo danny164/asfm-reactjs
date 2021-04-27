@@ -32,7 +32,7 @@ function NotFoundPage(props) {
                     <div>
                         <Link to="./home">
                             <button className="btn btn-sm btn-secondary">
-                                Go Home ( <span>{countdown}</span> )
+                                Trang Chủ ( <span className="font-weight-bold">{countdown}</span> )
                             </button>
                         </Link>
                     </div>
