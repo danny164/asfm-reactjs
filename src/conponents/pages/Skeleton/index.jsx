@@ -1,6 +1,5 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
-import Expand from 'react-expand-animated';
 
 function SkeletonCard() {
     return (

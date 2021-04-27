@@ -299,7 +299,6 @@ function MainHomePage(props) {
                                             setShow(true);
                                         }}
                                     >
-                                        {console.log('render lai')}
                                         <div className="d-flex align-items-start">
                                             <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                             <div className="d-flex flex-column flex-grow-1 ml-4">
