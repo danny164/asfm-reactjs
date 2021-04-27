@@ -10,7 +10,7 @@ import Login from './Login';
 import PrivateRoute from './PrivateRoute';
 import Register from './SignUp';
 import CheckRoute from './CheckRoute';
-import NotFoundPage from './pages/NotFound/NotFoundPage';
+import NotFoundPage from './pages/NotFound/index';
 
 function Application() {
     return (
