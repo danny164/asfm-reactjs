@@ -54,6 +54,7 @@ function MainHomePage(props) {
         id_roomchat: '',
         id_shipper: '',
         id_shop: '',
+        status: '',
     });
 
     const [dataModal, setDataModal] = useState({
@@ -131,6 +132,8 @@ function MainHomePage(props) {
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
         lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
         sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
+    } else {
+        sortStatus = [];
     }
 
     useEffect(() => {
@@ -148,9 +151,9 @@ function MainHomePage(props) {
 
     /////////////////////////////////////////////////////////
     // ! Xóa đơn
-    const handleDeleteOrder = (id) => {
+    const handleDeleteOrder = async (id) => {
         if (DeleteOrder) {
-            DeleteOrder(id);
+            await DeleteOrder(id);
             setShow(false);
         }
     };
@@ -180,34 +183,46 @@ function MainHomePage(props) {
                 // if (dataModal.id_post !== '') {
                 //     setDataModal({ ...dataModal, status: snapshot.val().status });
                 // }
-                realtime
-                    .ref('OrderStatus/' + currentUser.uid)
-                    .orderByChild('id_post')
-                    .equalTo(idPost)
-                    .once('value')
-                    .then((snapshot) => {
-                        setDataModal(snapshotToObject(snapshot));
-                    });
-
-                setTransactionInfor(snapshot.val());
-
-                if (snapshot.val().id_shipper !== '') {
-                    db.collection('ProfileShipper')
-                        .doc(snapshot.val().id_shipper)
-                        .get()
-                        .then((doc) => {
-                            if (doc.exists) {
-                                setShipperInfor(doc.data());
-                            } else {
-                                console.log('Không fetch được dữ liệu !');
-                            }
+                if (snapshot.val() !== null) {
+                    realtime
+                        .ref('OrderStatus/' + currentUser.uid)
+                        .orderByChild('id_post')
+                        .equalTo(idPost)
+                        .once('value')
+                        .then((snapshot) => {
+                            setDataModal(snapshotToObject(snapshot));
                         });
+
+                    setTransactionInfor(snapshot.val());
+                    if (transactionInfor.id_roomchat === null) {
+                        setTransactionInfor({ id_post: '', id_roomchat: '', id_shipper: '', id_shop: '', status: '' });
+                    }
+                    if (snapshot.val().id_shipper !== '') {
+                        db.collection('ProfileShipper')
+                            .doc(snapshot.val().id_shipper)
+                            .get()
+                            .then((doc) => {
+                                if (doc.exists) {
+                                    setShipperInfor(doc.data());
+                                } else {
+                                    console.log('Không fetch được dữ liệu !');
+                                }
+                            });
+                    } else {
+                        setShipperInfor({
+                            id_post: '',
+                            id_roomchat: '',
+                            id_shipper: '',
+                            id_shop: '',
+                        });
+                    }
                 } else {
-                    setShipperInfor({
+                    setTransactionInfor({
                         id_post: '',
                         id_roomchat: '',
                         id_shipper: '',
                         id_shop: '',
+                        status: '',
                     });
                 }
             });
@@ -283,6 +298,7 @@ function MainHomePage(props) {
                                             setShow(true);
                                         }}
                                     >
+                                        {console.log('render lai')}
                                         <div className="d-flex align-items-start">
                                             <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                             <div className="d-flex flex-column flex-grow-1 ml-4">
@@ -435,15 +451,17 @@ function MainHomePage(props) {
                         {/* </>
                         ))} */}
                     </Modal>
-                    <Chat
-                        showChat={showChat}
-                        onHandleCloseChat={handleCloseChat}
-                        shopInfo={shopInfo}
-                        idPost={dataModal.id_post}
-                        idRoom={transactionInfor.id_roomchat}
-                        idShop={idShop}
-                        shipperInfor={shipperInfor}
-                    />
+                    {transactionInfor.id_roomchat !== null && (
+                        <Chat
+                            showChat={showChat}
+                            onHandleCloseChat={handleCloseChat}
+                            shopInfo={shopInfo}
+                            idPost={dataModal.id_post}
+                            idRoom={transactionInfor.id_roomchat}
+                            idShop={idShop}
+                            shipperInfor={shipperInfor}
+                        />
+                    )}
                 </div>
             </section>
             <Footer />
