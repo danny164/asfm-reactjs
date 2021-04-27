@@ -11,6 +11,7 @@ import PrivateRoute from './PrivateRoute';
 import Register from './SignUp';
 import CheckRoute from './CheckRoute';
 import NotFoundPage from './pages/NotFound/index';
+import Map from './pages/Map/Map';
 
 function Application() {
     return (
@@ -24,6 +25,7 @@ function Application() {
                     <CheckRoute exact path="/login" component={Login} />
                     <CheckRoute exact path="/forgotpw" component={ForgotPw} />
                     <PrivateRoute exact path="/post-order" component={PostOrder} />
+                    <PrivateRoute exact path="/map" component={Map} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>

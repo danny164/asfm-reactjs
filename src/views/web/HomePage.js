@@ -66,12 +66,13 @@ function HomePage() {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     setData(snapshot.val());
                     console.log(snapshot.val());
+
                 });
 
                 realtime.ref('Transaction/').orderByChild("id_shop").equalTo(id).once('value').then((snapshot) => {
                     setNotification(snapshot.val());
                     console.log(snapshot.val())
-                });
+                })
             } catch (error) {
                 console.log(error);
             }
@@ -83,7 +84,7 @@ function HomePage() {
         try {
             await realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('newsfeed/' + id).remove();
+            await realtime.ref('Transaction/' + id).remove();
         } catch (e) {
             console.log(e);
         }
