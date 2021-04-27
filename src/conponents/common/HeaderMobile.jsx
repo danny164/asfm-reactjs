@@ -25,10 +25,10 @@ export default function HeaderMobile() {
                 </Link>
                 <div className="d-flex align-items-center">
                     <span href="#" className="btn btn-icon btn-lg btn-borderless mb-1" onClick={onHandleToggle}>
-                        <i class="fad fa-align-right fa-2x"></i>
+                        <i className="fad fa-align-right fa-2x"></i>
                     </span>
                     <span href="#" className="btn btn-icon btn-lg btn-borderless mb-1" onClick={onHandleMenu}>
-                        <i class="fad fa-books fa-2x"></i>
+                        <i className="fad fa-books fa-2x"></i>
                     </span>
                 </div>
             </header>
@@ -48,7 +48,7 @@ export default function HeaderMobile() {
             </div>
             {(toggle || menu) && (
                 <div
-                    class="header-menu-wrapper-overlay"
+                    className="header-menu-wrapper-overlay"
                     onClick={() => {
                         setToggle(false);
                         setMenu(false);
