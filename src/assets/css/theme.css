@@ -602,8 +602,7 @@ h3.card-label {
 
 @media (max-width: 767.98px) {
     .card.card-custom .card-header,
-    .card.card-custom .card-body.newsfeed,
-    .card.card-custom .card-body.post-order {
+    .card.card-custom .card-body {
         padding: 0.5rem 1rem;
     }
 }
