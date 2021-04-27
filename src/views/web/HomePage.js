@@ -83,8 +83,8 @@ function HomePage() {
     async function handleDeleteOrder(id) {
         try {
             await realtime.ref('newsfeed/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
         } catch (e) {
             console.log(e);
         }

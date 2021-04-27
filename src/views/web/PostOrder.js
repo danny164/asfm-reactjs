@@ -73,6 +73,7 @@ function PostOrder(props) {
                 ten_nguoi_gui: userInfor.fullname,
                 phi_giao: dataPostOrder.phi_giao,
                 phi_ung: tamung,
+                ma_bi_mat: dataPostOrder.ma_bi_mat
             });
 
             //tạo bảng transaction
@@ -81,7 +82,8 @@ function PostOrder(props) {
                 id_shop: currentUser.uid,
                 id_shipper: '',
                 id_roomchat: dataPostOrder.id_roomchat,
-                status: "0"
+                status: "0",
+                ma_bi_mat: dataPostOrder.ma_bi_mat
             });
 
             //tạo bảng chatroom

@@ -72,6 +72,7 @@ function MainHomePage(props) {
         ten_nguoi_gui: '',
         ten_nguoi_nhan: '',
         thoi_gian: '',
+        ma_bi_mat: '',
     });
     const [show, setShow] = useState(false);
 
@@ -385,6 +386,10 @@ function MainHomePage(props) {
                                             <p>
                                                 Tạm ứng:
                                                 <span className="font-weight-bold text-chartjs ml-2">{dataModal.phi_ung}</span>
+                                            </p>
+                                            <p>
+                                                Mã nhận hàng:
+                                                <span className="font-weight-bold text-chartjs ml-2">{dataModal.ma_bi_mat}</span>
                                             </p>
                                         </div>
 

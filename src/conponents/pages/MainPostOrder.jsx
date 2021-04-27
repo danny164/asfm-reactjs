@@ -273,6 +273,11 @@ function MainPostOrder(props) {
             return;
         }
 
+        let code = random.generate({
+            length: 4,
+            charset: 'numeric',
+        });
+
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
@@ -284,6 +289,7 @@ function MainPostOrder(props) {
             phi_giao: shipFeeRef.current.value,
             phi_ung: depositFeeRef.current.value,
             id_roomchat: idChat,
+            ma_bi_mat: code,
         };
 
         if (postOrder) {
