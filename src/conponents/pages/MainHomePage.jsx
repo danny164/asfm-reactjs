@@ -12,10 +12,10 @@ import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
 import TheNightOwl from '../../assets/media/avatar.png';
-import SkeletonCard from './Skeleton';
+import SkeletonCard from './Skeleton/SkeletonCard';
 import Expand from 'react-expand-animated';
 import { useAuth } from '../../context/AuthContext';
-
+import SkeletonShipper from './Skeleton/SkeletonShipper';
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
     idShop: PropTypes.string,
@@ -139,10 +139,11 @@ function MainHomePage(props) {
 
     useEffect(() => {
         setLoading(true);
+
         const timer = setTimeout(() => {
             setLoading(false);
             // console.log(loading);
-        }, 2000);
+        }, 1500);
         return () => {
             clearTimeout(timer);
         };
@@ -181,9 +182,6 @@ function MainHomePage(props) {
                 /* kiểm tra lần đầu nếu chưa có dataModel thì k chạy setDataModal 
                 và kiểm tra nếu có thay đổi status thì mới set k thì thôi */
 
-                // if (dataModal.id_post !== '') {
-                //     setDataModal({ ...dataModal, status: snapshot.val().status });
-                // }
                 if (snapshot.val() !== null) {
                     realtime
                         .ref('OrderStatus/' + currentUser.uid)
@@ -231,6 +229,20 @@ function MainHomePage(props) {
             console.log(error);
         }
     };
+
+    const [fetchLoading, setFetchLoading] = useState(false);
+
+    useEffect(() => {
+        if (shipperInfor === null) return;
+        setFetchLoading(true);
+        const timer = setTimeout(() => {
+            setFetchLoading(false);
+            // console.log(loading);
+        }, 1000);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [dataModal, transactionInfor, shipperInfor]);
 
     // * Lấy key và value trong object lồng { id : { key: value}}
     const snapshotToObject = (snapshot) => {
@@ -348,7 +360,6 @@ function MainHomePage(props) {
                                         </span>
                                     </article>
                                 )}
-                                {console.log(loading)}
                             </>
                         )}
                     </section>
@@ -388,7 +399,7 @@ function MainHomePage(props) {
                                             </p>
                                             <p>
                                                 Mã nhận hàng:
-                                                <span className="font-weight-bold text-chartjs ml-2">{dataModal.ma_bi_mat}</span>
+                                                <span className="font-weight-bold menu-in-progress ml-2">{dataModal.ma_bi_mat}</span>
                                             </p>
                                         </div>
 
@@ -419,24 +430,31 @@ function MainHomePage(props) {
                                 </>
                             )}
 
-                            <p className="font-weight-bold">Người nhận đơn:</p>
+                            {(dataModal.status === '0' || fetchLoading) && <SkeletonShipper status={dataModal.status} />}
+                            {!fetchLoading && dataModal.status !== '0' && (
+                                <>
+                                    <p className="font-weight-bold">Người nhận đơn:</p>
 
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="shipper-info">
-                                    <div className="avatar-shipper-sm">
-                                        {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div className="shipper-info">
+                                            <div className="avatar-shipper-sm">
+                                                {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
+                                            </div>
+                                            <div className="mr-5 font-weight-bold text-chartjs">{shipperInfor.name}</div>
+                                            <span>{shipperInfor.phone}</span>
+                                        </div>
+
+                                        {dataModal.status === '1' && (
+                                            <span className="cursor-pointer" onClick={handleClickChat}>
+                                                <i className="fad fa-comments fa-2x"></i>
+                                            </span>
+                                        )}
                                     </div>
-                                    <div className="mr-5 font-weight-bold text-chartjs">{shipperInfor.name}</div>
-                                    <span>{shipperInfor.phone}</span>
-                                </div>
-                                {dataModal.status === '1' && (
-                                    <span className="cursor-pointer" onClick={handleClickChat}>
-                                        <i className="fad fa-comments fa-2x"></i>
-                                    </span>
-                                )}
-                            </div>
 
-                            <div className="separator separator-dashed my-5" />
+                                    <div className="separator separator-dashed my-5" />
+                                </>
+                            )}
+
                             <p className="font-weight-bold">Theo dõi đơn hàng:</p>
                         </Modal.Body>
 

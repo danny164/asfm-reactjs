@@ -600,6 +600,29 @@ h3.card-label {
     color: white;
 }
 
+.shipper-picked::before {
+    content: 'Người nhận đơn:';
+    animation: animation-fade-in 2s;
+}
+
+@keyframes animation-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes animation-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 @media (max-width: 767.98px) {
     .card.card-custom .card-header,
     .card.card-custom .card-body {
