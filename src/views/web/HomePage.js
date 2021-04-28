@@ -66,7 +66,6 @@ function HomePage() {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     setData(snapshot.val());
                     console.log(snapshot.val());
-
                 });
 
                 realtime.ref('Transaction/').orderByChild("id_shop").equalTo(id).once('value').then((snapshot) => {

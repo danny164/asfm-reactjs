@@ -12,6 +12,7 @@ import Register from './SignUp';
 import CheckRoute from './CheckRoute';
 import NotFoundPage from './pages/NotFound/index';
 import Map from './pages/Map/Map';
+import App2 from './pages/Map/googleMap';
 
 function Application() {
     return (
@@ -25,7 +26,7 @@ function Application() {
                     <CheckRoute exact path="/login" component={Login} />
                     <CheckRoute exact path="/forgotpw" component={ForgotPw} />
                     <PrivateRoute exact path="/post-order" component={PostOrder} />
-                    <PrivateRoute exact path="/map" component={Map} />
+                    <PrivateRoute exact path="/map" component={App2} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>

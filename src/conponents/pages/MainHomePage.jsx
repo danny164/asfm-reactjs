@@ -184,7 +184,8 @@ function MainHomePage(props) {
                 // if (dataModal.id_post !== '') {
                 //     setDataModal({ ...dataModal, status: snapshot.val().status });
                 // }
-                if (snapshot.val() !== null) {
+
+                if (snapshot.val() !== null && dataModal.status !== snapshot.val().status) {
                     realtime
                         .ref('OrderStatus/' + currentUser.uid)
                         .orderByChild('id_post')
@@ -198,6 +199,7 @@ function MainHomePage(props) {
                     if (transactionInfor.id_roomchat === null) {
                         setTransactionInfor({ id_post: '', id_roomchat: '', id_shipper: '', id_shop: '', status: '' });
                     }
+
                     if (snapshot.val().id_shipper !== '') {
                         db.collection('ProfileShipper')
                             .doc(snapshot.val().id_shipper)
@@ -299,7 +301,6 @@ function MainHomePage(props) {
                                             setShow(true);
                                         }}
                                     >
-                                        {console.log('render lai')}
                                         <div className="d-flex align-items-start">
                                             <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                             <div className="d-flex flex-column flex-grow-1 ml-4">
@@ -359,6 +360,7 @@ function MainHomePage(props) {
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
+                            {console.log('chạy: ' + dataModal.status)}
                             <div className="d-flex align-items-start">
                                 <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                 <div className="d-flex flex-column flex-grow-1 ml-4">
