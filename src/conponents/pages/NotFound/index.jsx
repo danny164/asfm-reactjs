@@ -30,7 +30,7 @@ function NotFoundPage(props) {
                     <p className="error-subtitle text-success font-weight-boldest mb-10">ERROR !!!</p>
                     <p className="display-4 text-danger font-weight-boldest mt-md-0 line-height-md">Không tìm thấy nội dung yêu cầu !</p>
                     <div>
-                        <Link to="./home">
+                        <Link to="/home">
                             <button className="btn btn-sm btn-secondary">
                                 Trang Chủ ( <span className="font-weight-bold">{countdown}</span> )
                             </button>
