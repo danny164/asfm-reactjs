@@ -1,6 +1,7 @@
 import React from 'react';
 import DataTable from 'react-data-table-component';
 import PropTypes from 'prop-types';
+import CustomExpander from '../CustomExpander';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
@@ -18,19 +19,44 @@ function ShopList(props) {
     if (listShop) {
         data = listShop;
     }
+
+    const status = [
+        {
+            id: 1,
+            name: 'Đang hoạt động',
+            className: 'label label-sm label-inprocess label-inline py-4 flex-shrink-0',
+        },
+        {
+            id: 2,
+            name: 'Vô hiệu hóa',
+            className: 'label label-sm label-inline py-4 flex-shrink-0',
+        },
+    ];
+
     const columns = [
         {
-            name: 'ID',
-            selector: 'id',
+            name: 'Email',
+            selector: 'email',
             sortable: true,
         },
         {
-            name: 'Name',
+            name: 'Trạng thái',
+            selector: 'status',
+            sortable: true,
+        },
+        {
+            name: 'Họ tên',
             selector: 'fullname',
             sortable: true,
         },
+
         {
-            name: 'Address',
+            name: 'Số điện thoại',
+            selector: 'phone',
+            sortable: true,
+        },
+        {
+            name: 'Địa chỉ',
             selector: 'address',
             sortable: true,
             right: true,
@@ -46,6 +72,7 @@ function ShopList(props) {
             <DataTable
                 title="Danh sách quản lý Shop"
                 expandableRows={true}
+                expandableRowsComponent={<CustomExpander />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}
