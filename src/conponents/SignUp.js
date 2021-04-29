@@ -7,7 +7,9 @@ import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { db } from '../firebase'
+import { db } from '../firebase';
+import moment from 'moment';
+import random from 'randomstring';
 
 function Register(props) {
     const schema = yup.object().shape({
@@ -19,7 +21,7 @@ function Register(props) {
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
         rePassword: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không khớp'),
     });
-    const { currentUser } = UseAuth()
+    const { currentUser } = UseAuth();
     const {
         register,
         handleSubmit,
@@ -32,10 +34,10 @@ function Register(props) {
     const checkingPw = `form-control h-auto form-control-solid py-4 px-8 ${errors.password ? 'is-invalid' : ''}`;
     const checkingRePw = `form-control h-auto form-control-solid py-4 px-8 ${errors.rePassword ? 'is-invalid' : ''}`;
 
-    const emailRef = useRef()
-    const passwordRef = useRef()
-    const fullNameRef = useRef()
-    const phoneRef = useRef()
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const fullNameRef = useRef();
+    const phoneRef = useRef();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -80,21 +82,30 @@ function Register(props) {
     if (currentUser) {
         const insertShopInfor = async () => {
             try {
-                await db.collection('ShopProfile').doc(currentUser.uid).set({
-                    fullname: fullNameRef.current.value,
-                    phone: phoneRef.current.value,
-                    email: currentUser.email,
-                    id: currentUser.uid,
-                    role: "1",
-                    address: '',
-                    district: '',
-                    ward: '',
-                    detailAddress: ''
-                });
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .set({
+                        fullname: fullNameRef.current.value,
+                        phone: phoneRef.current.value,
+                        email: currentUser.email,
+                        id:
+                            moment().format('YYYYMMDD-HHmmssSSS') +
+                            random.generate({
+                                length: 3,
+                                charset: 'numeric',
+                            }),
+                        role: '1',
+                        address: '',
+                        district: '',
+                        ward: '',
+                        detailAddress: '',
+                        lastEdited: '',
+                    });
             } catch {
                 console.log('error');
             }
-        }
+        };
         insertShopInfor();
     }
 
@@ -119,21 +130,11 @@ function Register(props) {
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group mb-5">
-                                        <input
-                                            className="fullname"
-                                            type="text"
-                                            placeholder="Họ và Tên"
-                                            ref={fullNameRef}
-                                        />
+                                        <input className="fullname" type="text" placeholder="Họ và Tên" ref={fullNameRef} />
                                     </div>
 
                                     <div className="form-group mb-5">
-                                        <input
-                                            className="phone"
-                                            type="number"
-                                            placeholder="Số điện thoại"
-                                            ref={phoneRef}
-                                        />
+                                        <input className="phone" type="text" placeholder="Số điện thoại" ref={phoneRef} />
                                     </div>
 
                                     <div className="form-group mb-5">
