@@ -2,11 +2,12 @@ import React, { useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../assets/css/portal.css';
-import { useAuth } from '../context/AuthContext';
+import { UseAuth } from '../context/AuthContext';
 import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
 
 function Register(props) {
     const schema = yup.object().shape({
@@ -18,7 +19,7 @@ function Register(props) {
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
         rePassword: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không khớp'),
     });
-
+    const { currentUser } = UseAuth()
     const {
         register,
         handleSubmit,
@@ -39,7 +40,7 @@ function Register(props) {
     const [alert, setAlert] = useState('');
     const [license, setLicense] = useState(false);
 
-    const { signup } = useAuth();
+    const { signup } = UseAuth();
 
     const onSubmit = async (e) => {
         if (license === false) {
@@ -49,7 +50,8 @@ function Register(props) {
 
         try {
             setLoading(true);
-            await signup(emailRef.current.value, passwordRef.current.value);
+            signup(emailRef.current.value, passwordRef.current.value);
+
             setAlert('green');
             setError('Đăng kí thành công !');
         } catch (err) {
@@ -71,6 +73,10 @@ function Register(props) {
         } else {
             setLicense(false);
         }
+    }
+
+    if (currentUser) {
+        console.log(currentUser.uid)
     }
 
     return (

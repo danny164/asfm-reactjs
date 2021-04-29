@@ -24,7 +24,7 @@ function Application() {
                     <PrivateRoute exact path="/home" component={HomePage} />
                     <PrivateRoute exact path="/profile" component={Profile} />
                     <PrivateRoute exact path="/changepw" component={ChangePw} />
-                    <CheckRoute exact path="/register" component={Register} />
+                    <Route exact path="/register" component={Register} />
                     <CheckRoute exact path="/login" component={Login} />
                     <CheckRoute exact path="/forgotpw" component={ForgotPw} />
                     <PrivateRoute exact path="/post-order" component={PostOrder} />

@@ -1,10 +1,24 @@
 import React from 'react';
+import DataTable from 'react-data-table-component';
+import PropTypes from 'prop-types';
+
+ShipperList.propTypes = {
+    listShipper: PropTypes.array,
+};
+
+ShipperList.defaultProps = {
+    listShipper: null,
+};
 
 function ShipperList(props) {
-    const data = [
-        { id: 1, title: 'Conan the Barbarian', year: '1982' },
-        { id: 2, title: 'Doraemon', year: '1900' },
-    ];
+    const { listShipper } = props;
+
+    let data = [];
+
+    if (listShipper) {
+        data = listShipper;
+    }
+
     const columns = [
         {
             name: 'ID',
@@ -12,13 +26,13 @@ function ShipperList(props) {
             sortable: true,
         },
         {
-            name: 'Title',
-            selector: 'title',
+            name: 'Name',
+            selector: 'name',
             sortable: true,
         },
         {
-            name: 'Year',
-            selector: 'year',
+            name: 'Address',
+            selector: 'address',
             sortable: true,
             right: true,
         },
@@ -46,7 +60,5 @@ function ShipperList(props) {
         </>
     );
 }
-
-ShipperList.propTypes = {};
 
 export default ShipperList;

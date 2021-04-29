@@ -1,12 +1,56 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../../conponents/common/Footer';
 import HeaderMobile from '../../conponents/common/HeaderMobile';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import ShopList from './component/ShopList';
-
+import ShipperList from './component/ShipperList';
+import { db } from '../../firebase';
 function AdminPanel(props) {
+    const [isShopList, setIsShopList] = useState(true);
+    const [isShipperList, setIsShipperList] = useState(false);
+    const [listShipper, setListShipper] = useState();
+    const [listShop, setListShop] = useState();
+
     useEffect(() => {
         document.body.classList.add('bg');
+    }, []);
+
+    const toShipperList = () => {
+        setIsShipperList(true);
+        setIsShopList(false);
+    };
+
+    const toShopList = () => {
+        setIsShopList(true);
+        setIsShipperList(false);
+    };
+
+    useEffect(() => {
+        async function fetchShipperList() {
+            await db.collection('ProfileShipper').onSnapshot((querySnapshot) => {
+                if (querySnapshot) {
+                    const b = [];
+                    querySnapshot.forEach((doc) => {
+                        b.push(doc.data());
+                    });
+                    setListShipper(b);
+                }
+            });
+        }
+        async function fetchShopList() {
+            await db.collection('ShopProfile').onSnapshot((querySnapshot) => {
+                if (querySnapshot) {
+                    const a = [];
+                    querySnapshot.forEach((doc) => {
+                        a.push(doc.data());
+                    });
+                    console.log(a);
+                    setListShop(a);
+                }
+            });
+        }
+        fetchShipperList();
+        fetchShopList();
     }, []);
 
     return (
@@ -17,10 +61,20 @@ function AdminPanel(props) {
                     <HeaderMobile />
                     <section className="card-body">
                         <div className="py-3 mb-3">
-                            <span className="label label-xl label-inprogress label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">Quản lý Shop</span>
-                            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">Quản lý Shipper</span>
+                            <button
+                                className="label label-xl label-inprogress label-inline ml-3 py-4 flex-shrink-0 cursor-pointer"
+                                onClick={toShopList}
+                            >
+                                Quản lý Shop
+                            </button>
+                            <button
+                                className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer"
+                                onClick={toShipperList}
+                            >
+                                Quản lý Shipper
+                            </button>
                         </div>
-                        <ShopList />
+                        {isShopList ? <ShopList listShop={listShop} /> : <ShipperList listShipper={listShipper} />}
                     </section>
                     <Footer />
                 </main>
@@ -28,7 +82,5 @@ function AdminPanel(props) {
         </div>
     );
 }
-
-AdminPanel.propTypes = {};
 
 export default AdminPanel;
