@@ -220,8 +220,40 @@ function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const reverseString = (value) => {
         // 000 20 => 00020 => 20 + ' 000'
-        if (parseInt(value.split(' ').join('')) === 0) return '0';
+        const input = parseInt(value.split(' ').join(''));
+
+        if (input === 0 || isNaN(input)) return '0';
+
         return parseInt(value.split(' ').join('')) + ' 000';
+    };
+
+    const firstUppercase = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
+    // value: '        nguyen van       quynh      '
+    // remove: 'nguyen van quynh'
+    // split: ['nguyen', 'van', 'quynh']
+    // result: ['Nguyen', 'Van', 'Quynh']
+    // join: 'Nguyen Van Quynh'
+
+    const convertString = (value) => {
+        const removeSpace = value.replace(/[ ]{2,}/g, ' ').trim();
+
+        const removeSpecialChars = removeSpace.replace(
+            /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\,|\./g,
+            ''
+        );
+
+        const splitString = removeSpecialChars.split(' ');
+
+        const result = [];
+
+        splitString.forEach((string) => {
+            return result.push(firstUppercase(string));
+        });
+
+        return result.join(' ');
     };
 
     // Handle submitForm
@@ -279,16 +311,14 @@ function MainPostOrder(props) {
             km: '3km',
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
-            ten_nguoi_nhan: customerRef.current.value,
+            ten_nguoi_nhan: convertString(customerRef.current.value),
             phi_giao: reverseString(shipFeeRef.current.value),
             phi_ung: reverseString(depositFeeRef.current.value),
             id_roomchat: idChat,
             ma_bi_mat: code,
         };
 
-        if (postOrder) {
-            postOrder(dataPostOrder, newAddress);
-        }
+        postOrder && postOrder(dataPostOrder, newAddress);
     };
 
     const handleDefaultAddressChange = (e) => {

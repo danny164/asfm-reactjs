@@ -61,18 +61,15 @@ function AdminPanel(props) {
                     <HeaderMobile />
                     <section className="card-body">
                         <div className="py-3 mb-3">
-                            <button
+                            <span
                                 className="label label-xl label-inprogress label-inline ml-3 py-4 flex-shrink-0 cursor-pointer"
                                 onClick={toShopList}
                             >
                                 Quản lý Shop
-                            </button>
-                            <button
-                                className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer"
-                                onClick={toShipperList}
-                            >
+                            </span>
+                            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer" onClick={toShipperList}>
                                 Quản lý Shipper
-                            </button>
+                            </span>
                         </div>
                         {isShopList ? <ShopList listShop={listShop} /> : <ShipperList listShipper={listShipper} />}
                     </section>

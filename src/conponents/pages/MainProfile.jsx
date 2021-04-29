@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '../../assets/media/avatar.png';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-import Toast from 'react-bootstrap/Toast';
-import { Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 MainProfile.propTypes = {
     user: PropTypes.object,
     onChange: PropTypes.func,
@@ -38,24 +36,6 @@ function MainProfile(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            {/* {user.error && (
-                                <Row>
-                                    <Col xs={6}>
-                                        <Toast
-                                            show={true}
-                                            delay={6000000}
-                                            autohide
-                                        >
-                                            <Toast.Header>
-                                                Thông báo
-                                            </Toast.Header>
-                                            <Toast.Body>
-                                                {user.error}
-                                            </Toast.Body>
-                                        </Toast>
-                                    </Col>
-                                </Row>
-                            )}  */}
             {user.error && alert(user.error)}
             <Header />
 
