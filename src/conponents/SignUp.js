@@ -7,7 +7,7 @@ import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { db } from '../firebase'
 
 function Register(props) {
     const schema = yup.object().shape({
@@ -32,8 +32,10 @@ function Register(props) {
     const checkingPw = `form-control h-auto form-control-solid py-4 px-8 ${errors.password ? 'is-invalid' : ''}`;
     const checkingRePw = `form-control h-auto form-control-solid py-4 px-8 ${errors.rePassword ? 'is-invalid' : ''}`;
 
-    const emailRef = useRef();
-    const passwordRef = useRef();
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const fullNameRef = useRef()
+    const phoneRef = useRef()
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -50,7 +52,7 @@ function Register(props) {
 
         try {
             setLoading(true);
-            signup(emailRef.current.value, passwordRef.current.value);
+            await signup(emailRef.current.value, passwordRef.current.value);
 
             setAlert('green');
             setError('Đăng kí thành công !');
@@ -76,7 +78,24 @@ function Register(props) {
     }
 
     if (currentUser) {
-        console.log(currentUser.uid)
+        const insertShopInfor = async () => {
+            try {
+                await db.collection('ShopProfile').doc(currentUser.uid).set({
+                    fullname: fullNameRef.current.value,
+                    phone: phoneRef.current.value,
+                    email: currentUser.email,
+                    id: currentUser.uid,
+                    role: "1",
+                    address: '',
+                    district: '',
+                    ward: '',
+                    detailAddress: ''
+                });
+            } catch {
+                console.log('error');
+            }
+        }
+        insertShopInfor();
     }
 
     return (
@@ -99,6 +118,24 @@ function Register(props) {
                                 {error && <Alert style={{ color: alert }}>{error}</Alert>}
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
+                                    <div className="form-group mb-5">
+                                        <input
+                                            className="fullname"
+                                            type="text"
+                                            placeholder="Họ và Tên"
+                                            ref={fullNameRef}
+                                        />
+                                    </div>
+
+                                    <div className="form-group mb-5">
+                                        <input
+                                            className="phone"
+                                            type="number"
+                                            placeholder="Số điện thoại"
+                                            ref={phoneRef}
+                                        />
+                                    </div>
+
                                     <div className="form-group mb-5">
                                         <input
                                             className={checkingEmail}
