@@ -196,20 +196,8 @@ function MainPostOrder(props) {
             .string()
             .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
             .required('Vui lòng điền số điện thoại khách hàng'),
-        shipFee: yup
-            .string()
-            .matches(/^[0-9]+$/, {
-                message: 'Chỉ được phép nhập số',
-                excludeEmptyString: true,
-            })
-            .required('Vui lòng nhập phí giao hàng bạn muốn trả'),
-        tempFee: yup
-            .string()
-            .matches(/^[0-9]+$/, {
-                message: 'Chỉ được phép nhập số',
-                excludeEmptyString: true,
-            })
-            .max(7, 'Số tiền cho phép dưới 9 999 999 VND'),
+        shipFee: yup.string().required('Vui lòng nhập phí giao hàng bạn muốn trả'),
+        tempFee: yup.string(),
         note: yup.string().max(100, 'Vượt quá ${max} kí tự được cho phép'),
         shipAddress: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
     });
@@ -230,6 +218,12 @@ function MainPostOrder(props) {
     const checkingShipAddress = `form-control form-control-lg ${errors.shipAddress ? 'is-invalid' : ''}`;
 
     //////////////////////////////////////////////////////
+    const reverseString = (value) => {
+        // 000 20 => 00020 => 20 + ' 000'
+        if (parseInt(value.split(' ').join('')) === 0) return '0';
+        return parseInt(value.split(' ').join('')) + ' 000';
+    };
+
     // Handle submitForm
     const onSubmit = (e) => {
         const newAddress = { district: '', ward: '', address: '' };
@@ -286,8 +280,8 @@ function MainPostOrder(props) {
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
             ten_nguoi_nhan: customerRef.current.value,
-            phi_giao: shipFeeRef.current.value,
-            phi_ung: depositFeeRef.current.value,
+            phi_giao: reverseString(shipFeeRef.current.value),
+            phi_ung: reverseString(depositFeeRef.current.value),
             id_roomchat: idChat,
             ma_bi_mat: code,
         };
@@ -372,13 +366,16 @@ function MainPostOrder(props) {
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <div className="input-group">
-                                            <input
+                                            <InputMask
+                                                mask="000 999"
+                                                maskChar=""
                                                 type="text"
-                                                className={checkingShipFee}
+                                                className={checkingShipFee + ` rtl`}
                                                 {...register('shipFee')}
                                                 id="ship_inputmask"
                                                 placeholder={0}
                                                 ref={shipFeeRef}
+                                                dir="rtl"
                                             />
 
                                             <div className="input-group-append">
@@ -395,13 +392,15 @@ function MainPostOrder(props) {
                                     </label>
                                     <div className="col-xl-9 col-lg-8 input-group">
                                         <div className="input-group">
-                                            <input
-                                                type="text"
-                                                className={checkingTempFee}
+                                            <InputMask
+                                                mask="000 999"
+                                                maskChar=""
+                                                className={checkingTempFee + `rtl`}
                                                 {...register('tempFee')}
                                                 id="temp_inputmask"
                                                 placeholder={0}
                                                 ref={depositFeeRef}
+                                                dir="rtl"
                                             />
                                             <div className="input-group-append">
                                                 <span className="input-group-text">VND</span>

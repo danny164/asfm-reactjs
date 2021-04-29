@@ -33,6 +33,7 @@ function ShopList(props) {
         <>
             <DataTable
                 title="Danh sách quản lý Shop"
+                expandableRows={true}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}
