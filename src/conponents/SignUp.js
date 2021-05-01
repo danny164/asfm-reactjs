@@ -30,6 +30,8 @@ function Register(props) {
         resolver: yupResolver(schema),
     });
 
+    const checkingFullname = `form-control h-auto form-control-solid py-4 px-8 ${errors.fullname ? 'is-invalid' : ''}`;
+    const checkingPhone = `form-control h-auto form-control-solid py-4 px-8 ${errors.phone ? 'is-invalid' : ''}`;
     const checkingEmail = `form-control h-auto form-control-solid py-4 px-8 ${errors.email ? 'is-invalid' : ''}`;
     const checkingPw = `form-control h-auto form-control-solid py-4 px-8 ${errors.password ? 'is-invalid' : ''}`;
     const checkingRePw = `form-control h-auto form-control-solid py-4 px-8 ${errors.rePassword ? 'is-invalid' : ''}`;
@@ -130,11 +132,11 @@ function Register(props) {
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group mb-5">
-                                        <input className="fullname" type="text" placeholder="Họ và Tên" ref={fullNameRef} />
+                                        <input className={checkingFullname} type="text" placeholder="Họ và Tên" ref={fullNameRef} />
                                     </div>
 
                                     <div className="form-group mb-5">
-                                        <input className="phone" type="text" placeholder="Số điện thoại" ref={phoneRef} />
+                                        <input className={checkingPhone} type="text" placeholder="Số điện thoại" ref={phoneRef} />
                                     </div>
 
                                     <div className="form-group mb-5">

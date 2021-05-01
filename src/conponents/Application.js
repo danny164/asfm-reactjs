@@ -20,7 +20,7 @@ function Application() {
         <Router>
             <AuthProvider>
                 <Switch>
-                    <CheckRoute exact path="/register" component={Register} />
+                    <Route exact path="/register" component={Register} />
                     <CheckRoute exact path="/login" component={Login} />
                     <CheckRoute exact path="/forgotpw" component={ForgotPw} />
                     <PrivateRoute exact path="/home" component={HomePage} />
