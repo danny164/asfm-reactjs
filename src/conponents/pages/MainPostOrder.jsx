@@ -240,7 +240,8 @@ function MainPostOrder(props) {
     // join: 'Nguyen Van Quynh'
 
     const convertString = (value) => {
-        const removeSpace = value.replace(/[ ]{2,}/g, ' ').trim();
+        const allLowerCase = value.toLowerCase();
+        const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
 
         const removeSpecialChars = removeSpace.replace(
             /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\,|\.|[0-9]/g,
@@ -302,7 +303,7 @@ function MainPostOrder(props) {
             return;
         }
 
-        console.log(convertString(customerRef.current.value).split('').length);
+        // console.log(convertString(customerRef.current.value).split('').length);
 
         if (convertString(customerRef.current.value).split('').length < 5) {
             setFullnameError('Vui lòng kiểm tra lại tên khách hàng !');
@@ -332,7 +333,7 @@ function MainPostOrder(props) {
     };
 
     const handleDefaultAddressChange = (e) => {
-        console.log(e.target.checked);
+        // console.log(e.target.checked);
         if (e.target.checked === true) {
             setReceiveAddress(false);
         } else {

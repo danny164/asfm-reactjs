@@ -18,7 +18,7 @@ function Chart(props) {
             total: '17%',
             percent: '17%',
             processBarColor: 'bg-menu-progress',
-            style: { backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbtractThree})` },
+            style: { backgroundPosition: 'right top', backgroundSize: '7rem 7rem', backgroundImage: `url(${AbtractThree})` },
         },
         {
             id: 2,
@@ -28,7 +28,7 @@ function Chart(props) {
             total: '25%',
             percent: '25%',
             processBarColor: 'bg-menu-picked',
-            style: { backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbtractThree})` },
+            style: { backgroundPosition: 'right top', backgroundSize: '7rem 7rem', backgroundImage: `url(${AbtractThree})` },
         },
         {
             id: 3,
@@ -38,7 +38,7 @@ function Chart(props) {
             total: '35%',
             percent: '35%',
             processBarColor: 'bg-menu-completed',
-            style: { backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbtractThree})` },
+            style: { backgroundPosition: 'right top', backgroundSize: '7rem 7rem', backgroundImage: `url(${AbtractThree})` },
         },
         {
             id: 4,
@@ -48,11 +48,10 @@ function Chart(props) {
             total: '23%',
             percent: '23%',
             processBarColor: 'bg-menu-canceled',
-            style: { backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbtractThree})` },
+            style: { backgroundPosition: 'right top', backgroundSize: '7rem 7rem', backgroundImage: `url(${AbtractThree})` },
         },
     ];
 
-    console.log(cards);
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
@@ -82,6 +81,7 @@ function Chart(props) {
                                     </div>
                                 ))}
                             </div>
+
                             <div className="row">
                                 <div className="col-xl-6">
                                     <RadialChart />

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
@@ -11,11 +12,9 @@ import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
-import TheNightOwl from '../../assets/media/avatar.png';
 import SkeletonCard from './Skeleton/SkeletonCard';
-import Expand from 'react-expand-animated';
-import { useAuth } from '../../context/AuthContext';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
+
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
     idShop: PropTypes.string,

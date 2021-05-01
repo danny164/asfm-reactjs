@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '../../assets/media/avatar.png';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
+
 MainProfile.propTypes = {
     user: PropTypes.object,
     onChange: PropTypes.func,

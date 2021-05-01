@@ -35,13 +35,13 @@ function ShopList(props) {
 
     const columns = [
         {
-            name: 'Email',
-            selector: 'email',
+            name: 'Trạng thái',
+            selector: 'status',
             sortable: true,
         },
         {
-            name: 'Trạng thái',
-            selector: 'status',
+            name: 'Email',
+            selector: 'email',
             sortable: true,
         },
         {
