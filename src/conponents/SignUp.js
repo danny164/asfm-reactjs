@@ -49,11 +49,9 @@ function Register(props) {
             setAlert('#f27173');
             return setError('Bạn phải đồng ý với các điều khoản !');
         }
-
         try {
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value);
-
             setAlert('green');
             setError('Đăng kí thành công !');
         } catch (err) {
