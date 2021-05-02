@@ -65,6 +65,7 @@ function MainPostOrder(props) {
     const [ward, setWard] = useState('');
     const [districtReceive, setDistrictReceive] = useState('');
     const [wardReceive, setWardReceive] = useState('');
+    const [fullnameError, setFullnameError] = useState('');
     const [addressReceiveError, setAddressReceiveError] = useState();
     const [districtReceiveError, setDistrictReceiveError] = useState();
     const [wardReceiveError, setWardReceiveError] = useState();
@@ -210,11 +211,12 @@ function MainPostOrder(props) {
         resolver: yupResolver(schema),
     });
 
-    const checkingFullname = `form-control form-control-lg ${errors.fullname ? 'is-invalid' : ''}`;
+    const checkingFullname = `form-control form-control-lg ${errors.fullname || fullnameError ? 'is-invalid' : ''}`;
     const checkingPhone = `form-control form-control-lg ${errors.phone ? 'is-invalid' : ''}`;
     const checkingShipFee = `form-control form-control-lg ${errors.shipFee ? 'is-invalid' : ''}`;
     const checkingTempFee = `form-control form-control-lg ${errors.tempFee ? 'is-invalid' : ''}`;
     const checkingNote = `form-control form-control-lg ${errors.note ? 'is-invalid' : ''}`;
+    const checkingShopAddress = `form-control form-control-lg ${addressReceiveError ? 'is-invalid' : ''}`;
     const checkingShipAddress = `form-control form-control-lg ${errors.shipAddress ? 'is-invalid' : ''}`;
 
     //////////////////////////////////////////////////////
@@ -238,10 +240,11 @@ function MainPostOrder(props) {
     // join: 'Nguyen Van Quynh'
 
     const convertString = (value) => {
-        const removeSpace = value.replace(/[ ]{2,}/g, ' ').trim();
+        const allLowerCase = value.toLowerCase();
+        const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
 
         const removeSpecialChars = removeSpace.replace(
-            /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\,|\./g,
+            /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
             ''
         );
 
@@ -256,6 +259,7 @@ function MainPostOrder(props) {
         return result.join(' ');
     };
 
+    ///////////////////////////////////////////////////
     // Handle submitForm
     const onSubmit = (e) => {
         const newAddress = { district: '', ward: '', address: '' };
@@ -299,6 +303,13 @@ function MainPostOrder(props) {
             return;
         }
 
+        // console.log(convertString(customerRef.current.value).split('').length);
+
+        if (convertString(customerRef.current.value).split('').length < 5) {
+            setFullnameError('Vui lòng kiểm tra lại tên khách hàng !');
+            return;
+        }
+
         let code = random.generate({
             length: 4,
             charset: 'numeric',
@@ -322,7 +333,7 @@ function MainPostOrder(props) {
     };
 
     const handleDefaultAddressChange = (e) => {
-        console.log(e.target.checked);
+        // console.log(e.target.checked);
         if (e.target.checked === true) {
             setReceiveAddress(false);
         } else {
@@ -551,7 +562,7 @@ function MainPostOrder(props) {
                                         </label>
                                         <div className="col-xl-9 col-lg-8">
                                             <input
-                                                className="form-control form-control-lg"
+                                                className={checkingShopAddress}
                                                 type="text"
                                                 // {...register('shipAddress')}
                                                 maxLength={50}

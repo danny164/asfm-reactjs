@@ -45,9 +45,8 @@ function HomePage() {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            localStorage.setItem("fullname", doc.data().fullname)
-                            setInput(
-                                doc.data());
+                            localStorage.setItem('fullname', doc.data().fullname);
+                            setInput(doc.data());
                         } else {
                             console.log('No such document!');
                         }
@@ -68,10 +67,15 @@ function HomePage() {
                     console.log(snapshot.val());
                 });
 
-                realtime.ref('Transaction/').orderByChild("id_shop").equalTo(id).once('value').then((snapshot) => {
-                    setNotification(snapshot.val());
-                    console.log(snapshot.val())
-                })
+                realtime
+                    .ref('Transaction/')
+                    .orderByChild('id_shop')
+                    .equalTo(id)
+                    .once('value')
+                    .then((snapshot) => {
+                        setNotification(snapshot.val());
+                        console.log(snapshot.val());
+                    });
             } catch (error) {
                 console.log(error);
             }

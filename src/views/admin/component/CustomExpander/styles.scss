@@ -1,0 +1,15 @@
+.custom-expander {
+    position: relative;
+    .banned {
+        position: absolute;
+
+        top: -2px;
+        left: 20%;
+        opacity: 0.5;
+
+        img {
+            width: 70%;
+            height: auto;
+        }
+    }
+}
