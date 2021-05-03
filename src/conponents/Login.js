@@ -1,12 +1,13 @@
-import React, {  useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import '../assets/css/portal.css';
-import { useAuth} from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import db from '../firebase'
 
 function Login1(props) {
     const schema = yup.object().shape({
@@ -17,9 +18,11 @@ function Login1(props) {
     const checkRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
+    const { currentUser } = useAuth()
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const history = useHistory()
 
     const { signin } = useAuth();
 
@@ -36,8 +39,8 @@ function Login1(props) {
 
     const onSubmit = async (e) => {
         try {
-            setLoading(true);
             await signin(emailRef.current.value, passwordRef.current.value);
+            history.push('/home')
         } catch {
             setError('Đăng nhập không thành công!');
         }
@@ -56,6 +59,8 @@ function Login1(props) {
             localStorage.removeItem('password');
         }
     };
+
+   
 
     return (
         <main className="d-flex flex-column flex-root">

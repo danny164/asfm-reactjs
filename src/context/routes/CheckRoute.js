@@ -10,7 +10,7 @@ function CheckRoute({ component: Component, ...rest }) {
         <Route
             {...rest}
             render={(props) => {
-                return currentUser ? <Redirect to="/home" /> : <Component {...props} />;
+                return localStorage.getItem('email') ? <Redirect to="/home" /> : <Component {...props} />;
             }}
         ></Route>
     );

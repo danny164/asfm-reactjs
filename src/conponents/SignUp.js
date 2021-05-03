@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import '../assets/css/portal.css';
-import { UseAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { db } from '../firebase';
+import { db } from '../firebase'
 import moment from 'moment';
 import random from 'randomstring';
 
@@ -21,7 +21,10 @@ function Register(props) {
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
         rePassword: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không khớp'),
     });
-    const { currentUser } = UseAuth();
+
+    const { currentUser } = useAuth();
+    const history = useHistory()
+
     const {
         register,
         handleSubmit,
@@ -46,7 +49,7 @@ function Register(props) {
     const [alert, setAlert] = useState('');
     const [license, setLicense] = useState(false);
 
-    const { signup } = UseAuth();
+    const { signup } = useAuth();
 
     const onSubmit = async (e) => {
         if (license === false) {
@@ -56,13 +59,13 @@ function Register(props) {
         try {
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value);
-            setAlert('green');
-            setError('Đăng kí thành công !');
+            setAlert("success !")
+            history.push("/home")
         } catch (err) {
             setAlert('#f27173');
             // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
             const errorCode = err.code;
-            if (errorCode == 'auth/email-already-in-use') {
+            if (errorCode === 'auth/email-already-in-use') {
                 setError('Tài khoản đã tồn tại');
             } else {
                 setError('Đăng kí thất bại');
@@ -105,9 +108,11 @@ function Register(props) {
             } catch {
                 console.log('error');
             }
-        };
-        insertShopInfor();
+        }
+        insertShopInfor()
     }
+
+
 
     return (
         <div style={{ backgroundColor: 'white' }}>

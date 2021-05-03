@@ -20,22 +20,20 @@ function Application() {
         <Router>
             <AuthProvider>
                 <Switch>
-                    <Route exact path="/register" component={Register} />
-                    <CheckRoute exact path="/login" component={Login} />
-                    <CheckRoute exact path="/forgotpw" component={ForgotPw} />
-                    <PrivateRoute exact path="/home" component={HomePage} />
-                    <PrivateRoute exact path="/profile" component={Profile} />
-                    <PrivateRoute exact path="/changepw" component={ChangePw} />
-                    <PrivateRoute exact path="/post-order" component={PostOrder} />
-                    <PrivateRoute exact path="/chart" component={Chart} />
+                    <Redirect from="/" to="login" exact />
+                    <CheckRoute path="/register" component={Register} />
+                    <CheckRoute path="/login" component={Login} />
+                    <CheckRoute path="/forgotpw" component={ForgotPw} />
+                    <PrivateRoute path="/home" component={HomePage} />
+                    <PrivateRoute path="/profile" component={Profile} />
+                    <PrivateRoute path="/changepw" component={ChangePw} />
+                    <PrivateRoute path="/post-order" component={PostOrder} />
+                    <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
-                    <PrivateRoute exact path="/map" component={Map} />
+                    <PrivateRoute path="/map" component={Map} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>
-            <Switch>
-                <Redirect from="/" to="login" exact />
-            </Switch>
         </Router>
     );
 }
