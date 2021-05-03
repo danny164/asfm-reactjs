@@ -4,7 +4,6 @@ import { useAuth } from '../AuthContext';
 import PropTypes from 'prop-types';
 
 function CheckRoute({ component: Component, ...rest }) {
-    const { currentUser } = useAuth();
 
     return (
         <Route

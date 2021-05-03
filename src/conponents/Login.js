@@ -4,10 +4,10 @@ import { Link, useHistory } from 'react-router-dom';
 import '../assets/css/portal.css';
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import db from '../firebase'
+import { db } from '../firebase'
 
 function Login1(props) {
     const schema = yup.object().shape({
@@ -40,7 +40,9 @@ function Login1(props) {
     const onSubmit = async (e) => {
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
-            history.push('/home')
+            setError("")
+            setLoading(false)
+            // history.push('/home')
         } catch {
             setError('Đăng nhập không thành công!');
         }
@@ -60,7 +62,34 @@ function Login1(props) {
         }
     };
 
-   
+    if (currentUser) {
+        async function fetchRole() {
+            try {
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            if (doc.data().role === "1") {
+                                console.log("haha")
+                                history.push('/home')
+                            }
+
+                            if (doc.data().role === "9") {
+                                history.push('/admin')
+                            }
+
+                        } else {
+                            console.log('No such document!');
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchRole()
+    }
 
     return (
         <main className="d-flex flex-column flex-root">
