@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import AuthProvider from '../context/AuthContext';
 import CheckRoute from '../context/routes/CheckRoute';
 import PrivateRoute from '../context/routes/PrivateRoute';
+import BanRoute from "../context/routes/BanRoute"
 import AdminPanel from '../views/admin/index';
 import HomePage from '../views/web/HomePage';
 import PostOrder from '../views/web/PostOrder';
@@ -14,6 +15,7 @@ import Chart from './pages/Chart';
 import Map from './pages/Map/Map';
 import NotFoundPage from './pages/NotFound';
 import Register from './SignUp';
+import Banned from './pages/Banned';
 
 function Application() {
     return (
@@ -30,6 +32,7 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
+                    <BanRoute path="/banned" component={Banned} />
                     <PrivateRoute path="/map" component={Map} />
                     <Route component={NotFoundPage} />
                 </Switch>

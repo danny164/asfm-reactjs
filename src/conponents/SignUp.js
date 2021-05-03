@@ -60,7 +60,6 @@ function Register(props) {
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value);
             setAlert("success !")
-            history.push("/home")
         } catch (err) {
             setAlert('#f27173');
             // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
@@ -110,9 +109,29 @@ function Register(props) {
             }
         }
         insertShopInfor()
+
+        async function fetchRole() {
+            try {
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            localStorage.setItem('fullname', doc.data().fullname);
+                            localStorage.setItem('email', currentUser.email);
+                            localStorage.setItem("role", doc.data().role)
+                            history.push('/home')
+                        } else {
+                            console.log('No such document!');
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchRole()
     }
-
-
 
     return (
         <div style={{ backgroundColor: 'white' }}>

@@ -45,8 +45,8 @@ function HomePage() {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            localStorage.setItem('fullname', doc.data().fullname);
-                            localStorage.setItem('email', currentUser.email);
+                            // localStorage.setItem('fullname', doc.data().fullname);
+                            // localStorage.setItem('email', currentUser.email);
                             setInput(doc.data());
                         } else {
                             console.log('No such document!');
