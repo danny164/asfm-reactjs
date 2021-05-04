@@ -83,7 +83,8 @@ function PostOrder(props) {
                 id_shipper: '',
                 id_roomchat: dataPostOrder.id_roomchat,
                 status: "0",
-                ma_bi_mat: dataPostOrder.ma_bi_mat
+                ma_bi_mat: dataPostOrder.ma_bi_mat,
+                thoi_gian: dataPostOrder.thoi_gian
             });
 
             //tạo bảng chatroom

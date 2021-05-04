@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
@@ -42,12 +43,17 @@ function HomePage() {
                 await db
                     .collection('ShopProfile')
                     .doc(id)
-                    .get()
-                    .then((doc) => {
+                    .onSnapshot((doc) => {
                         if (doc.exists) {
                             // localStorage.setItem('fullname', doc.data().fullname);
                             // localStorage.setItem('email', currentUser.email);
-                            setInput(doc.data());
+                            if (doc.data().role === "0") {
+                                localStorage.setItem('role', doc.data().role)
+                                window.location.reload();
+                            } else {
+                                localStorage.setItem('role', doc.data().role)
+                                setInput(doc.data());
+                            }
                         } else {
                             console.log('No such document!');
                         }
@@ -68,15 +74,7 @@ function HomePage() {
                     console.log(snapshot.val());
                 });
 
-                realtime
-                    .ref('Transaction/')
-                    .orderByChild('id_shop')
-                    .equalTo(id)
-                    .once('value')
-                    .then((snapshot) => {
-                        setNotification(snapshot.val());
-                        console.log(snapshot.val());
-                    });
+                fetchNotification()
             } catch (error) {
                 console.log(error);
             }
@@ -84,6 +82,20 @@ function HomePage() {
         fetchOrder();
     }, []);
 
+    //fetch notification
+    const fetchNotification = async () => {
+        await realtime
+            .ref('Transaction/').child("id_shop").child(id)
+            .orderByChild("thoi_gian").startAt(moment()
+                .subtract(1, 'day').format('X'))
+            .once('value')
+            .then((snapshot) => {
+                if (snapshot !== null) {
+                    setNotification(snapshot.val());
+                    console.log(snapshot.val());
+                }
+            });
+    }
     async function handleDeleteOrder(id) {
         try {
             await realtime.ref('newsfeed/' + id).remove();
@@ -98,8 +110,8 @@ function HomePage() {
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} Notification={Notification} />
-                <AsideRight name={input.fullname} />
+                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
+                <AsideRight name={input.fullname} Notification={Notification} />
             </div>
         </div>
     );

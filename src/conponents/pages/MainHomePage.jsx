@@ -21,7 +21,6 @@ MainHomePage.propTypes = {
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
     DeleteOrder: PropTypes.func,
-    Notification: PropTypes.object,
 };
 
 MainHomePage.defaultProps = {
@@ -30,7 +29,6 @@ MainHomePage.defaultProps = {
     ChangeOrderStatus: null,
     DeleteOrder: null,
     idShop: '',
-    Notification: null,
 };
 
 var renderStatus = [];
