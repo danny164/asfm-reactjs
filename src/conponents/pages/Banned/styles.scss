@@ -1,0 +1,59 @@
+:root {
+    --animation-sentence: "You know you're supposed to leave, right?";
+    --animation-duration: 40s;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.bg--banned {
+    width: 100%;
+    color: #f1eedb !important;
+    background: #282b24;
+    overflow: hidden;
+}
+
+.banned--container {
+    text-align: center;
+    margin: 1rem 0.5rem 0;
+}
+
+.banned--container {
+    h1 {
+        font-family: var(--font-header);
+        font-size: calc(4rem + 2vw);
+        text-transform: uppercase;
+    }
+    p.alert {
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        font-size: 2rem;
+        margin: 1.5rem 0 1.5rem;
+    }
+    p.reason {
+        letter-spacing: 0.2rem;
+        font-size: 2rem;
+        margin: 1.5rem 0 3rem;
+    }
+}
+
+.ghost {
+    position: absolute;
+    bottom: 5px;
+    left: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    /* have the ghost move to the right and to the left of the screen, turning to its central position and repeating the animation twice */
+    animation: hoverGhost calc(var(--animation-duration) / 2) ease-in-out 2;
+}
+
+@keyframes hoverGhost {
+    25% {
+        transform: translateX(20vw);
+    }
+    75% {
+        transform: translateX(-20vw);
+    }
+}

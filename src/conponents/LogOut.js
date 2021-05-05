@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Signout() {
     const { logout } = useAuth();
 
-    async function handleLogout() {
+    const handleLogout = async () => {
         try {
-            await logout()
-            localStorage.removeItem("role")
-            localStorage.removeItem('email')
-            localStorage.removeItem("fullname")
+            await logout();
+            localStorage.removeItem('role');
+            localStorage.removeItem('email');
+            localStorage.removeItem('fullname');
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
     return (
         <Link to="#" className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block" onClick={handleLogout}>
