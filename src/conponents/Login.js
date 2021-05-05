@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Alert } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import '../assets/css/portal.css';
@@ -7,9 +7,13 @@ import Logo from './Logo';
 import { set, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { db } from '../firebase'
+import { db } from '../firebase';
 
 function Login1(props) {
+    useEffect(() => {
+        document.body.classList.remove('bg--banned');
+    }, []);
+
     const schema = yup.object().shape({
         email: yup.string().email('Email không hợp lệ').required('Bạn chưa nhập địa chỉ email'),
         password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
@@ -18,11 +22,11 @@ function Login1(props) {
     const checkRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { currentUser } = useAuth()
+    const { currentUser } = useAuth();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const history = useHistory()
+    const history = useHistory();
 
     const { signin } = useAuth();
 
@@ -40,8 +44,7 @@ function Login1(props) {
     const onSubmit = async (e) => {
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
-            setError("thành công !")
-            setLoading(false)
+            setLoading(false);
 
             // history.push('/home')
         } catch {
@@ -72,25 +75,24 @@ function Login1(props) {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            if (doc.data().role === "1") {
+                            if (doc.data().role === '1') {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);
-                                localStorage.setItem("role", doc.data().role);
-                                history.push("/home")
+                                localStorage.setItem('role', doc.data().role);
+                                history.push('/home');
                             }
 
-                            if (doc.data().role === "9") {
+                            if (doc.data().role === '9') {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);
-                                localStorage.setItem("role", doc.data().role)
-                                history.push('/admin')
+                                localStorage.setItem('role', doc.data().role);
+                                history.push('/admin');
                             }
 
-                            if (doc.data().role === "0") {
-                                localStorage.setItem("role", doc.data().role)
-                                history.push('/banned')
+                            if (doc.data().role === '0') {
+                                localStorage.setItem('role', doc.data().role);
+                                history.push('/banned');
                             }
-
                         } else {
                             console.log('No such document!');
                         }
@@ -99,7 +101,7 @@ function Login1(props) {
                 console.log(error);
             }
         }
-        fetchRole()
+        fetchRole();
     }
 
     return (
