@@ -7,8 +7,8 @@ function Signout() {
 
     const handleLogout = async () => {
         try {
-            localStorage.removeItem('role');
             await logout();
+            localStorage.removeItem('role');
             localStorage.removeItem('email');
             localStorage.removeItem('fullname');
         } catch (e) {
