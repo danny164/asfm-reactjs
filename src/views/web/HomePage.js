@@ -10,6 +10,7 @@ import random from 'randomstring';
 let notify = [];
 function HomePage() {
     const { currentUser } = useAuth();
+    const now = moment().format('X');
 
     const [id] = useState(currentUser.uid);
     const [input, setInput] = useState({
@@ -31,13 +32,7 @@ function HomePage() {
         ghi_chu: '',
     });
 
-    const [notification, setNotification] = useState({
-        id_post: '',
-        id_roomchat: '',
-        id_shipper: '',
-        id_shop: '',
-        status: '',
-    });
+    const [notification, setNotification] = useState([]);
 
     //fetch user infor
     useEffect(() => {
@@ -50,11 +45,11 @@ function HomePage() {
                         if (doc.exists) {
                             // localStorage.setItem('fullname', doc.data().fullname);
                             // localStorage.setItem('email', currentUser.email);
-                            if (doc.data().role === "0") {
-                                localStorage.setItem('role', doc.data().role)
+                            if (doc.data().role === '0') {
+                                localStorage.setItem('role', doc.data().role);
                                 window.location.reload();
                             } else {
-                                localStorage.setItem('role', doc.data().role)
+                                localStorage.setItem('role', doc.data().role);
                                 setInput(doc.data());
                             }
                         } else {
@@ -76,8 +71,6 @@ function HomePage() {
                     setData(snapshot.val());
                     // console.log(snapshot.val());
                 });
-
-                fetchNotification()
             } catch (error) {
                 console.log(error);
             }
@@ -87,31 +80,43 @@ function HomePage() {
 
     //fetch notification  .orderByKey("thoi_gian").startAt(moment()
     // .subtract(1, 'day').format('X'))
-    const fetchNotification = async () => {
-        try {
-            await realtime
-                .ref('Notification/' + currentUser.uid)
-                .on('child_added', (snapshot) => {
+    useEffect(() => {
+        const fetchNotification = async () => {
+            try {
+                await realtime.ref('Notification/' + currentUser.uid).on('child_added', (snapshot) => {
                     if (snapshot !== null) {
                         notify.push(snapshot.val());
                         console.log(snapshot.val());
                     }
-                    setNotification(notify);
                 });
+                setNotification(notify);
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
-            await realtime
-                .ref('Transaction/')
-                .orderByChild("id_shop").equalTo(id)
-                .on('child_changed', (snapshot) => {
-                    if (snapshot !== null) {
-                        pushNotification(snapshot.val())
-                        console.log(snapshot.val());
-                    }
-                });
-        } catch (err) {
-            console.log(err)
+        async function updateNotification() {
+            try {
+                await realtime
+                    .ref('Transaction/')
+                    .orderByChild('id_shop')
+                    .equalTo(id)
+                    .on('child_changed', (snapshot) => {
+                        if (snapshot !== null) {
+                            pushNotification(snapshot.val());
+                            console.log(snapshot.val());
+                        }
+                    });
+            } catch (err) {
+                console.log(err)
+            }
         }
-    }
+
+        updateNotification()
+        fetchNotification();
+    }, [])
+
+    //hàm cập nhật những thay đổi về trạng thái đơn cho thông báo
 
     //hàm insert những thông báo mới vào bảng Notification.
     async function pushNotification(notify) {
@@ -120,8 +125,8 @@ function HomePage() {
             id_shop: currentUser.uid,
             id_shipper: notify.id_shipper,
             status: notify.status,
-            thoi_gian: notify.thoi_gian
-        }
+            thoi_gian: now,
+        };
 
         const idNotify =
             moment().format('YYYYMMDD-HHmmssSSS') +
@@ -131,9 +136,9 @@ function HomePage() {
             });
 
         try {
-            await realtime.ref("Notification/" + currentUser.uid + "/" + idNotify).set(notification)
+            await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(notification);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
 
@@ -147,7 +152,7 @@ function HomePage() {
         }
     }
 
-    console.log(notify)
+    console.log(notify);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
