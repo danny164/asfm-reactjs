@@ -10,7 +10,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         <Route
             {...rest}
             render={(props) => {
-                if (localStorage.getItem('role') && localStorage.getItem('role') === '0') {
+                if (localStorage.getItem('role') && localStorage.getItem('role') === '0' && currentUser) {
                     return <Component {...props} />;
                 } else {
                     return <Redirect to="/login?message=loginRequired" />;
