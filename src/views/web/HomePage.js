@@ -19,12 +19,6 @@ function HomePage() {
         address: '',
     });
 
-    const idNotify =
-        moment().format('YYYYMMDD-HHmmssSSS') +
-        random.generate({
-            length: 3,
-            charset: 'numeric',
-        });
 
     const [data, setData] = useState({
         id_post: '',
@@ -77,8 +71,6 @@ function HomePage() {
                     setData(snapshot.val());
                     // console.log(snapshot.val());
                 });
-
-                fetchNotification();
             } catch (error) {
                 console.log(error);
             }
@@ -88,30 +80,43 @@ function HomePage() {
 
     //fetch notification  .orderByKey("thoi_gian").startAt(moment()
     // .subtract(1, 'day').format('X'))
-    const fetchNotification = async () => {
-        try {
-            await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
-                if (snapshot !== null) {
-                    notify.push(snapshot.val());
-                    console.log(snapshot.val());
-                }
-                setNotification(notify);
-            });
-
-            await realtime
-                .ref('Transaction/')
-                .orderByChild('id_shop')
-                .equalTo(id)
-                .on('child_changed', (snapshot) => {
+    useEffect(() => {
+        const fetchNotification = async () => {
+            try {
+                await realtime.ref('Notification/' + currentUser.uid).on('child_added', (snapshot) => {
                     if (snapshot !== null) {
-                        pushNotification(snapshot.val());
+                        notify.push(snapshot.val());
                         console.log(snapshot.val());
                     }
                 });
-        } catch (err) {
-            console.log(err);
+                setNotification(notify);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        async function updateNotification() {
+            try {
+                await realtime
+                    .ref('Transaction/')
+                    .orderByChild('id_shop')
+                    .equalTo(id)
+                    .on('child_changed', (snapshot) => {
+                        if (snapshot !== null) {
+                            pushNotification(snapshot.val());
+                            console.log(snapshot.val());
+                        }
+                    });
+            } catch (err) {
+                console.log(err)
+            }
         }
-    };
+
+        updateNotification()
+        fetchNotification();
+    }, [])
+
+    //hàm cập nhật những thay đổi về trạng thái đơn cho thông báo
 
     //hàm insert những thông báo mới vào bảng Notification.
     async function pushNotification(notify) {
@@ -122,6 +127,13 @@ function HomePage() {
             status: notify.status,
             thoi_gian: now,
         };
+
+        const idNotify =
+            moment().format('YYYYMMDD-HHmmssSSS') +
+            random.generate({
+                length: 3,
+                charset: 'numeric',
+            });
 
         try {
             await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(notification);
