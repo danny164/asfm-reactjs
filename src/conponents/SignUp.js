@@ -1,15 +1,17 @@
-import React, { useRef, useState } from 'react';
-import { Alert } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
-import '../assets/css/portal.css';
-import { useAuth } from '../context/AuthContext';
-import Logo from './Logo';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { db } from '../firebase'
 import moment from 'moment';
 import random from 'randomstring';
+import React, { useRef, useState } from 'react';
+import { Alert } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { Link, useHistory } from 'react-router-dom';
+import * as yup from 'yup';
+import '../assets/css/portal.css';
+import Bubbles from '../assets/media/ball-wed.svg';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import Version from './common/Version';
+import Logo from './Logo';
 
 function Register(props) {
     const schema = yup.object().shape({
@@ -23,7 +25,7 @@ function Register(props) {
     });
 
     const { currentUser } = useAuth();
-    const history = useHistory()
+    const history = useHistory();
 
     const {
         register,
@@ -59,7 +61,7 @@ function Register(props) {
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
             setLoading(false);
-            setAlert("success !")
+            setAlert('success !');
         } catch (err) {
             setAlert('#f27173');
             // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
@@ -104,13 +106,13 @@ function Register(props) {
                         detailAddress: '',
                         lastEdited: '',
                         reason: '',
-                        lock_time: ''
+                        lock_time: '',
                     });
             } catch {
                 console.log('error');
             }
-        }
-        insertShopInfor()
+        };
+        insertShopInfor();
 
         async function fetchRole() {
             try {
@@ -122,8 +124,8 @@ function Register(props) {
                         if (doc.exists) {
                             localStorage.setItem('fullname', doc.data().fullname);
                             localStorage.setItem('email', currentUser.email);
-                            localStorage.setItem("role", doc.data().role)
-                            history.push('/home')
+                            localStorage.setItem('role', doc.data().role);
+                            history.push('/home');
                         } else {
                             console.log('No such document!');
                         }
@@ -132,13 +134,21 @@ function Register(props) {
                 console.log(error);
             }
         }
-        fetchRole()
+        fetchRole();
     }
 
     return (
-        <div style={{ backgroundColor: 'white' }}>
+        <div
+            className="bgi-no-repeat"
+            style={{
+                backgroundColor: 'white',
+                backgroundPosition: 'center center',
+                backgroundSize: 'cover',
+                backgroundImage: `url(${Bubbles})`,
+            }}
+        >
             {/* main page */}
-            <main className="d-flex flex-column flex-root">
+            <main className="d-flex flex-column flex-root min-vh-100">
                 {/* register page */}
                 <section className="login d-flex flex-row-fluid" id="login">
                     <div className="d-flex flex-center flex-row-fluid">
@@ -227,6 +237,7 @@ function Register(props) {
                     </div>
                 </section>
                 {/* end register page*/}
+                <Version />
             </main>
             {/*end main page*/}
         </div>
