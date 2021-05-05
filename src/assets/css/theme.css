@@ -12,6 +12,20 @@ body {
     text-align: left;
 }
 
+.sticky-version {
+    width: fit-content;
+    position: fixed;
+    bottom: 10%;
+    right: 0;
+    padding: 1rem;
+    z-index: 50;
+    background-color: #181c32;
+    color: #fff;
+    border-top-left-radius: 0.675rem;
+    border-bottom-left-radius: 0.675rem;
+    transition: width 2s;
+}
+
 input.rtl {
     text-align: left;
 }
