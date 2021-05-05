@@ -40,9 +40,7 @@ function Login1(props) {
     const onSubmit = async (e) => {
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
-            setError("thành công !")
-            setLoading(false)
-
+            setError("")
             // history.push('/home')
         } catch {
             setError('Đăng nhập không thành công!');
@@ -86,9 +84,11 @@ function Login1(props) {
                                 history.push('/admin')
                             }
 
-                            if (doc.data().role === "0") {
+                            if (doc.data().role === "0" && !localStorage.getItem("role")) {
                                 localStorage.setItem("role", doc.data().role)
                                 history.push('/banned')
+                            } else {
+                                localStorage.setItem("role", doc.data().role)
                             }
 
                         } else {

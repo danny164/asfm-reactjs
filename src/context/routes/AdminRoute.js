@@ -8,7 +8,7 @@ function CheckRoute({ component: Component, ...rest }) {
         <Route
             {...rest}
             render={(props) => {
-                if (localStorage.getItem('role') && localStorage.getItem('role') !== "9" && currentUser) { return <Redirect to="/home" /> } else { if (localStorage.getItem('role') && localStorage.getItem('role') === "9" && currentUser) { return <Component {...props} /> } else { return <Redirect to="/login?message=loginRequired" />} }
+                if (localStorage.getItem('role') && localStorage.getItem('role') !== "9" && currentUser) { return <Redirect to="/home" /> } else { if (localStorage.getItem('role') && localStorage.getItem('role') === "9" && currentUser) { return <Component {...props} /> } else { return <Redirect to="/login?message=loginRequired" /> } }
             }}
         ></Route>
     );
