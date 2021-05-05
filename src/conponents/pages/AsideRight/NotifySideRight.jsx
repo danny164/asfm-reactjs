@@ -1,12 +1,13 @@
 import React from 'react';
 import { propTypes } from 'react-bootstrap/esm/Image';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
+
 NotifySideRight.propTypes = {
-    Notification: propTypes.object,
+    Notification: propTypes.array,
 };
 
 NotifySideRight.defaultProps = {
-    Notification: null,
+    Notification: [],
 };
 
 function NotifySideRight(props) {

@@ -18,12 +18,6 @@ function HomePage() {
         address: '',
     });
 
-    const idNotify =
-        moment().format('YYYYMMDD-HHmmssSSS') +
-        random.generate({
-            length: 3,
-            charset: 'numeric',
-        });
 
     const [data, setData] = useState({
         id_post: '',
@@ -128,6 +122,13 @@ function HomePage() {
             status: notify.status,
             thoi_gian: notify.thoi_gian
         }
+
+        const idNotify =
+            moment().format('YYYYMMDD-HHmmssSSS') +
+            random.generate({
+                length: 3,
+                charset: 'numeric',
+            });
 
         try {
             await realtime.ref("Notification/" + currentUser.uid + "/" + idNotify).set(notification)
