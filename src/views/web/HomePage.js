@@ -7,7 +7,6 @@ import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 import random from 'randomstring';
 
-let notify = [];
 function HomePage() {
     const { currentUser } = useAuth();
     const now = moment().format('X');
@@ -32,7 +31,7 @@ function HomePage() {
         ghi_chu: '',
     });
 
-    const [notification, setNotification] = useState([]);
+    const [notification, setNotification] = useState();
 
     //fetch user infor
     useEffect(() => {
@@ -68,8 +67,10 @@ function HomePage() {
         async function fetchOrder() {
             try {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
-                    setData(snapshot.val());
-                    // console.log(snapshot.val());
+                    if (snapshot !== null) {
+                        setData(snapshot.val());
+                        // console.log(snapshot.val());
+                    }
                 });
             } catch (error) {
                 console.log(error);
@@ -83,13 +84,12 @@ function HomePage() {
     useEffect(() => {
         const fetchNotification = async () => {
             try {
-                await realtime.ref('Notification/' + currentUser.uid).on('child_added', (snapshot) => {
+                await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot !== null) {
-                        notify.push(snapshot.val());
+                        setNotification(snapshot.val());
                         console.log(snapshot.val());
                     }
                 });
-                setNotification(notify);
             } catch (err) {
                 console.log(err);
             }
@@ -152,7 +152,7 @@ function HomePage() {
         }
     }
 
-    console.log(notify);
+    console.log(notification)
 
     return (
         <div className="header-fixed sidebar-enabled bg">

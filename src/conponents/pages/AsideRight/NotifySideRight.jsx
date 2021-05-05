@@ -73,17 +73,17 @@ function NotifySideRight(props) {
                 </h3>
             </div>
             <div className="card-body card-body--notify pt-2 px-5">
-                {/* {Notification &&
-                    Notification.map((data) => (
+                {Notification &&
+                    Object.values(Notification).map((data) => (
                         <>
                             <div className="separator separator-dashed my-2" />
                             <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                Đơn hàng <span className="font-weight-bold menu-in-progress"></span> đã{' '}
+                                Đơn hàng <span className="font-weight-bold menu-in-progress">#{data.id_post}</span> đã{' '}
                                 <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
-                                <span className="font-size-sm text-time">{moment(data.thoi_gian).fromNow()}</span>
+                                <span className="font-size-sm text-time">{moment.unix(data.thoi_gian).fromNow()}</span>
                             </div>
                         </>
-                    ))} */}
+                    ))}
 
                 {/* <div className="py-1">
                     Đơn hàng <span className="font-weight-bold menu-in-progress">#20210421-202348057193</span> đã{' '}
