@@ -12,6 +12,7 @@ import { db } from '../firebase';
 function Login1(props) {
     useEffect(() => {
         document.body.classList.remove('bg--banned');
+        document.body.classList.remove('bg');
     }, []);
 
     const schema = yup.object().shape({
