@@ -5,7 +5,9 @@ import AsideRight from '../../conponents/pages/AsideRight';
 import MainHomePage from '../../conponents/pages/MainHomePage';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
+import random from 'randomstring';
 
+let notify = [];
 function HomePage() {
     const { currentUser } = useAuth();
 
@@ -15,6 +17,13 @@ function HomePage() {
         phone: '',
         address: '',
     });
+
+    const idNotify =
+        moment().format('YYYYMMDD-HHmmssSSS') +
+        random.generate({
+            length: 3,
+            charset: 'numeric',
+        });
 
     const [data, setData] = useState({
         id_post: '',
@@ -71,7 +80,7 @@ function HomePage() {
             try {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     setData(snapshot.val());
-                    console.log(snapshot.val());
+                    // console.log(snapshot.val());
                 });
 
                 fetchNotification()
@@ -82,20 +91,51 @@ function HomePage() {
         fetchOrder();
     }, []);
 
-    //fetch notification
+    //fetch notification  .orderByKey("thoi_gian").startAt(moment()
+    // .subtract(1, 'day').format('X'))
     const fetchNotification = async () => {
-        await realtime
-            .ref('Transaction/').child("id_shop").child(id)
-            .orderByChild("thoi_gian").startAt(moment()
-                .subtract(1, 'day').format('X'))
-            .once('value')
-            .then((snapshot) => {
-                if (snapshot !== null) {
-                    setNotification(snapshot.val());
-                    console.log(snapshot.val());
-                }
-            });
+        try {
+            await realtime
+                .ref('Notification/' + currentUser.uid)
+                .on('child_added', (snapshot) => {
+                    if (snapshot !== null) {
+                        notify.push(snapshot.val());
+                        console.log(snapshot.val());
+                    }
+                    setNotification(notify);
+                });
+
+            await realtime
+                .ref('Transaction/')
+                .orderByChild("id_shop").equalTo(id)
+                .on('child_changed', (snapshot) => {
+                    if (snapshot !== null) {
+                        pushNotification(snapshot.val())
+                        console.log(snapshot.val());
+                    }
+                });
+        } catch (err) {
+            console.log(err)
+        }
     }
+
+    //hàm insert những thông báo mới vào bảng Notification.
+    async function pushNotification(notify) {
+        const notification = {
+            id_post: notify.id_post,
+            id_shop: currentUser.uid,
+            id_shipper: notify.id_shipper,
+            status: notify.status,
+            thoi_gian: notify.thoi_gian
+        }
+
+        try {
+            await realtime.ref("Notification/" + currentUser.uid + "/" + idNotify).set(notification)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     async function handleDeleteOrder(id) {
         try {
             await realtime.ref('newsfeed/' + id).remove();
@@ -106,12 +146,14 @@ function HomePage() {
         }
     }
 
+    console.log(notify)
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
                 <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
-                <AsideRight name={input.fullname} Notification={Notification} />
+                <AsideRight name={input.fullname} Notification={notification} />
             </div>
         </div>
     );

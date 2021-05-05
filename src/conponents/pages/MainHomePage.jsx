@@ -367,7 +367,6 @@ function MainHomePage(props) {
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            {console.log('chạy: ' + dataModal.status)}
                             <div className="d-flex align-items-start">
                                 <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                 <div className="d-flex flex-column flex-grow-1 ml-4">

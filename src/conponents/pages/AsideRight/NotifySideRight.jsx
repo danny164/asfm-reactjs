@@ -12,7 +12,7 @@ NotifySideRight.defaultProps = {
 function NotifySideRight(props) {
     const { Notification } = props;
 
-    
+    console.log(Notification);
     return (
         <section
             className="card card-custom bgi-no-repeat gutter-b"

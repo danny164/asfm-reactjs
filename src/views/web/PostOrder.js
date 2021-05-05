@@ -87,6 +87,15 @@ function PostOrder(props) {
                 thoi_gian: dataPostOrder.thoi_gian
             });
 
+            //tạo bảng thông báo
+            await realtime.ref("Notification/" + currentUser.uid + "/" + dataPostOrder.idPost).set({
+                id_post: dataPostOrder.idPost,
+                id_shop: currentUser.uid,
+                id_shipper: '',
+                status: "0",
+                thoi_gian: dataPostOrder.thoi_gian
+            });
+
             //tạo bảng chatroom
             history.push("/home");
         } catch (error) {

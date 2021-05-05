@@ -16,6 +16,8 @@ AsideRight.defaultProps = {
 };
 
 function AsideRight(props) {
+    const { Notification } = props;
+
     return (
         <aside className="sidebar d-flex flex-row-auto flex-column">
             <div className="d-flex flex-column pb-10 pt-9 px-5 px-lg-10">

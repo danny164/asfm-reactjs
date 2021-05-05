@@ -103,6 +103,8 @@ function Register(props) {
                         ward: '',
                         detailAddress: '',
                         lastEdited: '',
+                        reason: '',
+                        lock_time: ''
                     });
             } catch {
                 console.log('error');

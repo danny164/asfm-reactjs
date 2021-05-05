@@ -40,9 +40,9 @@ function Login1(props) {
     const onSubmit = async (e) => {
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
-            setError("")
+            setError("thành công !")
             setLoading(false)
-            fetchRole()
+
             // history.push('/home')
         } catch {
             setError('Đăng nhập không thành công!');
@@ -63,41 +63,43 @@ function Login1(props) {
         }
     };
 
+    if (currentUser) {
+        async function fetchRole() {
+            try {
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            if (doc.data().role === "1") {
+                                localStorage.setItem('fullname', doc.data().fullname);
+                                localStorage.setItem('email', currentUser.email);
+                                localStorage.setItem("role", doc.data().role);
+                                history.push("/home")
+                            }
 
-    async function fetchRole() {
-        try {
-            await db
-                .collection('ShopProfile')
-                .doc(currentUser.uid)
-                .get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        if (doc.data().role === "1") {
-                            localStorage.setItem('fullname', doc.data().fullname);
-                            localStorage.setItem('email', currentUser.email);
-                            localStorage.setItem("role", doc.data().role);
-                            history.push("/home")
+                            if (doc.data().role === "9") {
+                                localStorage.setItem('fullname', doc.data().fullname);
+                                localStorage.setItem('email', currentUser.email);
+                                localStorage.setItem("role", doc.data().role)
+                                history.push('/admin')
+                            }
+
+                            if (doc.data().role === "0") {
+                                localStorage.setItem("role", doc.data().role)
+                                history.push('/banned')
+                            }
+
+                        } else {
+                            console.log('No such document!');
                         }
-
-                        if (doc.data().role === "9") {
-                            localStorage.setItem('fullname', doc.data().fullname);
-                            localStorage.setItem('email', currentUser.email);
-                            localStorage.setItem("role", doc.data().role)
-                            history.push('/admin')
-                        }
-
-                        if (doc.data().role === "0") {
-                            localStorage.setItem("role", doc.data().role)
-                            history.push('/banned')
-                        }
-
-                    } else {
-                        console.log('No such document!');
-                    }
-                });
-        } catch (error) {
-            console.log(error);
+                    });
+            } catch (error) {
+                console.log(error);
+            }
         }
+        fetchRole()
     }
 
     return (
