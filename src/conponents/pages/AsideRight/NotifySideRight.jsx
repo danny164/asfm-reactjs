@@ -22,53 +22,30 @@ function NotifySideRight(props) {
             action: 'đang',
             name: 'được xử lý',
             classname: `text-progress`,
-            icon: <i class="fad fa-spinner text-progress fa-sm ml-1"></i>,
+            icon: <i class="fad fa-spinner text-progress fa-sm mr-1"></i>,
         },
         {
             id: 2,
             action: 'đã',
             name: 'có shipper nhận',
             classname: `text-picked`,
-            icon: <i class="fad fa-hand-pointer text-picked fa-sm ml-1"></i>,
+            icon: <i class="fad fa-box-full text-picked fa-sm mr-1"></i>,
         },
         {
             id: 3,
             action: 'đã',
             name: 'giao hàng thành công',
             classname: `text-done`,
-            icon: <i className="fad fa-check-circle text-done fa-sm ml-1"></i>,
+            icon: <i className="fad fa-check-circle text-done fa-sm mr-1"></i>,
         },
         {
             id: 4,
             action: 'đã',
             name: 'bị hủy',
             classname: `text-cancelled`,
-            icon: <i class="fad fa-times-circle text-cancelled fa-sm ml-1"></i>,
+            icon: <i class="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
         },
     ];
-
-    // const dateToFromNowDaily = (date) => {
-    //     const convertDate = moment.unix(date);
-
-    //     return moment(date).relativeTime('vi', {
-    //         future: '%s tới',
-    //         past: '%s trước',
-    //         s: 'vài giây',
-    //         ss: '%d giây',
-    //         m: 'một phút',
-    //         mm: '%d phút',
-    //         h: 'một giờ',
-    //         hh: '%d giờ',
-    //         d: 'một ngày',
-    //         dd: '%d ngày',
-    //         w: 'một tuần',
-    //         ww: '%d tuần',
-    //         M: 'một tháng',
-    //         MM: '%d tháng',
-    //         y: 'một năm',
-    //         yy: '%d năm',
-    //     });
-    // };
 
     console.log(Notification);
     return (
@@ -87,9 +64,9 @@ function NotifySideRight(props) {
                         <>
                             <div className="separator separator-dashed my-2" />
                             <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                Đơn hàng <span className="text-id">#{data.id_post}</span> {baseOnStatus[data.status].action}{' '}
-                                <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.
-                                {baseOnStatus[data.status].icon}{' '}
+                                {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span>{' '}
+                                {baseOnStatus[data.status].action}{' '}
+                                <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
                                 <span className="font-size-sm text-time">{moment.unix(data.thoi_gian).fromNow()}</span>{' '}
                             </div>
                         </>
