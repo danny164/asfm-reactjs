@@ -91,11 +91,9 @@ function Login1(props) {
                                 history.push('/admin');
                             }
 
-                            if (doc.data().role === '0' && !localStorage.getItem('role')) {
+                            if (doc.data().role === '0') {
                                 localStorage.setItem('role', doc.data().role);
                                 history.push('/banned');
-                            } else {
-                                localStorage.setItem('role', doc.data().role);
                             }
                         } else {
                             console.log('No such document!');
