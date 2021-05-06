@@ -9,7 +9,6 @@ import random from 'randomstring';
 
 function HomePage() {
     const { currentUser } = useAuth();
-    const now = moment().format('X');
 
     const [id] = useState(currentUser.uid);
     const [input, setInput] = useState({
@@ -87,7 +86,6 @@ function HomePage() {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot !== null) {
                         setNotification(snapshot.val());
-                        console.log(snapshot.val());
                     }
                 });
             } catch (err) {
@@ -102,11 +100,10 @@ function HomePage() {
                     .orderByChild('id_shop')
                     .equalTo(id)
                     .on('child_changed', (snapshot) => {
-                        if (snapshot !== null) {
-                            pushNotification(snapshot.val());
-                            console.log(snapshot.val());
-                        }
+                        pushNotification(snapshot.val());
+                        console.log("chạy chạy đi đi");
                     });
+
             } catch (err) {
                 console.log(err)
             }
@@ -120,14 +117,7 @@ function HomePage() {
 
     //hàm insert những thông báo mới vào bảng Notification.
     async function pushNotification(notify) {
-        const notification = {
-            id_post: notify.id_post,
-            id_shop: currentUser.uid,
-            id_shipper: notify.id_shipper,
-            status: notify.status,
-            thoi_gian: now,
-        };
-
+        const now = moment().format('X')
         const idNotify =
             moment().format('YYYYMMDD-HHmmssSSS') +
             random.generate({
@@ -135,8 +125,17 @@ function HomePage() {
                 charset: 'numeric',
             });
 
+        const data = {
+            id_post: notify.id_post,
+            id_shop: currentUser.uid,
+            id_shipper: notify.id_shipper,
+            status: notify.status,
+            thoi_gian: now
+        }
+
+        console.log("alo alo alo !!!")
         try {
-            await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(notification);
+            await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(data);
         } catch (err) {
             console.log(err);
         }
@@ -152,7 +151,6 @@ function HomePage() {
         }
     }
 
-    console.log(notification)
 
     return (
         <div className="header-fixed sidebar-enabled bg">
