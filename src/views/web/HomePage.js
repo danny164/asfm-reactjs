@@ -92,53 +92,8 @@ function HomePage() {
                 console.log(err);
             }
         };
-
-        async function updateNotification() {
-            try {
-                await realtime
-                    .ref('Transaction/')
-                    .orderByChild('id_shop')
-                    .equalTo(id)
-                    .on('child_changed', (snapshot) => {
-                        console.log("một lần !!")
-                        console.log(snapshot.val())
-                        pushNotification(snapshot.val());
-                    });
-            } catch (err) {
-                console.log(err)
-            }
-        }
-
-        updateNotification()
         fetchNotification();
     }, [])
-
-    //hàm cập nhật những thay đổi về trạng thái đơn cho thông báo
-
-    //hàm insert những thông báo mới vào bảng Notification.
-    async function pushNotification(notify) {
-        const now = moment().format('X')
-        const idNotify =
-            moment().format('YYYYMMDD-HHmmssSSS') +
-            random.generate({
-                length: 3,
-                charset: 'numeric',
-            });
-
-        const data = {
-            id_post: notify.id_post,
-            id_shop: currentUser.uid,
-            id_shipper: notify.id_shipper,
-            status: notify.status,
-            thoi_gian: now
-        }
-
-        try {
-            await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(data);
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
     async function handleDeleteOrder(id) {
         try {

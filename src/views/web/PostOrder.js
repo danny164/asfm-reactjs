@@ -88,7 +88,7 @@ function PostOrder(props) {
             });
 
             //tạo bảng thông báo
-            await realtime.ref("Notification/" + currentUser.uid + "/" + dataPostOrder.idPost).set({
+            await realtime.ref("Notification/" + currentUser.uid).push().set({
                 id_post: dataPostOrder.idPost,
                 id_shop: currentUser.uid,
                 id_shipper: '',
