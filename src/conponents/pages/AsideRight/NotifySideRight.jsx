@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import './styles.scss';
-import moment from 'moment';
-import 'moment/locale/vi';
+import Moment from 'react-moment';
 
 NotifySideRight.propTypes = {
     Notification: PropTypes.array,
@@ -67,7 +66,11 @@ function NotifySideRight(props) {
                                 {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span>{' '}
                                 {baseOnStatus[data.status].action}{' '}
                                 <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
-                                <span className="font-size-sm text-time">{moment.unix(data.thoi_gian).fromNow()}</span>{' '}
+                                <span className="font-size-sm text-time">
+                                    <Moment locale="vi" unix interval={1000} fromNow>
+                                        {data.thoi_gian}
+                                    </Moment>
+                                </span>{' '}
                             </div>
                         </>
                     ))}
