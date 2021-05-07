@@ -100,10 +100,10 @@ function HomePage() {
                     .orderByChild('id_shop')
                     .equalTo(id)
                     .on('child_changed', (snapshot) => {
+                        console.log("một lần !!")
+                        console.log(snapshot.val())
                         pushNotification(snapshot.val());
-                        console.log("chạy chạy đi đi");
                     });
-
             } catch (err) {
                 console.log(err)
             }
@@ -133,7 +133,6 @@ function HomePage() {
             thoi_gian: now
         }
 
-        console.log("alo alo alo !!!")
         try {
             await realtime.ref('Notification/' + currentUser.uid + '/' + idNotify).set(data);
         } catch (err) {
