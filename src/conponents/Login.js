@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import '../assets/css/portal.css';
+import '../assets/css/portal.scss';
 import Bubbles from '../assets/media/ball-wed.svg';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';

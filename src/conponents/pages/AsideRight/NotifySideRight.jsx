@@ -68,7 +68,7 @@ function NotifySideRight(props) {
                                 {baseOnStatus[data.status].action}{' '}
                                 <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
                                 <span className="font-size-sm text-time">
-                                    <Moment locale="vi" unix interval={60000} fromNow>
+                                    <Moment locale="vi" unix fromNow>
                                         {data.thoi_gian}
                                     </Moment>
                                 </span>{' '}
