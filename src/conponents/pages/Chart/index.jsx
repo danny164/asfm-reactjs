@@ -27,7 +27,7 @@ function Chart(props) {
             title: 'Đơn đã nhận',
             subTitle: 'đã nhận',
             col: 'col-xl-3',
-            number: 15,
+            number: 17,
             total: '25%',
             percent: '25%',
             label: 'label-light-info',
@@ -39,7 +39,7 @@ function Chart(props) {
             title: 'Đơn hoàn thành',
             subTitle: 'hoàn thành',
             col: 'col-xl-3',
-            number: 15,
+            number: 21,
             total: '35%',
             percent: '35%',
             label: 'label-light-success',
@@ -51,7 +51,7 @@ function Chart(props) {
             title: 'Đơn bị hủy',
             subTitle: 'bị hủy',
             col: 'col-xl-3',
-            number: 15,
+            number: 6,
             total: '23%',
             percent: '23%',
             label: 'label-light-danger',
@@ -82,6 +82,7 @@ function Chart(props) {
                                         <ChartCard
                                             title={card.title}
                                             subTitle={card.subTitle}
+                                            number={card.number}
                                             total={card.total}
                                             percent={card.percent}
                                             labelCustom={card.label}

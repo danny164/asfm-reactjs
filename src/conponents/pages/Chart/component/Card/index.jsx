@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 
 function ChartCard(props) {
-    const { style, title, subTitle, total, percent, labelCustom, processBarColor } = props;
+    const { style, title, subTitle, number, total, percent, labelCustom, processBarColor } = props;
 
     return (
         <div className="card card-custom bgi-no-repeat card-stretch gutter-b" style={style}>
             <div className="card-body my-4">
                 <div className="d-block card-title font-weight-bolder font-size-lg">
                     {title}
-                    <span className={`label label-sm ${labelCustom} label-rounded font-weight-bolder ml-1`}>15</span>
+                    <span className={`label label-sm ${labelCustom} label-rounded font-weight-bolder ml-1`}>{number}</span>
                 </div>
                 <div className="font-weight-bold text-muted font-size-sm">
                     <span className="font-weight-bold font-size-h2 mr-2">{total}</span> {subTitle}
@@ -27,6 +27,7 @@ ChartCard.propTypes = {
     style: PropTypes.object,
     title: PropTypes.string,
     subTitle: PropTypes.string,
+    number: PropTypes.number,
     total: PropTypes.string,
     percent: PropTypes.string,
     labelCustom: PropTypes.string,
@@ -36,6 +37,7 @@ ChartCard.defaultProps = {
     style: null,
     title: '',
     subTitle: '',
+    number: 0,
     total: '',
     percent: '',
     labelCustom: '',
