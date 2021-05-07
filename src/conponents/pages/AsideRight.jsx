@@ -6,13 +6,13 @@ import NotifySideRight from './AsideRight/NotifySideRight';
 AsideRight.propTypes = {
     name: PropTypes.string,
     name2: PropTypes.object,
-    Notification: PropTypes.array,
+    Notification: PropTypes.object,
 };
 
 AsideRight.defaultProps = {
     name: '',
     name2: null,
-    Notification: [],
+    Notification: null,
 };
 
 function AsideRight(props) {

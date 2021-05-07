@@ -6,11 +6,11 @@ import 'moment/locale/vi';
 import Moment from 'react-moment';
 
 NotifySideRight.propTypes = {
-    Notification: PropTypes.array,
+    Notification: PropTypes.object,
 };
 
 NotifySideRight.defaultProps = {
-    Notification: [],
+    Notification: null,
 };
 
 function NotifySideRight(props) {
