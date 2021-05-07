@@ -42,11 +42,23 @@ function AsideLeft(props) {
             <nav className="d-flex flex-column align-items-center flex-column-fluid pb-10 scroll ps">
                 <ul className="nav flex-column">
                     {links.map((link) => (
-                        <li className="nav-item mb-2" key={link.id}>
-                            <NavLink strict activeClassName="active" to={link.to} className={link.className}>
-                                <i className={link.icon} />
-                            </NavLink>
-                        </li>
+                        <>
+                            {link.id !== 3 && (
+                                <li className="nav-item mb-2" key={link.id}>
+                                    <NavLink strict activeClassName="active" to={link.to} className={link.className}>
+                                        <i className={link.icon} />
+                                    </NavLink>
+                                </li>
+                            )}
+
+                            {localStorage.getItem('role') === '9' && link.id === 3 && (
+                                <li className="nav-item mb-2" key={link.id}>
+                                    <NavLink strict activeClassName="active" to={link.to} className={link.className}>
+                                        <i className={link.icon} />
+                                    </NavLink>
+                                </li>
+                            )}
+                        </>
                     ))}
                 </ul>
             </nav>

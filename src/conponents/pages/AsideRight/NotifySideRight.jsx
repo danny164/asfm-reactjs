@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import './styles.scss';
+import 'moment/locale/vi';
 import Moment from 'react-moment';
 
 NotifySideRight.propTypes = {
