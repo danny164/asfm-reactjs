@@ -129,6 +129,26 @@ input.rtl {
     color: #6c757d;
 }
 
+.text-id {
+    color: #abbd81;
+}
+
+.text-progress {
+    color: #f8b26a;
+}
+
+.text-picked {
+    color: #e795b3;
+}
+
+.text-done {
+    color: #5699d2;
+}
+
+.text-cancelled {
+    color: #e15b64;
+}
+
 .text-time {
     color: #b5b5c3;
     white-space: nowrap;

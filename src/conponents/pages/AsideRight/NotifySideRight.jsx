@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import './styles.scss';
-import moment from 'moment';
+import Moment from 'react-moment';
 
 NotifySideRight.propTypes = {
     Notification: PropTypes.array,
@@ -18,48 +18,33 @@ function NotifySideRight(props) {
     const baseOnStatus = [
         {
             id: 1,
+            action: 'đang',
             name: 'được xử lý',
-            classname: `font-weight-bold text-warning`,
+            classname: `text-progress`,
+            icon: <i class="fad fa-spinner text-progress fa-sm mr-1"></i>,
         },
         {
             id: 2,
-            name: 'được xác nhận',
-            classname: `font-weight-bold text-purple`,
+            action: 'đã',
+            name: 'có shipper nhận',
+            classname: `text-picked`,
+            icon: <i class="fad fa-box-full text-picked fa-sm mr-1"></i>,
         },
         {
             id: 3,
-            name: 'giao thành công',
-            classname: `font-weight-bold text-primary-2`,
+            action: 'đã',
+            name: 'giao hàng thành công',
+            classname: `text-done`,
+            icon: <i className="fad fa-check-circle text-done fa-sm mr-1"></i>,
         },
         {
             id: 4,
+            action: 'đã',
             name: 'bị hủy',
-            classname: `font-weight-bold text-chartjs`,
+            classname: `text-cancelled`,
+            icon: <i class="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
         },
     ];
-
-    // const dateToFromNowDaily = (date) => {
-    //     const convertDate = moment.unix(date);
-
-    //     return moment(convertDate).relativeTime(null, {
-    //         future: 'in %s',
-    //         past: '%s ago',
-    //         s: 'a few seconds',
-    //         ss: '%d seconds',
-    //         m: 'a minute',
-    //         mm: '%d minutes',
-    //         h: 'an hour',
-    //         hh: '%d hours',
-    //         d: 'a day',
-    //         dd: '%d days',
-    //         w: 'a week',
-    //         ww: '%d weeks',
-    //         M: 'a month',
-    //         MM: '%d months',
-    //         y: 'a year',
-    //         yy: '%d years',
-    //     });
-    // };
 
     return (
         <section
@@ -77,29 +62,17 @@ function NotifySideRight(props) {
                         <>
                             <div className="separator separator-dashed my-2" />
                             <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                Đơn hàng <span className="font-weight-bold menu-in-progress">#{data.id_post}</span> đã{' '}
+                                {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span>{' '}
+                                {baseOnStatus[data.status].action}{' '}
                                 <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
-                                <span className="font-size-sm text-time">{moment.unix(data.thoi_gian).fromNow()}</span>
+                                <span className="font-size-sm text-time">
+                                    <Moment locale="vi" unix interval={60000} fromNow>
+                                        {data.thoi_gian}
+                                    </Moment>
+                                </span>{' '}
                             </div>
                         </>
                     ))}
-
-                {/* <div className="py-1">
-                    Đơn hàng <span className="font-weight-bold menu-in-progress">#20210421-202348057193</span> đã{' '}
-                    <span className="font-weight-bold text-primary-2">giao thành công</span>.{' '}
-                    <span className="font-size-sm text-time">5 phút trước</span>
-                </div>
-                <div className="separator separator-dashed my-2" />
-                <div className="py-1">
-                    Đơn hàng <span className="font-weight-bold menu-in-progress">#20210421-212548057193</span> đã{' '}
-                    <span className="font-weight-bold text-purple">được xác nhận</span> và tài xế đang trên đường tới bạn.{' '}
-                    <span className="font-size-sm text-time">5 phút trước</span>
-                </div>
-                <div className="separator separator-dashed my-2" />
-                <div className="py-1">
-                    Đơn hàng <span className="font-weight-bold menu-in-progress">#20210423-165311577617</span> đã{' '}
-                    <span className="font-weight-bold text-chartjs">bị hủy</span>. <span className="font-size-sm text-time">5 phút trước</span>
-                </div> */}
             </div>
         </section>
     );
