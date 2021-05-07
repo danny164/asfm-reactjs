@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import '../assets/css/portal.css';
+import '../assets/css/portal.scss';
 import Bubbles from '../assets/media/ball-wed.svg';
 import { useAuth } from '../context/AuthContext';
 import Version from './common/Version';

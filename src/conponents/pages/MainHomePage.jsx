@@ -232,11 +232,13 @@ function MainHomePage(props) {
 
     useEffect(() => {
         if (shipperInfor === null) return;
+
         setFetchLoading(true);
+
         const timer = setTimeout(() => {
             setFetchLoading(false);
-            // console.log(loading);
         }, 1000);
+
         return () => {
             clearTimeout(timer);
         };
