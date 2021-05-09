@@ -11,6 +11,7 @@ function Signout() {
             localStorage.removeItem('role');
             localStorage.removeItem('email');
             localStorage.removeItem('fullname');
+            localStorage.removeItem('imageUrl');
         } catch (e) {
             console.log(e);
         }

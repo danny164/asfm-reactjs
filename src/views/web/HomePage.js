@@ -9,6 +9,7 @@ function HomePage() {
     const { currentUser } = useAuth();
 
     const [id] = useState(currentUser.uid);
+
     const [input, setInput] = useState({
         fullname: '',
         phone: '',
