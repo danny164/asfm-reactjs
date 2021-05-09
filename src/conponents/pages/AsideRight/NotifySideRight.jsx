@@ -22,14 +22,14 @@ function NotifySideRight(props) {
             action: 'đang',
             name: 'được xử lý',
             classname: `text-progress`,
-            icon: <i class="fad fa-spinner text-progress fa-sm mr-1"></i>,
+            icon: <i className="fad fa-spinner text-progress fa-sm mr-1"></i>,
         },
         {
             id: 2,
             action: 'đã',
             name: 'có shipper nhận',
             classname: `text-picked`,
-            icon: <i class="fad fa-box-full text-picked fa-sm mr-1"></i>,
+            icon: <i className="fad fa-box-full text-picked fa-sm mr-1"></i>,
         },
         {
             id: 3,
@@ -43,7 +43,7 @@ function NotifySideRight(props) {
             action: 'đã',
             name: 'bị hủy',
             classname: `text-cancelled`,
-            icon: <i class="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
+            icon: <i className="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
         },
     ];
 

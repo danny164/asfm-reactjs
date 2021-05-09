@@ -25,81 +25,86 @@ function PostOrder(props) {
     })
     //post order function
     async function PostOrder(dataPostOrder, newAddress) {
-        if (newAddress.district !== '') {
-            address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
+        if (localStorage.getItem("role") === "2") {
+            return alert("tài khoản của bạn tạm thời không được phép đăng đơn !")
         } else {
-            if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
-                setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !')
-                return
+            if (newAddress.district !== '') {
+                address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
+            } else {
+                if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
+                    setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !')
+                    return
+                }
+                address = userInfor.address;
             }
-            address = userInfor.address;
-        }
 
-        if (dataPostOrder.phi_ung !== '') {
-            tamung = dataPostOrder.phi_ung
-        }
-        try {
-            //tao bảng newsfeed
-            await realtime.ref("newsfeed/" + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: address,
-                ghi_chu: dataPostOrder.ghi_chu,
-                km: dataPostOrder.km,
-                thoi_gian: dataPostOrder.thoi_gian,
-                sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                sdt_nguoi_gui: userInfor.phone,
-                ten_nguoi_gui: userInfor.fullname,
-                phi_giao: dataPostOrder.phi_giao,
-                phi_ung: tamung,
-                id_shop: currentUser.uid,
-                status: ""
-            });
+            if (dataPostOrder.phi_ung !== '') {
+                tamung = dataPostOrder.phi_ung
+            }
+            try {
+                //tao bảng newsfeed
+                await realtime.ref("newsfeed/" + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    noi_giao: dataPostOrder.noi_giao,
+                    noi_nhan: address,
+                    ghi_chu: dataPostOrder.ghi_chu,
+                    km: dataPostOrder.km,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
+                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
+                    sdt_nguoi_gui: userInfor.phone,
+                    ten_nguoi_gui: userInfor.fullname,
+                    phi_giao: dataPostOrder.phi_giao,
+                    phi_ung: tamung,
+                    id_shop: currentUser.uid,
+                    status: ""
+                });
 
-            //tạo bảng orderstatus
-            await realtime.ref("OrderStatus/" + currentUser.uid + "/" + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                id_shop: currentUser.uid,
-                status: "0",
-                noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: address,
-                ghi_chu: dataPostOrder.ghi_chu,
-                km: dataPostOrder.km,
-                thoi_gian: dataPostOrder.thoi_gian,
-                sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                sdt_nguoi_gui: userInfor.phone,
-                ten_nguoi_gui: userInfor.fullname,
-                phi_giao: dataPostOrder.phi_giao,
-                phi_ung: tamung,
-                ma_bi_mat: dataPostOrder.ma_bi_mat
-            });
+                //tạo bảng orderstatus
+                await realtime.ref("OrderStatus/" + currentUser.uid + "/" + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    status: "0",
+                    noi_giao: dataPostOrder.noi_giao,
+                    noi_nhan: address,
+                    ghi_chu: dataPostOrder.ghi_chu,
+                    km: dataPostOrder.km,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
+                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
+                    sdt_nguoi_gui: userInfor.phone,
+                    ten_nguoi_gui: userInfor.fullname,
+                    phi_giao: dataPostOrder.phi_giao,
+                    phi_ung: tamung,
+                    ma_bi_mat: dataPostOrder.ma_bi_mat
+                });
 
-            //tạo bảng transaction
-            await realtime.ref("Transaction/" + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                id_shop: currentUser.uid,
-                id_shipper: '',
-                id_roomchat: dataPostOrder.id_roomchat,
-                status: "0",
-                ma_bi_mat: dataPostOrder.ma_bi_mat,
-                thoi_gian: dataPostOrder.thoi_gian
-            });
+                //tạo bảng transaction
+                await realtime.ref("Transaction/" + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    id_shipper: '',
+                    id_roomchat: dataPostOrder.id_roomchat,
+                    status: "0",
+                    ma_bi_mat: dataPostOrder.ma_bi_mat,
+                    thoi_gian: dataPostOrder.thoi_gian
+                });
 
-            //tạo bảng thông báo
-            await realtime.ref("Notification/" + currentUser.uid).push().set({
-                id_post: dataPostOrder.idPost,
-                id_shop: currentUser.uid,
-                id_shipper: '',
-                status: "0",
-                thoi_gian: dataPostOrder.thoi_gian
-            });
+                //tạo bảng thông báo
+                await realtime.ref("Notification/" + currentUser.uid).push().set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    id_shipper: '',
+                    status: "0",
+                    thoi_gian: dataPostOrder.thoi_gian
+                });
 
-            //tạo bảng chatroom
-            history.push("/home");
-        } catch (error) {
-            console.log(error);
+                //tạo bảng chatroom
+                history.push("/home");
+
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 

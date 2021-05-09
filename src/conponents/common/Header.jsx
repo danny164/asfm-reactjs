@@ -40,7 +40,7 @@ function Header(props) {
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('0')}>
                                         <span className={`menu menu-in-progress ${filteredStatus === '0' ? 'active' : 'none'}`}>Đang xử lý</span>
                                     </Link>
-                                    <span class="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                    <span className="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
                                         15
                                     </span>
                                 </li>
@@ -48,7 +48,7 @@ function Header(props) {
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('1')}>
                                         <span className={`menu menu-picked ${filteredStatus === '1' ? 'active' : 'none'}`}>Đã nhận đơn</span>
                                     </Link>
-                                    <span class="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                    <span className="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
                                         5
                                     </span>
                                 </li>
@@ -56,7 +56,7 @@ function Header(props) {
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('2')}>
                                         <span className={`menu menu-completed ${filteredStatus === '2' ? 'active' : 'none'}`}>Hoàn thành</span>
                                     </Link>
-                                    <span class="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                    <span className="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
                                         9
                                     </span>
                                 </li>
@@ -64,7 +64,7 @@ function Header(props) {
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterStatus('3')}>
                                         <span className={`menu menu-canceled ${filteredStatus === '3' ? 'active' : 'none'}`}>Đơn hủy</span>
                                     </Link>
-                                    <span class="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                    <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
                                         7
                                     </span>
                                 </li>

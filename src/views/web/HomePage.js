@@ -1,11 +1,9 @@
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
 import MainHomePage from '../../conponents/pages/MainHomePage';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
-import random from 'randomstring';
 
 function HomePage() {
     const { currentUser } = useAuth();
@@ -16,7 +14,6 @@ function HomePage() {
         phone: '',
         address: '',
     });
-
 
     const [data, setData] = useState({
         id_post: '',
@@ -93,7 +90,7 @@ function HomePage() {
             }
         };
         fetchNotification();
-    }, [])
+    }, []);
 
     async function handleDeleteOrder(id) {
         try {
@@ -104,7 +101,6 @@ function HomePage() {
             console.log(e);
         }
     }
-
 
     return (
         <div className="header-fixed sidebar-enabled bg">

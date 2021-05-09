@@ -222,11 +222,11 @@ function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const reverseString = (value) => {
         // 000 20 => 00020 => 20 + ' 000'
-        const input = parseInt(value.split(' ').join(''));
+        const input = parseInt(value.split(' ').join('')); // 20
 
         if (input === 0 || isNaN(input)) return '0';
 
-        return parseInt(value.split(' ').join('')) + ' 000';
+        return input + ' 000';
     };
 
     const firstUppercase = (str) => {

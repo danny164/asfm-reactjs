@@ -22,10 +22,10 @@ function ForgotPass() {
             setLoading(true);
             await resetPassword(emailRef.current.value);
             setAlert('green');
-            setError('request reset password success, check your inbox for further instructions !');
+            setError('Yêu cầu lấy tại mật khẩu thành công, vui lòng kiểm tra email !');
         } catch {
             setAlert('red');
-            setError('Email not exist !');
+            setError('Tài khoản không tồn tại !');
         }
         setLoading(false);
     }
