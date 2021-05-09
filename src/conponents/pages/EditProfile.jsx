@@ -302,7 +302,7 @@ function EditProfile(props) {
                                                 data-toggle="tooltip"
                                                 data-original-title="Change avatar"
                                             >
-                                                <i className="fa fa-pen icon-sm text-muted" onClick={() => fileInput.current.click()} />
+                                                <i className="fa fa-pen icon-sm text-muted" />
                                                 <input
                                                     type="file"
                                                     name="profile_avatar"
