@@ -43,25 +43,15 @@ export default function Profile() {
     }
 
     async function editProfile(fullName, phone, address, district, ward, detailAddress) {
-        let oldProfile = {}
         try {
-            await db
-                .collection('ShopProfile')
-                .doc(userInfor.uid)
-                .get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        oldProfile = doc.data()
-                    }
-                });
-            oldProfile.fullname = fullName
-            oldProfile.phone = phone
-            oldProfile.address = address
-            oldProfile.district = district
-            oldProfile.ward = ward
-            oldProfile.detailAddress = detailAddress
-
-            await db.collection('ShopProfile').doc(currentUser.uid).set(oldProfile);
+            await db.collection('ShopProfile').doc(currentUser.uid).update({
+                fullname : fullName,
+                phone : phone,
+                address : address,
+                district : district,
+                ward : ward,
+                detailAddress : detailAddress,
+            });
             changeToProfile();
         } catch (err) {
             console.log(err);

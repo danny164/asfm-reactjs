@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import PropTypes from 'prop-types';
+
+LineChart.propTypes = {
+    datas: PropTypes.array,
+};
+
+LineChart.defaultProps = {
+    datas: [],
+};
 
 function LineChart(props) {
+    const { datas } = props;
+    const [label, setLabel] = useState();
+    const [labels, setLabels] = useState();
+
     const data = {
         labels: ['01/05', '02/05', '03/05', '04/05', '05/05', '06/05', '07/05'],
         datasets: [
@@ -87,6 +100,4 @@ function LineChart(props) {
     );
 }
 
-LineChart.propTypes = {};
-
-export default LineChart;
+export default React.memo(LineChart);

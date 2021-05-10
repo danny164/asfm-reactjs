@@ -127,6 +127,7 @@ function MainHomePage(props) {
     const [loading, setLoading] = useState(false);
 
     if (datas) {
+        
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
         lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
         sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));

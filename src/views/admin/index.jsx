@@ -53,6 +53,18 @@ function AdminPanel(props) {
         fetchShopList();
     }, []);
 
+    const bannedShop = async () => {
+        // if (type === '2') {
+        await db.collection('ShopProfile').where('id', '==', '20210510-142919964165').update({ role: '2' });
+        return alert('Khóa thành công !');
+
+        // if (type === '0') {
+        //     await db.collection('ShopProfile').doc('ue0tQY1XjBYRqiV9mqscygDqc2w1').update({ role: '0' });
+        // }
+    };
+
+    const bannedShipper = (type) => {};
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
@@ -71,6 +83,9 @@ function AdminPanel(props) {
                                 Quản lý Shipper
                             </span>
                         </div>
+                        <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer" onClick={toShipperList}>
+                            <button onClick={() => bannedShop()}>test</button>
+                        </span>
                         {isShopList ? <ShopList listShop={listShop} /> : <ShipperList listShipper={listShipper} />}
                     </section>
                     <Footer />

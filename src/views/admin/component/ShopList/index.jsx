@@ -41,7 +41,7 @@ function ShopList(props) {
         },
         {
             name: 'Trạng thái',
-            selector: 'status',
+            selector: 'role',
             sortable: true,
         },
         {

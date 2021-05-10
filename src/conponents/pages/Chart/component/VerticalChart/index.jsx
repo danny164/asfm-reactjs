@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import PropTypes from 'prop-types';
+
+VerticalChart.propTypes = {
+    datas: PropTypes.array,
+};
+
+VerticalChart.defaultProps = {
+    datas: [],
+};
 
 function VerticalChart(props) {
+    const { datas } = props;
+    const [label, setLabel] = useState();
+    const [labels, setLabels] = useState();
+
     const data = {
         labels: ['01/05', '02/05', '03/05', '04/05', '05/05', '06/05', '07/05'],
         datasets: [
@@ -85,6 +98,4 @@ function VerticalChart(props) {
     );
 }
 
-VerticalChart.propTypes = {};
-
-export default VerticalChart;
+export default React.memo(VerticalChart);

@@ -9,9 +9,13 @@ import ChartCard from './component/Card';
 import LineChart from './component/LineChart';
 import VerticalChart from './component/VerticalChart';
 import './styles.scss';
+import moment from 'moment';
 
+var lastStatus = [];
 function Chart(props) {
     const { currentUser } = useAuth();
+
+    const [sortByRange, setSortByRange] = useState('1');
 
     let percent1 = 0;
     let percent2 = 0;
@@ -51,6 +55,17 @@ function Chart(props) {
         return returnArr;
     };
 
+    if (data !== []) {
+    }
+
+    const last24hrs = (sortByRange, dataTime) => {
+        if (sortByRange === '7') {
+            return dataTime >= moment().subtract(7, 'days').format('X');
+        }
+        if (sortByRange === '30') return dataTime >= moment().subtract(1, 'month').format('X');
+        return dataTime >= moment().subtract(1, 'day').format('X');
+    };
+
     const setPercent = (data) => {
         if (data === '0') {
             percent1 = percent1 + 1;
@@ -70,7 +85,9 @@ function Chart(props) {
     };
 
     if (data !== []) {
-        data.map((data) => {
+        lastStatus = data.filter((data) => last24hrs(sortByRange, data.thoi_gian));
+
+        lastStatus.map((data) => {
             setPercent(data.status);
         });
         totalOrder = data.length;
@@ -79,7 +96,7 @@ function Chart(props) {
     percentS1 = Math.round((percent1 / totalOrder) * 100);
     percentS2 = Math.round((percent2 / totalOrder) * 100);
     percentS3 = Math.round((percent3 / totalOrder) * 100);
-    percentS4 = 100 - (percentS1 + percentS2 + percentS3);
+    percentS4 = Math.round((percent4 / totalOrder) * 100);
 
     const cards = [
         {
@@ -132,6 +149,10 @@ function Chart(props) {
         },
     ];
 
+    const handleSortByRange = (range) => {
+        setSortByRange(range);
+    };
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
@@ -141,9 +162,24 @@ function Chart(props) {
 
                     <section className="card-body">
                         <div className="py-3 mb-3">
-                            <span className="label label-xl label-inprogress label-inline mr-3 py-4 flex-shrink-0 cursor-pointer">Ngày</span>
-                            <span className="label label-xl label-light-success label-inline mr-3 py-4 flex-shrink-0 cursor-pointer">Tuần</span>
-                            <span className="label label-xl label-picked label-inline mr-3 py-4 flex-shrink-0 cursor-pointer">Tháng</span>
+                            <span
+                                className="label label-xl label-inprogress label-inline mr-3 py-4 flex-shrink-0 cursor-pointer "
+                                onClick={() => handleSortByRange('1')}
+                            >
+                                Ngày
+                            </span>
+                            <span
+                                className="label label-xl label-light-success label-inline mr-3 py-4 flex-shrink-0 cursor-pointer"
+                                onClick={() => handleSortByRange('7')}
+                            >
+                                Tuần
+                            </span>
+                            <span
+                                className="label label-xl label-picked label-inline mr-3 py-4 flex-shrink-0 cursor-pointer"
+                                onClick={() => handleSortByRange('30')}
+                            >
+                                Tháng
+                            </span>
                         </div>
                     </section>
                     <div className="d-flex flex-column-fluid">
@@ -167,10 +203,10 @@ function Chart(props) {
 
                             <div className="row">
                                 <div className="col-xl-6">
-                                    <LineChart />
+                                    <LineChart datas={data} />
                                 </div>
                                 <div className="col-xl-6">
-                                    <VerticalChart />
+                                    <VerticalChart datas={data} />
                                 </div>
                             </div>
                         </div>
