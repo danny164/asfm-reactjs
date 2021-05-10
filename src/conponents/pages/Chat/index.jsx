@@ -104,9 +104,14 @@ function ChatModal(props) {
                             chats.map((item, idx) => (
                                 <div key={idx} className={checkingID(item.id)}>
                                     <div className="chat-content">
-                                        {item.id !== idShop && <img src={shipperInfor.avatar} alt="The Night Owl" />}
-                                        {item.imgmessage !== ''}
-                                        <div className="message-text">{item.message}</div>
+                                        {item.id !== idShop && <img class="shipper-info" src={shipperInfor.avatar} alt="The Night Owl" />}
+                                        {item.imgmessage !== '' ? (
+                                            <div className="message-image">
+                                                <img src={item.imgmessage} alt="" />
+                                            </div>
+                                        ) : (
+                                            <div className="message-text">{item.message}</div>
+                                        )}
                                         <div className="message-time">{item.timemessage}</div>
                                     </div>
                                 </div>
@@ -138,7 +143,7 @@ function ChatModal(props) {
                     <div className="chat-icon-action">
                         <i className="fad fa-paper-plane" onClick={handleSubmitMessage}></i>
                     </div>
-                    {/* <span className="form-text text-muted"></span> */}
+                    {/* <span className="form-text text-chartjs"></span> */}
                 </div>
             </Modal.Footer>
         </Modal>

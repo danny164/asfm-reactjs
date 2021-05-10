@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '../../assets/media/avatar.png';
 import Footer from '../common/Footer';
@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import InputMask from 'react-input-mask';
+import { uploadImage, getDownloadUrl } from '../../context/Upload';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 EditProfile.propTypes = {
     user: PropTypes.object,
@@ -28,6 +30,27 @@ function EditProfile(props) {
     const addressRef = useRef();
     const wardRef = useRef();
     const districtRef = useRef();
+
+    const fileInput = useRef(null);
+    const [imageUrl, setImageUrl] = useState('');
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    useEffect(() => {
+        getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
+    }, [user.uid]);
+
+    const fileChange = async (files) => {
+        if (files.length === 0) return;
+
+        const ref = await uploadImage(user.uid, files[0], updateProgress);
+        const downloadUrl = await ref.getDownloadURL();
+        setImageUrl(downloadUrl);
+    };
+
+    const updateProgress = (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress);
+    };
 
     //////////////////////////////////////////////////////
     const [district, setDistrict] = useState();
@@ -99,7 +122,6 @@ function EditProfile(props) {
             if (user.input.district) {
                 if (user.input.district === district) {
                     save = user.input.district;
-                    console.log(save);
                     items.push(
                         <option selected="selected" value={district}>
                             {district}
@@ -122,7 +144,6 @@ function EditProfile(props) {
         const items = [];
         if (user.input.district) {
             if (save === user.input.district) {
-                console.log(save);
                 Object.values(dataList[save]).map((data, index) => {
                     if (user.input.ward === data) {
                         items.push(
@@ -141,7 +162,6 @@ function EditProfile(props) {
             } else {
                 if (!district) return;
                 else {
-                    console.log('district ' + district);
                     Object.values(dataList[district]).map((data, index) => {
                         items.push(
                             <option key={index} value={data}>
@@ -154,7 +174,6 @@ function EditProfile(props) {
         } else {
             if (!district) return;
             else {
-                console.log('district ' + district);
                 Object.values(dataList[district]).map((data, index) => {
                     items.push(
                         <option key={index} value={data}>
@@ -175,7 +194,6 @@ function EditProfile(props) {
         if (e.target.value || e.target.value === '') {
             setDistrict(e.target.value);
             setWard('');
-            console.log('ward ' + ward);
         }
     };
 
@@ -273,10 +291,11 @@ function EditProfile(props) {
                                             className="image-input image-input-outline"
                                             id="profile_avatar"
                                             style={{
-                                                backgroundImage: `url(${Avatar})`,
+                                                backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
                                             }}
                                         >
                                             <div className="image-input-wrapper" />
+
                                             <label
                                                 className="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
                                                 data-action="change"
@@ -284,27 +303,25 @@ function EditProfile(props) {
                                                 data-original-title="Change avatar"
                                             >
                                                 <i className="fa fa-pen icon-sm text-muted" />
-                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" />
-                                                <input type="hidden" name="profile_avatar_remove" />
+                                                <input
+                                                    type="file"
+                                                    name="profile_avatar"
+                                                    accept=".png, .jpg, .jpeg"
+                                                    ref={fileInput}
+                                                    onChange={(e) => fileChange(e.target.files)}
+                                                />
                                             </label>
-                                            <span
-                                                className="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                                                data-action="cancel"
-                                                data-toggle="tooltip"
-                                                title="Cancel avatar"
-                                            >
-                                                <i className="fas fa-times text-muted" />
-                                            </span>
-                                            <span
-                                                className="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                                                data-action="remove"
-                                                data-toggle="tooltip"
-                                                title="Remove avatar"
-                                            >
-                                                <i className="fas fa-times text-muted" />
-                                            </span>
                                         </div>
-                                        <span className="form-text text-muted">Định dạng cho phép: png, jpg, jpeg.</span>
+                                        <div>
+                                            <ProgressBar
+                                                animated
+                                                striped
+                                                variant="success"
+                                                now={uploadProgress}
+                                                style={{ width: '120px', height: '4px' }}
+                                            />
+                                            <span className="form-text text-muted">Định dạng cho phép: png, jpg, jpeg.</span>
+                                        </div>
                                     </div>
                                 </div>
                                 {/* email */}

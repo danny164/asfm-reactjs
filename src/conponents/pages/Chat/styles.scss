@@ -65,11 +65,22 @@
 .chat-content {
     display: grid;
 
-    img {
+    img.shipper-info {
         border-radius: 100%;
         height: 40px;
         width: 40px;
         grid-row: span 2;
+    }
+    .message-image {
+        margin-bottom: 5px;
+        min-height: 400px;
+
+        img {
+            border: 0.25px dashed #c4c4c4;
+            border-radius: 1rem;
+
+            width: 100%;
+        }
     }
 }
 

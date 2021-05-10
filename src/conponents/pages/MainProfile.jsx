@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '../../assets/media/avatar.png';
+import { getDownloadUrl } from '../../context/Upload';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 
@@ -18,22 +19,17 @@ MainProfile.defaultProps = {
 function MainProfile(props) {
     const { user, onChange } = props;
 
-    // Dữ liệu các quận trong thành phố Đà Nẵng
+    const [imageUrl, setImageUrl] = useState('');
 
-    // *** This is for test data
-    // useEffect(() => {
-    //     console.log(district);
-    // }, [district]);
+    useEffect(() => {
+        getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
+    }, [user.uid]);
 
-    // useEffect(() => {
-    //     console.log(ward);
-    // }, [ward]);
-
-    function handleChangeEdit() {
+    const handleChangeEdit = () => {
         if (onChange) {
             onChange();
         }
-    }
+    };
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -94,7 +90,7 @@ function MainProfile(props) {
                                             className="image-input image-input-outline"
                                             id="profile_avatar"
                                             style={{
-                                                backgroundImage: `url(${Avatar})`,
+                                                backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
                                             }}
                                         >
                                             <div className="image-input-wrapper" />

@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AbstractThree from '../../../assets/media/abstract-3.svg';
 import Avatar from '../../../assets/media/avatar.png';
 import { useAuth } from '../../../context/AuthContext';
 import Signout from '../../LogOut';
+import { getDownloadUrl } from '../../../context/Upload';
 
 function InforSideRight(props) {
     const { currentUser } = useAuth();
+
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        getDownloadUrl(currentUser.uid).then((url) => {
+            if (!!url) {
+                setImageUrl(url);
+                localStorage.setItem('imageUrl', url);
+            }
+        });
+    }, [currentUser.uid]);
+
     return (
         <section
             className="card card-custom bgi-no-repeat gutter-b"
@@ -18,7 +31,7 @@ function InforSideRight(props) {
                         <div
                             className="symbol-label"
                             style={{
-                                backgroundImage: `url(${Avatar})`,
+                                backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
                             }}
                         />
                         <i className="symbol-badge symbol-badge-bottom bg-success" />
@@ -27,7 +40,7 @@ function InforSideRight(props) {
                     <h4 className="font-weight-bold my-2">
                         {localStorage.getItem('fullname') ? localStorage.getItem('fullname') : currentUser.email}
                     </h4>
-                    <div className="text-muted mb-2">Shop Owner</div>
+                    <div className="text-muted mb-2">{localStorage.getItem('role') === '9' ? 'Admin' : 'Shop Owner'}</div>
                     <span className="label label-light-warning label-inline font-weight-bold label-lg">Hoạt động</span>
                     <div className="mt-10">
                         <Link to="/profile" className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">
