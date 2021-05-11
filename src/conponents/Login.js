@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import '../assets/css/portal.scss';
 import Bubbles from '../assets/media/ball-wed.svg';
 import { useAuth } from '../context/AuthContext';
-import { getDownloadUrl } from '../context/Upload';
 import { db } from '../firebase';
 import Version from './common/Version';
 import Logo from './Logo';
@@ -70,7 +69,6 @@ function Login1(props) {
     };
 
     if (currentUser) {
-
         async function fetchRole() {
             try {
                 await db
@@ -105,7 +103,7 @@ function Login1(props) {
                 console.log(error);
             }
         }
-     
+
         fetchRole();
     }
 
