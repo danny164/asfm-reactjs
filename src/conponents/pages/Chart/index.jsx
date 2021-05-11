@@ -161,7 +161,7 @@ function Chart(props) {
                     <HeaderMobile />
 
                     <section className="card-body d-flex flex-row justify-content-between align-items-center">
-                        <div className="card-toolbar">
+                        <div className="card-toolbar py-3 mb-3">
                             <ul className="nav nav-pills flex-row-reverse">
                                 <li className="nav-item">
                                     <div

@@ -5,6 +5,7 @@ import AsideLeft from '../../conponents/pages/AsideLeft';
 import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
+import './styles.scss';
 
 function AdminPanel(props) {
     const [isShopList, setIsShopList] = useState(true);
@@ -74,16 +75,23 @@ function AdminPanel(props) {
                 <main className="d-flex flex-column flex-row-fluid wrapper min-vh-100">
                     <HeaderMobile />
                     <section className="card-body">
-                        <div className="py-3 mb-3">
-                            <span
-                                className="label label-xl label-inprogress label-inline ml-3 py-4 flex-shrink-0 cursor-pointer"
-                                onClick={toShopList}
-                            >
-                                Quản lý Shop
-                            </span>
-                            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer" onClick={toShipperList}>
-                                Quản lý Shipper
-                            </span>
+                        <div className="card-body__action py-3">
+                            <div className="mb-3">
+                                <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={toShopList}>
+                                    Quản lý Shop
+                                </button>
+                                <button type="button" className="btn btn-sm btn-light-primary ml-3" onClick={toShipperList}>
+                                    Quản lý Shipper
+                                </button>
+                            </div>
+                            <div className="mb-3">
+                                <button type="button" className="btn btn-sm btn-light-warning ml-3">
+                                    Khóa tạm thời
+                                </button>
+                                <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                    Khóa vĩnh viễn
+                                </button>
+                            </div>
                         </div>
                         {isShopList ? (
                             <ShopList listShop={listShop} banned={banned} permanentLock={permanentLock} />

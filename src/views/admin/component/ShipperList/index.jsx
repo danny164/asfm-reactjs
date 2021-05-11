@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
+import CustomExpander from '../CustomExpander';
 
 ShipperList.propTypes = {
     listShipper: PropTypes.array,
@@ -32,17 +33,22 @@ function ShipperList(props) {
             sortable: true,
         },
         {
-            name: 'Role',
+            name: 'Trạng thái',
             selector: 'role',
             sortable: true,
         },
         {
-            name: 'Name',
+            name: 'Họ tên',
             selector: 'name',
             sortable: true,
         },
         {
-            name: 'Address',
+            name: 'Số điện thoại',
+            selector: 'phone',
+            sortable: true,
+        },
+        {
+            name: 'Địa chỉ',
             selector: 'address',
             sortable: true,
             right: true,
@@ -67,14 +73,10 @@ function ShipperList(props) {
 
     return (
         <>
-            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
-                <button onClick={() => bannedUser()}>Khóa tạm thời</button>
-            </span>
-            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
-                <button onClick={() => permanentLockUser()}>Khóa vĩnh viễn</button>
-            </span>
             <DataTable
                 title="Danh sách quản lý Shipper"
+                expandableRows={true}
+                expandableRowsComponent={<CustomExpander />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}

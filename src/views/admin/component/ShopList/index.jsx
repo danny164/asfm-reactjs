@@ -40,7 +40,7 @@ function ShopList(props) {
 
     const columns = [
         {
-            name: 'id',
+            name: 'ID',
             selector: 'id',
             sortable: true,
         },
@@ -83,7 +83,7 @@ function ShopList(props) {
             return alert('Bạn chưa chọn đối tượng nào !');
         } else {
             await banned(selectedData);
-            alert('Khóa thành công')
+            alert('Khóa thành công');
         }
     };
 
@@ -91,12 +91,6 @@ function ShopList(props) {
 
     return (
         <>
-            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
-                <button onClick={() => bannedUser()}>Khóa tạm thời</button>
-            </span>
-            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
-                <button onClick={() => permanentLockUser()}>Khóa vĩnh viễn</button>
-            </span>
             <DataTable
                 title="Danh sách quản lý Shop"
                 expandableRows={true}
