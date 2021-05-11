@@ -5,3 +5,28 @@
     align-items: center;
     flex-wrap: wrap;
 }
+
+.flatpickr-calendar {
+    min-width: 339px;
+
+    .flatpickr-innerContainer {
+        width: 100%;
+
+        .flatpickr-rContainer {
+            width: 100%;
+        }
+
+        .flatpickr-days {
+            width: 100%;
+
+            .dayContainer {
+                min-width: 339px;
+                max-width: 339px;
+
+                .flatpickr-day {
+                    max-width: 43px;
+                }
+            }
+        }
+    }
+}

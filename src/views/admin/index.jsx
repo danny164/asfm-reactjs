@@ -1,4 +1,9 @@
+import 'flatpickr/dist/themes/airbnb.css';
+import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import React, { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Flatpickr from 'react-flatpickr';
 import Footer from '../../conponents/common/Footer';
 import HeaderMobile from '../../conponents/common/HeaderMobile';
 import AsideLeft from '../../conponents/pages/AsideLeft';
@@ -12,6 +17,8 @@ function AdminPanel(props) {
     const [isShipperList, setIsShipperList] = useState(false);
     const [listShipper, setListShipper] = useState();
     const [listShop, setListShop] = useState();
+
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         document.body.classList.add('bg');
@@ -77,7 +84,7 @@ function AdminPanel(props) {
                     <section className="card-body">
                         <div className="card-body__action py-3">
                             <div className="mb-3">
-                                <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={toShopList}>
+                                <button type="button" className="btn btn-sm btn-light-primary ml-3" onClick={toShopList}>
                                     Quản lý Shop
                                 </button>
                                 <button type="button" className="btn btn-sm btn-light-primary ml-3" onClick={toShipperList}>
@@ -85,14 +92,91 @@ function AdminPanel(props) {
                                 </button>
                             </div>
                             <div className="mb-3">
-                                <button type="button" className="btn btn-sm btn-light-warning ml-3">
-                                    Khóa tạm thời
+                                <button type="button" className="btn btn-sm btn-light-success ml-3">
+                                    Mở khóa
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light-danger ml-3">
-                                    Khóa vĩnh viễn
+                                <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={() => setShow(true)}>
+                                    Khóa tài khoản
                                 </button>
                             </div>
                         </div>
+
+                        <Modal show={show} onHide={() => setShow(false)}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Bạn muốn khóa bao lâu ? </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <form className="form">
+                                    <div className="form-group row">
+                                        <label className="col-3 col-form-label">Thời gian</label>
+                                        <div className="col-9 col-form-label">
+                                            <div className="radio-inline">
+                                                <label className="radio radio-danger">
+                                                    <input type="radio" name="lock-time" />
+                                                    <span />
+                                                    24 giờ
+                                                </label>
+                                                <label className="radio radio-danger">
+                                                    <input type="radio" name="lock-time" />
+                                                    <span />3 ngày
+                                                </label>
+                                                <label className="radio radio-danger">
+                                                    <input type="radio" name="lock-time" />
+                                                    <span />1 tuần
+                                                </label>
+                                                <label className="radio radio-danger">
+                                                    <input type="radio" name="lock-time" />
+                                                    <span />
+                                                    Tùy chỉnh
+                                                </label>
+                                            </div>
+
+                                            <Flatpickr
+                                                className="form-control datetimepicker-input mt-3"
+                                                options={{
+                                                    enableTime: true,
+                                                    time_24hr: true,
+                                                    minDate: 'today',
+                                                    locale: Vietnamese,
+                                                }}
+                                                placeholder="Chọn ngày và giờ"
+                                            />
+
+                                            <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
+
+                                            <div className="radio-inline mt-3">
+                                                <label className="radio radio-danger text-chartjs">
+                                                    <input type="radio" name="lock-time" />
+                                                    <span />
+                                                    Khóa vĩnh viễn
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group row">
+                                        <div className="col col-form-label">
+                                            <div className="form-group mb-1">
+                                                <label htmlFor="reason-text">
+                                                    Lý do khóa <span className="text-danger">*</span>
+                                                </label>
+                                                <textarea
+                                                    className="form-control"
+                                                    name="reason-text"
+                                                    rows={3}
+                                                    placeholder="Vi phạm chính sách sử dụng !"
+                                                />
+                                            </div>
+                                            <span className="form-text text-muted">* Có thể để trống nội dung, nội dung khóa sẽ là mặc định</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary btn-sm">Đóng</Button>
+                                <Button variant="chartjs btn-sm">Khóa tài khoản</Button>
+                            </Modal.Footer>
+                        </Modal>
                         {isShopList ? (
                             <ShopList listShop={listShop} banned={banned} permanentLock={permanentLock} />
                         ) : (
