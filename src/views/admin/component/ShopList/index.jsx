@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import PropTypes from 'prop-types';
 import CustomExpander from '../CustomExpander';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
+    banned: PropTypes.func,
+    permanentLock: PropTypes.func,
 };
 
 ShopList.defaultProps = {
     listShop: null,
+    banned: null,
+    permanentLock: null,
 };
 
 function ShopList(props) {
-    const { listShop } = props;
+    const { listShop, banned, permanentLock } = props;
+    const [selectedData, setSelectedData] = useState([]);
 
     let data = [];
 
@@ -70,10 +75,28 @@ function ShopList(props) {
 
     const handleChange = (state) => {
         console.log('Số hàng đã chọn: ', state.selectedRows);
+        setSelectedData(state.selectedRows);
     };
+
+    const bannedUser = async () => {
+        if (selectedData.length === 0) {
+            return alert('Bạn chưa chọn đối tượng nào !');
+        } else {
+            await banned(selectedData);
+            alert('Khóa thành công')
+        }
+    };
+
+    const permanentLockUser = async () => {};
 
     return (
         <>
+            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
+                <button onClick={() => bannedUser()}>Khóa tạm thời</button>
+            </span>
+            <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer">
+                <button onClick={() => permanentLockUser()}>Khóa vĩnh viễn</button>
+            </span>
             <DataTable
                 title="Danh sách quản lý Shop"
                 expandableRows={true}

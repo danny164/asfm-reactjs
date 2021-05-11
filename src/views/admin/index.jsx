@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../../conponents/common/Footer';
 import HeaderMobile from '../../conponents/common/HeaderMobile';
 import AsideLeft from '../../conponents/pages/AsideLeft';
-import ShopList from './component/ShopList';
-import ShipperList from './component/ShipperList';
 import { db } from '../../firebase';
+import ShipperList from './component/ShipperList';
+import ShopList from './component/ShopList';
+
 function AdminPanel(props) {
     const [isShopList, setIsShopList] = useState(true);
     const [isShipperList, setIsShipperList] = useState(false);
@@ -44,7 +45,6 @@ function AdminPanel(props) {
                     querySnapshot.forEach((doc) => {
                         a.push(doc.data());
                     });
-                    console.log(a);
                     setListShop(a);
                 }
             });
@@ -53,17 +53,19 @@ function AdminPanel(props) {
         fetchShopList();
     }, []);
 
-    const bannedShop = async () => {
-        // if (type === '2') {
-        await db.collection('ShopProfile').where('id', '==', '20210510-142919964165').update({ role: '2' });
-        return alert('Khóa thành công !');
-
-        // if (type === '0') {
-        //     await db.collection('ShopProfile').doc('ue0tQY1XjBYRqiV9mqscygDqc2w1').update({ role: '0' });
-        // }
+    const banned = async (selectedData) => {
+        if (isShopList === true) {
+            await selectedData.map((data) => {
+                db.collection('ShopProfile').where('id', '==', data.id).update({ role: '2' });
+            });
+        } else {
+            await selectedData.map((data) => {
+                db.collection('ProfileShipper').doc(data.id).update({ role: '2' });
+            });
+        }
     };
 
-    const bannedShipper = (type) => {};
+    const permanentLock = async (selectedData) => {};
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -83,10 +85,11 @@ function AdminPanel(props) {
                                 Quản lý Shipper
                             </span>
                         </div>
-                        <span className="label label-xl label-picked label-inline ml-3 py-4 flex-shrink-0 cursor-pointer" onClick={toShipperList}>
-                            <button onClick={() => bannedShop()}>test</button>
-                        </span>
-                        {isShopList ? <ShopList listShop={listShop} /> : <ShipperList listShipper={listShipper} />}
+                        {isShopList ? (
+                            <ShopList listShop={listShop} banned={banned} permanentLock={permanentLock} />
+                        ) : (
+                            <ShipperList listShipper={listShipper} banned={banned} permanentLock={permanentLock} />
+                        )}
                     </section>
                     <Footer />
                 </main>
