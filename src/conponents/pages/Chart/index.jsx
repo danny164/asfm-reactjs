@@ -160,26 +160,34 @@ function Chart(props) {
                 <main className="d-flex flex-column flex-row-fluid wrapper">
                     <HeaderMobile />
 
-                    <section className="card-body">
-                        <div className="py-3 mb-3">
-                            <span
-                                className="label label-xl label-inprogress label-inline mr-3 py-4 flex-shrink-0 cursor-pointer "
-                                onClick={() => handleSortByRange('1')}
-                            >
-                                Ngày
-                            </span>
-                            <span
-                                className="label label-xl label-light-success label-inline mr-3 py-4 flex-shrink-0 cursor-pointer"
-                                onClick={() => handleSortByRange('7')}
-                            >
-                                Tuần
-                            </span>
-                            <span
-                                className="label label-xl label-picked label-inline mr-3 py-4 flex-shrink-0 cursor-pointer"
-                                onClick={() => handleSortByRange('30')}
-                            >
-                                Tháng
-                            </span>
+                    <section className="card-body d-flex flex-row justify-content-between align-items-center">
+                        <div className="card-toolbar">
+                            <ul className="nav nav-pills flex-row-reverse">
+                                <li className="nav-item">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '30' ? 'active' : 'btn-outline-secondary'}`}
+                                        onClick={() => handleSortByRange('30')}
+                                    >
+                                        <span className="nav-text">Tháng</span>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '7' ? 'active' : 'btn-outline-secondary'}`}
+                                        onClick={() => handleSortByRange('7')}
+                                    >
+                                        <span className="nav-text">Tuần</span>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <div
+                                        className={`nav-link btn py-2 px-4 ${sortByRange === '1' ? 'active' : 'btn-outline-secondary'}`}
+                                        onClick={() => handleSortByRange('1')}
+                                    >
+                                        <span className="nav-text">Ngày</span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </section>
                     <div className="d-flex flex-column-fluid">
