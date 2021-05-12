@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -68,7 +69,30 @@ function Login1(props) {
         }
     };
 
+    const updateRole = async () => {
+        await db
+            .collection('ShopProfile')
+            .doc(currentUser.uid)
+            .update({
+                role: '1', reason: ''
+            })
+    }
+
     if (currentUser) {
+        async function checkRole() {
+            await db
+                .collection('ShopProfile')
+                .doc(currentUser.uid)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        if (doc.data().lock_time < moment().format('X')) {
+                            updateRole()
+                        }
+                    }
+                })
+        }
+
         async function fetchRole() {
             try {
                 await db
@@ -103,7 +127,7 @@ function Login1(props) {
                 console.log(error);
             }
         }
-
+        checkRole();
         fetchRole();
     }
 
