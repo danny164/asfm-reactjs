@@ -12,6 +12,7 @@ import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
+import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 
@@ -127,7 +128,6 @@ function MainHomePage(props) {
     const [loading, setLoading] = useState(false);
 
     if (datas) {
-        
         renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
         lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
         sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
@@ -430,6 +430,10 @@ function MainHomePage(props) {
                                     <div className="separator separator-dashed my-5" />
                                 </>
                             )}
+
+                            <CustomRating />
+
+                            <div className="separator separator-dashed my-5" />
 
                             {(dataModal.status === '0' || fetchLoading) && <SkeletonShipper status={dataModal.status} />}
                             {!fetchLoading && dataModal.status !== '0' && (
