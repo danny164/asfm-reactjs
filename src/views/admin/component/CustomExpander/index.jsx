@@ -1,27 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import icBanned from './banned.png';
 import './styles.scss';
 
 function CustomExpander(props) {
-    const actions = [
-        {
-            id: 1,
-            name: 'Khóa tài khoản',
-            className: 'label label-lg label-canceled label-inline ml-6 py-4 flex-shrink-0 cursor-pointer',
-        },
-        {
-            id: 2,
-            name: 'Mở khóa tài khoản',
-            className: 'label label-lg label-completed label-inline ml-6 py-4 flex-shrink-0 cursor-pointer',
-        },
-        {
-            id: 3,
-            name: 'Chỉnh sửa tài khoản',
-            className: 'label label-lg label-inprogress label-inline ml-6 py-4 flex-shrink-0 cursor-pointer',
-        },
-    ];
-
     return (
         <>
             <div className="d-flex align-items-start ml-7 my-5">
@@ -49,22 +30,14 @@ function CustomExpander(props) {
                                 Số điện thoại:
                                 <span className="font-weight-bold text-chartjs ml-2">0344 063 164</span>
                             </p>
-                            <p>
+                            <p className="mb-0">
                                 Địa chỉ:
                                 <span className="font-weight-bold ml-2">986, Ngô Quyền, Phường An Hải Bắc, Quận Sơn Trà, Thành phố Đà Nẵng</span>
                             </p>
-                            <div className="banned">
-                                <img src={icBanned} alt="banned" />
-                            </div>
                         </div>
                     </section>
                 </div>
             </div>
-            {actions.map((type) => (
-                <span key={type.id} className={type.className}>
-                    {type.name}
-                </span>
-            ))}
 
             <div className="separator separator-dashed my-5" />
         </>
