@@ -1,6 +1,6 @@
 import 'flatpickr/dist/themes/airbnb.css';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Flatpickr from 'react-flatpickr';
@@ -11,12 +11,18 @@ import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
 import './styles.scss';
+import moment from 'moment';
 
 function AdminPanel(props) {
     const [isShopList, setIsShopList] = useState(true);
     const [isShipperList, setIsShipperList] = useState(false);
     const [listShipper, setListShipper] = useState();
     const [listShop, setListShop] = useState();
+    const [flexible, setFlexible] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [selectedData, setSelectedData] = useState([]);
+
+    const [lockTime, setLockTime] = useState();
 
     const [show, setShow] = useState(false);
 
@@ -73,7 +79,25 @@ function AdminPanel(props) {
         }
     };
 
-    const permanentLock = async (selectedData) => {};
+    const timeChange = (e) => {
+        setFlexible(true);
+    };
+
+    const timeFixed = (e) => {
+        setFlexible(false);
+        convertLockTime(e.target.value)
+    };
+
+    const convertLockTime = (type) => {
+
+        
+    };
+
+    const getSelected = (selected) => {
+        setSelectedData(selected);
+    };
+
+    console.log(selectedData);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -101,7 +125,13 @@ function AdminPanel(props) {
                             </div>
                         </div>
 
-                        <Modal show={show} onHide={() => setShow(false)}>
+                        <Modal
+                            show={show}
+                            onHide={() => {
+                                setShow(false);
+                                setFlexible(false);
+                            }}
+                        >
                             <Modal.Header closeButton>
                                 <Modal.Title>Bạn muốn khóa bao lâu ? </Modal.Title>
                             </Modal.Header>
@@ -112,38 +142,44 @@ function AdminPanel(props) {
                                         <div className="col-9 col-form-label">
                                             <div className="radio-inline">
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" />
+                                                    <input type="radio" name="lock-time" value="1" onClick={timeFixed} />
                                                     <span />
                                                     24 giờ
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" />
+                                                    <input type="radio" name="lock-time" value="3" onClick={timeFixed} />
                                                     <span />3 ngày
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" />
+                                                    <input type="radio" name="lock-time" value="7" onClick={timeFixed} />
                                                     <span />1 tuần
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" />
+                                                    <input type="radio" name="lock-time" onClick={timeChange} />
                                                     <span />
                                                     Tùy chỉnh
                                                 </label>
                                             </div>
+                                            {flexible === true && (
+                                                <>
+                                                    <Flatpickr
+                                                        className="form-control datetimepicker-input mt-3"
+                                                        options={{
+                                                            enableTime: true,
+                                                            time_24hr: true,
+                                                            minDate: 'today',
+                                                            locale: Vietnamese,
+                                                        }}
+                                                        placeholder="Chọn ngày và giờ"
+                                                        value={date}
+                                                        onChange={(date) => {
+                                                            setDate(date);
+                                                        }}
+                                                    />
 
-                                            <Flatpickr
-                                                className="form-control datetimepicker-input mt-3"
-                                                options={{
-                                                    enableTime: true,
-                                                    time_24hr: true,
-                                                    minDate: 'today',
-                                                    locale: Vietnamese,
-                                                }}
-                                                placeholder="Chọn ngày và giờ"
-                                            />
-
-                                            <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
-
+                                                    <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
+                                                </>
+                                            )}
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
                                                     <input type="radio" name="lock-time" />
@@ -173,14 +209,22 @@ function AdminPanel(props) {
                                 </form>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary btn-sm">Đóng</Button>
+                                <Button
+                                    variant="secondary btn-sm"
+                                    onClick={() => {
+                                        setShow(false);
+                                        setFlexible(false);
+                                    }}
+                                >
+                                    Đóng
+                                </Button>
                                 <Button variant="chartjs btn-sm">Khóa tài khoản</Button>
                             </Modal.Footer>
                         </Modal>
                         {isShopList ? (
-                            <ShopList listShop={listShop} banned={banned} permanentLock={permanentLock} />
+                            <ShopList listShop={listShop} getSelected={getSelected} />
                         ) : (
-                            <ShipperList listShipper={listShipper} banned={banned} permanentLock={permanentLock} />
+                            <ShipperList listShipper={listShipper} getSelected={getSelected} />
                         )}
                     </section>
                     <Footer />

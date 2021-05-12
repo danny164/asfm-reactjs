@@ -5,19 +5,16 @@ import CustomExpander from '../CustomExpander';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
-    banned: PropTypes.func,
-    permanentLock: PropTypes.func,
+    getSelected: PropTypes.func,
 };
 
 ShopList.defaultProps = {
     listShop: null,
-    banned: null,
-    permanentLock: null,
+    getSelected: null,
 };
 
 function ShopList(props) {
-    const { listShop, banned, permanentLock } = props;
-    const [selectedData, setSelectedData] = useState([]);
+    const { listShop, getSelected } = props;
 
     let data = [];
 
@@ -75,19 +72,10 @@ function ShopList(props) {
 
     const handleChange = (state) => {
         console.log('Số hàng đã chọn: ', state.selectedRows);
-        setSelectedData(state.selectedRows);
-    };
-
-    const bannedUser = async () => {
-        if (selectedData.length === 0) {
-            return alert('Bạn chưa chọn đối tượng nào !');
-        } else {
-            await banned(selectedData);
-            alert('Khóa thành công');
+        if (getSelected) {
+            getSelected(state.selectedRows);
         }
     };
-
-    const permanentLockUser = async () => {};
 
     return (
         <>

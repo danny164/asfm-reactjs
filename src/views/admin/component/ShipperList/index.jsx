@@ -6,21 +6,18 @@ import CustomExpander from '../CustomExpander';
 
 ShipperList.propTypes = {
     listShipper: PropTypes.array,
-    banned: PropTypes.func,
-    permanentLock: PropTypes.func,
+    getSelected: PropTypes.func,
 };
 
 ShipperList.defaultProps = {
     listShipper: null,
-    banned: null,
-    permanentLock: null,
+    getSelected: null,
 };
 
 function ShipperList(props) {
-    const { listShipper, banned, permanentLock } = props;
+    const { listShipper, getSelected } = props;
 
     let data = [];
-    const [selectedData, setSelectedData] = useState([]);
 
     if (listShipper) {
         data = listShipper;
@@ -57,19 +54,10 @@ function ShipperList(props) {
 
     const handleChange = (state) => {
         console.log('Số hàng đã chọn: ', state.selectedRows);
-        setSelectedData(state.selectedRows);
-    };
-
-    const bannedUser = async () => {
-        if (selectedData.length === 0) {
-            return alert('Bạn chưa chọn đối tượng nào !');
-        } else {
-            await banned(selectedData);
-            alert('Khóa thành công');
+        if (getSelected) {
+            getSelected(state.selectableRows);
         }
     };
-
-    const permanentLockUser = async () => {};
 
     return (
         <>
