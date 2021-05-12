@@ -70,7 +70,13 @@ function AdminPanel(props) {
     }, []);
 
     const locked = async () => {
-        console.log(noteRef.current.value);
+        let reason = '';
+        if (noteRef.current.value === '') {
+            reason = 'Vi phạm chính sách sử dụng !';
+        } else {
+            reason = noteRef.current.value;
+        }
+
         if (selectedData.length === 0) {
             return alert('Bạn chưa chọn người dùng nào !');
         }
@@ -78,21 +84,21 @@ function AdminPanel(props) {
         if (isShopList === true) {
             if (date === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: noteRef.current.value });
+                    db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: reason });
                 });
             } else {
                 await selectedData.map((data) => {
-                    db.collection('ShopProfile').doc(data.uid).update({ role: '2', lock_time: date, reason: noteRef.current.value });
+                    db.collection('ShopProfile').doc(data.uid).update({ role: '2', lock_time: date, reason: reason });
                 });
             }
         } else {
             if (date === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: noteRef.current.value });
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: reason });
                 });
             } else {
                 await selectedData.map((data) => {
-                    db.collection('ProfileShipper').doc(data.id).update({ role: '2', lock_time: date, reason: noteRef.current.value });
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '2', lock_time: date, reason: reason });
                 });
             }
         }
@@ -134,8 +140,6 @@ function AdminPanel(props) {
     const getSelected = (selected) => {
         setSelectedData(selected);
     };
-
-    console.log(selectedData);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -239,7 +243,7 @@ function AdminPanel(props) {
                                                     className="form-control"
                                                     name="reason-text"
                                                     rows={3}
-                                                    defaultValue="Vi phạm chính sách sử dụng !"
+                                                    placeholder="Vi phạm chính sách sử dụng !"
                                                     ref={noteRef}
                                                 />
                                             </div>

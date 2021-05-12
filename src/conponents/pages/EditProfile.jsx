@@ -34,6 +34,9 @@ function EditProfile(props) {
     const fileInput = useRef(null);
     const [imageUrl, setImageUrl] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [fullNameEmpty, setFullNameEmpty] = useState();
+    const [phoneEmpty, setPhoneEmpty] = useState();
+    const [addressEmpty, setAddressEmpty] = useState();
 
     useEffect(() => {
         getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
@@ -200,16 +203,9 @@ function EditProfile(props) {
     //////////////////////////////////////////////////////
 
     const schema = yup.object().shape({
-        fullname: yup
-            .string()
-            .required('Vui lòng nhập họ và tên của bạn')
-            .max(50, 'Vượt quá ${max} kí tự được cho phép')
-            .min(5, 'Tối thiểu ${min} kí tự'),
-        phone: yup
-            .string()
-            .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
-            .required('Vui lòng điền số điện thoại của bạn'),
-        address: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
+        fullname: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').min(5, 'Tối thiểu ${min} kí tự'),
+        phone: yup.string().matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ'),
+        address: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép'),
     });
 
     const {
@@ -221,8 +217,26 @@ function EditProfile(props) {
     });
 
     ////////////////////////////////////
-    const onSubmit = (e) => {
-        edit(
+    const onSubmit = async (e) => {
+        if (fullNameRef.current.value === '' && phoneRef.current.value === '' && addressRef.current.value === '') {
+            setFullNameEmpty('Vui lòng nhập họ và tên của bạn !');
+            setAddressEmpty('Vui lòng cung cấp số nhà, tên đường !');
+            return setPhoneEmpty('Vui lòng điền số điện thoại của bạn !');
+        }
+
+        if (fullNameRef.current.value === '') {
+            return setFullNameEmpty('Vui lòng nhập họ và tên của bạn !');
+        }
+
+        if (phoneRef.current.value === '') {
+            return setPhoneEmpty('Vui lòng điền số điện thoại của bạn !');
+        }
+
+        if (addressRef.current.value === '') {
+            return setAddressEmpty('Vui lòng cung cấp số nhà, tên đường !');
+        }
+
+        await edit(
             fullNameRef.current.value,
             phoneRef.current.value,
             addressRef.current.value + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
@@ -357,6 +371,7 @@ function EditProfile(props) {
                                             ref={fullNameRef}
                                         />
                                         <span className="form-text text-muted text-chartjs">{errors.fullname?.message}</span>
+                                        <span className="form-text text-muted text-chartjs">{fullNameEmpty !== '' && fullNameEmpty}</span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -377,6 +392,7 @@ function EditProfile(props) {
                                             ref={phoneRef}
                                         />
                                         <span className="form-text text-muted text-chartjs">{errors.phone?.message}</span>{' '}
+                                        <span className="form-text text-muted text-chartjs">{phoneEmpty !== '' && phoneEmpty}</span>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -456,6 +472,7 @@ function EditProfile(props) {
                                             ref={addressRef}
                                         />
                                         <span className="form-text text-muted text-chartjs">{errors.address?.message}</span>
+                                        <span className="form-text text-muted text-chartjs">{addressEmpty !== '' && addressEmpty}</span>
                                     </div>
                                 </div>
                             </div>

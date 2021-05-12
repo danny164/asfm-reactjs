@@ -1,12 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { useAuth } from '../../../context/AuthContext';
 import { Link, Redirect } from 'react-router-dom';
+import { db } from '../../../firebase';
 
 function Banned(props) {
+    const [data, setData] = useState();
+    const { currentUser } = useAuth();
+
     useEffect(() => {
         document.body.classList.add('bg--banned');
+        async function fetchData() {
+            try {
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exist) setData(doc.data());
+                    });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData();
     }, []);
 
     const { logout } = useAuth();

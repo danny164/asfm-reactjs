@@ -19,8 +19,8 @@ function Login1(props) {
     }, []);
 
     const schema = yup.object().shape({
-        email: yup.string().email('Email không hợp lệ').required('Bạn chưa nhập địa chỉ email'),
-        password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự').required('Bạn chưa nhập mật khẩu'),
+        email: yup.string().email('Email không hợp lệ'),
+        password: yup.string().min(6, 'Mật khẩu tối thiểu phải ${min} kí tự'),
     });
 
     const checkRef = useRef();
@@ -29,6 +29,8 @@ function Login1(props) {
     const { currentUser } = useAuth();
 
     const [error, setError] = useState('');
+    const [emailEmpty, setEmailEmpty] = useState()
+    const [passEmpty, setPassEmpty] = useState('')
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
@@ -46,6 +48,18 @@ function Login1(props) {
     const checkingPw = `form-control h-auto form-control-solid py-4 px-8 ${errors.password ? 'is-invalid' : ''}`;
 
     const onSubmit = async (e) => {
+        if (emailRef.current.value === '' && passwordRef.current.value === '') {
+            setPassEmpty('Bạn chưa nhập mật khẩu !')
+            return setEmailEmpty('Bạn chưa nhập địa chỉ email !')
+        }
+
+        if (emailRef.current.value === '') {
+            return setEmailEmpty('Bạn chưa nhập địa chỉ email !')
+        }
+
+        if (passwordRef.current.value === '') {
+            return setPassEmpty('Bạn chưa nhập mật khẩu !')
+        }
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
             setError('');
@@ -169,7 +183,7 @@ function Login1(props) {
                                             />
                                         </div>
                                         <p className="text-chartjs">{errors.email?.message}</p>
-
+                                        <p className="text-chartjs">{emailEmpty !== '' && emailEmpty}</p>
                                         <div className="form-group mb-5">
                                             <input
                                                 className={checkingPw}
@@ -181,7 +195,7 @@ function Login1(props) {
                                             />
                                         </div>
                                         <p className="text-chartjs">{errors.password?.message}</p>
-
+                                        <p className="text-chartjs">{passEmpty !== '' && passEmpty}</p>
                                         <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
                                             <div className="checkbox-inline">
                                                 <label className="checkbox m-0 text-muted">
