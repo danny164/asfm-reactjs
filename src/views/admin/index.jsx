@@ -22,8 +22,6 @@ function AdminPanel(props) {
     const [date, setDate] = useState(new Date());
     const [selectedData, setSelectedData] = useState([]);
 
-    const [lockTime, setLockTime] = useState();
-
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -69,13 +67,21 @@ function AdminPanel(props) {
 
     const banned = async (selectedData) => {
         if (isShopList === true) {
-            await selectedData.map((data) => {
-                db.collection('ShopProfile').where('id', '==', data.id).update({ role: '2' });
-            });
+            if (date === '0') {
+                await selectedData.map((data) => {
+                    db.collection('ShopProfile').where('id', '==', data.id).update({ role: '0' });
+                });
+            }
         } else {
-            await selectedData.map((data) => {
-                db.collection('ProfileShipper').doc(data.id).update({ role: '2' });
-            });
+            if (date === '0') {
+                await selectedData.map((data) => {
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '0' });
+                });
+            } else {
+                await selectedData.map((data) => {
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '2', lock_time: date });
+                });
+            }
         }
     };
 
@@ -85,13 +91,10 @@ function AdminPanel(props) {
 
     const timeFixed = (e) => {
         setFlexible(false);
-        convertLockTime(e.target.value)
+        convertLockTime(e.target.value);
     };
 
-    const convertLockTime = (type) => {
-
-        
-    };
+    const convertLockTime = (type) => {};
 
     const getSelected = (selected) => {
         setSelectedData(selected);
