@@ -1,8 +1,10 @@
-import 'flatpickr/dist/themes/airbnb.css';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
-import React, { useEffect, useRef, useState } from 'react';
+import 'flatpickr/dist/themes/airbnb.css';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Expand from 'react-expand-animated';
 import Flatpickr from 'react-flatpickr';
 import Footer from '../../conponents/common/Footer';
 import HeaderMobile from '../../conponents/common/HeaderMobile';
@@ -11,7 +13,6 @@ import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
 import './styles.scss';
-import moment from 'moment';
 
 function AdminPanel(props) {
     const [isShopList, setIsShopList] = useState(true);
@@ -163,25 +164,27 @@ function AdminPanel(props) {
                                                     Tùy chỉnh
                                                 </label>
                                             </div>
-                                            {flexible === true && (
-                                                <>
-                                                    <Flatpickr
-                                                        className="form-control datetimepicker-input mt-3"
-                                                        options={{
-                                                            enableTime: true,
-                                                            time_24hr: true,
-                                                            minDate: 'today',
-                                                            locale: Vietnamese,
-                                                        }}
-                                                        defaultValue={moment.unix(date).format('YYYY-MM-DD HH:mm')}
-                                                        placeholder="Chọn ngày và giờ"
-                                                        onChange={(date) => {
-                                                            setDate(moment(date[0]).format('X'));
-                                                        }}
-                                                    />
-                                                    <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
-                                                </>
-                                            )}
+                                            {
+                                                <Expand open={flexible}>
+                                                    <>
+                                                        <Flatpickr
+                                                            className="form-control datetimepicker-input mt-3"
+                                                            options={{
+                                                                enableTime: true,
+                                                                time_24hr: true,
+                                                                minDate: 'today',
+                                                                locale: Vietnamese,
+                                                            }}
+                                                            defaultValue={moment.unix(date).format('YYYY-MM-DD HH:mm')}
+                                                            placeholder="Chọn ngày và giờ"
+                                                            onChange={(date) => {
+                                                                setDate(moment(date[0]).format('X'));
+                                                            }}
+                                                        />
+                                                        <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
+                                                    </>
+                                                </Expand>
+                                            }
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
                                                     <input type="radio" name="lock-time" value="0" onClick={timeFixed} />
