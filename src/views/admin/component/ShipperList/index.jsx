@@ -55,7 +55,7 @@ function ShipperList(props) {
     const handleChange = (state) => {
         console.log('Số hàng đã chọn: ', state.selectedRows);
         if (getSelected) {
-            getSelected(state.selectableRows);
+            getSelected(state.selectedRows);
         }
     };
 

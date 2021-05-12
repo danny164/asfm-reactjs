@@ -1,7 +1,7 @@
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import 'flatpickr/dist/themes/airbnb.css';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Expand from 'react-expand-animated';
@@ -25,6 +25,8 @@ function AdminPanel(props) {
     const [selectedData, setSelectedData] = useState([]);
 
     const [show, setShow] = useState(false);
+
+    const noteRef = useRef();
 
     useEffect(() => {
         document.body.classList.add('bg');
@@ -67,24 +69,48 @@ function AdminPanel(props) {
         fetchShopList();
     }, []);
 
-    const banned = async (selectedData) => {
+    const locked = async () => {
+        console.log(noteRef.current.value);
+        if (selectedData.length === 0) {
+            return alert('Bạn chưa chọn người dùng nào !');
+        }
+
         if (isShopList === true) {
             if (date === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ShopProfile').where('id', '==', data.id).update({ role: '0' });
+                    db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: noteRef.current.value });
+                });
+            } else {
+                await selectedData.map((data) => {
+                    db.collection('ShopProfile').doc(data.uid).update({ role: '2', lock_time: date, reason: noteRef.current.value });
                 });
             }
         } else {
             if (date === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ProfileShipper').doc(data.id).update({ role: '0' });
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: noteRef.current.value });
                 });
             } else {
                 await selectedData.map((data) => {
-                    db.collection('ProfileShipper').doc(data.id).update({ role: '2', lock_time: date });
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '2', lock_time: date, reason: noteRef.current.value });
                 });
             }
         }
+        return alert('Thao tác thành công !');
+    };
+
+    const unLocked = async () => {
+        let time = moment().format('X');
+        if (isShopList === true) {
+            await selectedData.map((data) => {
+                db.collection('ShopProfile').doc(data.uid).update({ role: '1', lock_time: time, reason: '' });
+            });
+        } else {
+            await selectedData.map((data) => {
+                db.collection('ProfileShipper').doc(data.id).update({ role: '1', lock_time: time, reason: '' });
+            });
+        }
+        return alert('Thao tác thành công !');
     };
 
     const timeChange = (e) => {
@@ -99,7 +125,7 @@ function AdminPanel(props) {
 
     const convertLockTime = (type) => {
         if (type === '0') {
-            setDate(moment().add(100, 'years').format('X'));
+            setDate('0');
         } else {
             setDate(moment().add(type, 'days').format('X'));
         }
@@ -109,7 +135,7 @@ function AdminPanel(props) {
         setSelectedData(selected);
     };
 
-    console.log(date);
+    console.log(selectedData);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -128,7 +154,7 @@ function AdminPanel(props) {
                                 </button>
                             </div>
                             <div className="mb-3">
-                                <button type="button" className="btn btn-sm btn-light-success ml-3">
+                                <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={unLocked}>
                                     Mở khóa
                                 </button>
                                 <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={() => setShow(true)}>
@@ -213,7 +239,8 @@ function AdminPanel(props) {
                                                     className="form-control"
                                                     name="reason-text"
                                                     rows={3}
-                                                    placeholder="Vi phạm chính sách sử dụng !"
+                                                    defaultValue="Vi phạm chính sách sử dụng !"
+                                                    ref={noteRef}
                                                 />
                                             </div>
                                             <span className="form-text text-muted">* Có thể để trống nội dung, nội dung khóa sẽ là mặc định</span>
@@ -231,7 +258,9 @@ function AdminPanel(props) {
                                 >
                                     Đóng
                                 </Button>
-                                <Button variant="chartjs btn-sm">Khóa tài khoản</Button>
+                                <Button variant="chartjs btn-sm" onClick={locked}>
+                                    Khóa tài khoản
+                                </Button>
                             </Modal.Footer>
                         </Modal>
                         {isShopList ? (
