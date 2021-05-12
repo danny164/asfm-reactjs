@@ -49,22 +49,17 @@ function CustomExpander(props) {
                                 Số điện thoại:
                                 <span className="font-weight-bold text-chartjs ml-2">0344 063 164</span>
                             </p>
-                            <p>
+                            <p className="mb-0">
                                 Địa chỉ:
                                 <span className="font-weight-bold ml-2">986, Ngô Quyền, Phường An Hải Bắc, Quận Sơn Trà, Thành phố Đà Nẵng</span>
                             </p>
-                            <div className="banned">
+                            {/* <div className="banned">
                                 <img src={icBanned} alt="banned" />
-                            </div>
+                            </div> */}
                         </div>
                     </section>
                 </div>
             </div>
-            {actions.map((type) => (
-                <span key={type.id} className={type.className}>
-                    {type.name}
-                </span>
-            ))}
 
             <div className="separator separator-dashed my-5" />
         </>
