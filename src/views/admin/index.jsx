@@ -146,7 +146,7 @@ function AdminPanel(props) {
                                         <div className="col-9 col-form-label">
                                             <div className="radio-inline">
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" value="1" onClick={timeFixed} />
+                                                    <input type="radio" name="lock-time" defaultChecked="checked" value="1" onClick={timeFixed} />
                                                     <span />
                                                     24 giờ
                                                 </label>
