@@ -18,11 +18,10 @@ function AdminPanel(props) {
     const [isShipperList, setIsShipperList] = useState(false);
     const [listShipper, setListShipper] = useState();
     const [listShop, setListShop] = useState();
-    const [flexible, setFlexible] = useState(false);
-    const [date, setDate] = useState(new Date());
-    const [selectedData, setSelectedData] = useState([]);
 
-    const [lockTime, setLockTime] = useState();
+    const [flexible, setFlexible] = useState(false);
+    const [date, setDate] = useState(moment().format('X'));
+    const [selectedData, setSelectedData] = useState([]);
 
     const [show, setShow] = useState(false);
 
@@ -81,23 +80,27 @@ function AdminPanel(props) {
 
     const timeChange = (e) => {
         setFlexible(true);
+        setDate(moment().add(14, 'days').format('X'));
     };
 
     const timeFixed = (e) => {
         setFlexible(false);
-        convertLockTime(e.target.value)
+        convertLockTime(e.target.value);
     };
 
     const convertLockTime = (type) => {
-
-        
+        if (type === '0') {
+            setDate(moment().add(100, 'years').format('X'));
+        } else {
+            setDate(moment().add(type, 'days').format('X'));
+        }
     };
 
     const getSelected = (selected) => {
         setSelectedData(selected);
     };
 
-    console.log(selectedData);
+    console.log(date);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -170,19 +173,18 @@ function AdminPanel(props) {
                                                             minDate: 'today',
                                                             locale: Vietnamese,
                                                         }}
+                                                        defaultValue={moment.unix(date).format('YYYY-MM-DD HH:mm')}
                                                         placeholder="Chọn ngày và giờ"
-                                                        value={date}
                                                         onChange={(date) => {
-                                                            setDate(date);
+                                                            setDate(moment(date[0]).format('X'));
                                                         }}
                                                     />
-
                                                     <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
                                                 </>
                                             )}
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
-                                                    <input type="radio" name="lock-time" />
+                                                    <input type="radio" name="lock-time" value="0" onClick={timeFixed} />
                                                     <span />
                                                     Khóa vĩnh viễn
                                                 </label>
