@@ -5,20 +5,32 @@ import Avatar from '../../../assets/media/avatar.png';
 import { useAuth } from '../../../context/AuthContext';
 import Signout from '../../LogOut';
 import { getDownloadUrl } from '../../../context/Upload';
+import PropTypes from 'prop-types';
 
+InforSideRight.propTypes = {
+    isShowChange: PropTypes.bool,
+};
+
+InforSideRight.defaultProps = {
+    isShowChange: false,
+};
 function InforSideRight(props) {
+    const { isShowChange } = props;
     const { currentUser } = useAuth();
 
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
-        getDownloadUrl(currentUser.uid).then((url) => {
-            if (!!url) {
-                setImageUrl(url);
-                localStorage.setItem('imageUrl', url);
-            }
-        });
-    }, [currentUser.uid]);
+        async function fetchImg() {
+            await getDownloadUrl(currentUser.uid).then((url) => {
+                if (!!url) {
+                    localStorage.setItem('imageUrl', url);
+                    setImageUrl(url);
+                }
+            });
+        }
+        fetchImg();
+    }, [currentUser.uid, isShowChange]);
 
     return (
         <section

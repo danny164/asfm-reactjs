@@ -431,11 +431,12 @@ function MainHomePage(props) {
                                 </>
                             )}
 
-                            <CustomRating />
+                            {dataModal.status === '2' && <CustomRating shipper_id={shipperInfor.id} post_id={dataModal.id_post} />}
 
                             <div className="separator separator-dashed my-5" />
 
                             {(dataModal.status === '0' || fetchLoading) && <SkeletonShipper status={dataModal.status} />}
+
                             {!fetchLoading && dataModal.status !== '0' && (
                                 <>
                                     <p className="font-weight-bold">Người nhận đơn:</p>
