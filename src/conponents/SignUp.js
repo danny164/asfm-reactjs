@@ -129,6 +129,7 @@ function Register(props) {
                                 length: 3,
                                 charset: 'numeric',
                             }),
+                        uid: currentUser.uid,
                         role: '1',
                         address: '',
                         district: '',

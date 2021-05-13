@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
-import PropTypes from 'prop-types';
-import CustomExpander from '../CustomExpander';
-import { useAuth } from '../../../../context/AuthContext';
-import 'moment/locale/vi';
 import moment from 'moment';
+import 'moment/locale/vi';
+import PropTypes from 'prop-types';
+import React from 'react';
+import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
+import { useAuth } from '../../../../context/AuthContext';
+import CustomExpander from '../CustomExpander';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
@@ -74,6 +74,8 @@ const columns = [
     },
 ];
 
+const now = moment().format('X');
+
 const LockTime = ({ row }) => (
     <>
         {row.lock_time && row.lock_time > '4129589471' && (
@@ -82,7 +84,7 @@ const LockTime = ({ row }) => (
                 {status[2].name}
             </span>
         )}
-        {row.lock_time && row.lock_time < '4129589471' && (
+        {row.lock_time > now && row.lock_time < '4129589471' && (
             <span className={status[1].className}>
                 <i className="fad fa-clock mr-1 text-warning"></i>
                 <Moment interval={1000} unix durationFromNow format="HH [h] mm [m] ss">
@@ -90,7 +92,7 @@ const LockTime = ({ row }) => (
                 </Moment>
             </span>
         )}
-        {!row.lock_time && <span className={status[0].className}>{status[0].name}</span>}
+        {(!row.lock_time || row.lock_time < now) && <span className={status[0].className}>{status[0].name}</span>}
     </>
 );
 
@@ -105,6 +107,7 @@ function ShopList(props) {
     }
 
     const handleChange = (state) => {
+        console.log('Số rows', state.selectedRows);
         if (getSelected) {
             getSelected(state.selectedRows);
         }
