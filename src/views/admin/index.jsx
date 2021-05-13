@@ -21,9 +21,11 @@ function AdminPanel(props) {
     const [listShop, setListShop] = useState();
 
     const [flexible, setFlexible] = useState(false);
-    const [date, setDate] = useState(moment().format('X'));
+    const [date, setDate] = useState(moment().add(1, 'days').format('X'));
     const [selectedData, setSelectedData] = useState([]);
     const [type, setType] = useState();
+
+    const [toggledClearRows, setToggledClearRows] = useState(false);
 
     const [show, setShow] = useState(false);
 
@@ -103,6 +105,9 @@ function AdminPanel(props) {
                 });
             }
         }
+        setToggledClearRows(true);
+        setToggledClearRows(false);
+        setShow(false);
         return alert('Thao tác thành công !');
     };
 
@@ -117,20 +122,25 @@ function AdminPanel(props) {
                 db.collection('ProfileShipper').doc(data.id).update({ role: '1', lock_time: time, reason: '' });
             });
         }
-        setShow(false);
+        setToggledClearRows(true);
+        setToggledClearRows(false);
+        setShow(false)
         return alert('Thao tác thành công !');
     };
 
+    // custom time with datetimepicker
     const timeChange = (e) => {
         setFlexible(true);
         setDate(moment().add(14, 'days').format('X'));
     };
 
+    // fixed time 1, 3, 7 ngày
     const timeFixed = (e) => {
         setFlexible(false);
         convertLockTime(e.target.value);
     };
 
+    // set 0 to lock forever, others to lock temporary
     const convertLockTime = (type) => {
         if (type === '0') {
             setDate(moment().add(100, 'years').format('X'));
@@ -143,6 +153,8 @@ function AdminPanel(props) {
     const getSelected = (selected) => {
         setSelectedData(selected);
     };
+
+    console.log(date);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -216,7 +228,7 @@ function AdminPanel(props) {
                                                                 minDate: 'today',
                                                                 locale: Vietnamese,
                                                             }}
-                                                            defaultValue={moment.unix(date).format('YYYY-MM-DD HH:mm')}
+                                                            defaultValue={moment().add(14, 'days').format('YYYY-MM-DD HH:mm')}
                                                             placeholder="Chọn ngày và giờ"
                                                             onChange={(date) => {
                                                                 setDate(moment(date[0]).format('X'));
@@ -271,9 +283,9 @@ function AdminPanel(props) {
                             </Modal.Footer>
                         </Modal>
                         {isShopList ? (
-                            <ShopList listShop={listShop} getSelected={getSelected} />
+                            <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />
                         ) : (
-                            <ShipperList listShipper={listShipper} getSelected={getSelected} />
+                            <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />
                         )}
                     </section>
                     <Footer />
