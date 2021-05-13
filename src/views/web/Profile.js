@@ -86,7 +86,7 @@ export default function Profile() {
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
-                <AsideLeft />
+                <AsideLeft isShowChange={isShowProfile}/>
                 {isShowProfile && <MainProfile onChange={changeToEdit} user={userInfor} />}
                 {isShowEdit && <EditProfile user={userInfor} edit={editProfile} />}
                 <AsideRight name={userInfor.input.fullname} />

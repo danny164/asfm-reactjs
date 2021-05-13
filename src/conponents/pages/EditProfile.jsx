@@ -94,7 +94,9 @@ function EditProfile(props) {
     const [addressEmpty, setAddressEmpty] = useState();
 
     useEffect(() => {
-        getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
+        getDownloadUrl(user.uid).then((url) => {
+            !!url && setImageUrl(url);
+        });
     }, [user.uid]);
 
     const fileChange = async (files) => {
