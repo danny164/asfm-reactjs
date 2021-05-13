@@ -126,16 +126,19 @@ function AdminPanel(props) {
         return alert('Thao tác thành công !');
     };
 
+    // custom time with datetimepicker
     const timeChange = (e) => {
         setFlexible(true);
         setDate(moment().add(14, 'days').format('X'));
     };
 
+    // fixed time 1, 3, 7 ngày
     const timeFixed = (e) => {
         setFlexible(false);
         convertLockTime(e.target.value);
     };
 
+    // set 0 to lock forever, others to lock temporary
     const convertLockTime = (type) => {
         if (type === '0') {
             setDate('0');
