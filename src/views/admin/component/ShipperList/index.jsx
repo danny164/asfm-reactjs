@@ -16,6 +16,35 @@ ShipperList.defaultProps = {
     toggledClearRows: false,
 };
 
+const columns = [
+    {
+        name: 'ID',
+        selector: 'id',
+        sortable: true,
+    },
+    {
+        name: 'Trạng thái',
+        selector: 'role',
+        sortable: true,
+    },
+    {
+        name: 'Họ tên',
+        selector: 'name',
+        sortable: true,
+    },
+    {
+        name: 'Số điện thoại',
+        selector: 'phone',
+        sortable: true,
+    },
+    {
+        name: 'Địa chỉ',
+        selector: 'address',
+        sortable: true,
+        right: true,
+    },
+];
+
 function ShipperList(props) {
     const { listShipper, getSelected, toggledClearRows } = props;
 
@@ -25,37 +54,7 @@ function ShipperList(props) {
         data = listShipper;
     }
 
-    const columns = [
-        {
-            name: 'ID',
-            selector: 'id',
-            sortable: true,
-        },
-        {
-            name: 'Trạng thái',
-            selector: 'role',
-            sortable: true,
-        },
-        {
-            name: 'Họ tên',
-            selector: 'name',
-            sortable: true,
-        },
-        {
-            name: 'Số điện thoại',
-            selector: 'phone',
-            sortable: true,
-        },
-        {
-            name: 'Địa chỉ',
-            selector: 'address',
-            sortable: true,
-            right: true,
-        },
-    ];
-
     const handleChange = (state) => {
-        console.log('Số hàng đã chọn: ', state.selectedRows);
         if (getSelected) {
             getSelected(state.selectedRows);
         }

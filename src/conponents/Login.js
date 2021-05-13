@@ -29,8 +29,8 @@ function Login1(props) {
     const { currentUser } = useAuth();
 
     const [error, setError] = useState('');
-    const [emailEmpty, setEmailEmpty] = useState()
-    const [passEmpty, setPassEmpty] = useState('')
+    const [emailEmpty, setEmailEmpty] = useState();
+    const [passEmpty, setPassEmpty] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
@@ -49,16 +49,16 @@ function Login1(props) {
 
     const onSubmit = async (e) => {
         if (emailRef.current.value === '' && passwordRef.current.value === '') {
-            setPassEmpty('Bạn chưa nhập mật khẩu !')
-            return setEmailEmpty('Bạn chưa nhập địa chỉ email !')
+            setPassEmpty('Bạn chưa nhập mật khẩu !');
+            return setEmailEmpty('Bạn chưa nhập địa chỉ email !');
         }
 
         if (emailRef.current.value === '') {
-            return setEmailEmpty('Bạn chưa nhập địa chỉ email !')
+            return setEmailEmpty('Bạn chưa nhập địa chỉ email !');
         }
 
         if (passwordRef.current.value === '') {
-            return setPassEmpty('Bạn chưa nhập mật khẩu !')
+            return setPassEmpty('Bạn chưa nhập mật khẩu !');
         }
         try {
             await signin(emailRef.current.value, passwordRef.current.value);
@@ -84,12 +84,11 @@ function Login1(props) {
     };
 
     async function updateRole() {
-        await db
-            .collection('ShopProfile')
-            .doc(currentUser.uid)
-            .update({
-                role: '1', reason: ''
-            })
+        await db.collection('ShopProfile').doc(currentUser.uid).update({
+            role: '1',
+            lock_time: '',
+            reason: '',
+        });
     }
 
     if (currentUser) {
@@ -102,12 +101,12 @@ function Login1(props) {
                     .then((doc) => {
                         if (doc.exists) {
                             if (doc.data().lock_time < moment().format('X') && doc.data().role !== '1' && doc.data().role !== '9') {
-                                updateRole()
+                                updateRole();
                             }
                         }
-                    })
+                    });
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         }
 
@@ -145,7 +144,7 @@ function Login1(props) {
                 console.log(error);
             }
         }
-        checkRole()
+        checkRole();
         fetchRole();
     }
 

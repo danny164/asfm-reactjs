@@ -23,7 +23,6 @@ function AdminPanel(props) {
     const [flexible, setFlexible] = useState(false);
     const [date, setDate] = useState(moment().add(1, 'days').format('X'));
     const [selectedData, setSelectedData] = useState([]);
-    const [lockType, setLockType] = useState();
 
     const [toggledClearRows, setToggledClearRows] = useState(false);
 
@@ -98,7 +97,6 @@ function AdminPanel(props) {
             if (date > '4129589471') {
                 await selectedData.map((data) => {
                     db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: reason, lock_time: date });
-                    setDate()
                 });
             } else {
                 await selectedData.map((data) => {
@@ -106,9 +104,11 @@ function AdminPanel(props) {
                 });
             }
         }
+
         setToggledClearRows(true);
         setToggledClearRows(false);
         setShow(false);
+
         return alert('Thao tác thành công !');
     };
 
@@ -116,19 +116,21 @@ function AdminPanel(props) {
         if (selectedData.length === 0) {
             return alert('Bạn chưa chọn người dùng nào !');
         }
-        let time = moment().format('X');
+
         if (isShopList === true) {
             await selectedData.map((data) => {
-                db.collection('ShopProfile').doc(data.uid).update({ role: '1', lock_time: time, reason: '' });
+                db.collection('ShopProfile').doc(data.uid).update({ role: '1', lock_time: '', reason: '' });
             });
         } else {
             await selectedData.map((data) => {
-                db.collection('ProfileShipper').doc(data.id).update({ role: '1', lock_time: time, reason: '' });
+                db.collection('ProfileShipper').doc(data.id).update({ role: '1', lock_time: '', reason: '' });
             });
         }
+
         setToggledClearRows(true);
         setToggledClearRows(false);
         setShow(false);
+
         return alert('Thao tác thành công !');
     };
 
@@ -148,10 +150,8 @@ function AdminPanel(props) {
     // set 0 to lock forever, others to lock temporary
     const convertLockTime = (type) => {
         if (type === '0') {
-            // setLockType('0');
             setDate(moment().add(100, 'years').format('X'));
         } else {
-            setLockType('');
             setDate(moment().add(type, 'days').format('X'));
         }
     };
@@ -185,7 +185,7 @@ function AdminPanel(props) {
                                     className="btn btn-sm btn-light-danger ml-3"
                                     onClick={() => {
                                         setShow(true);
-                                        setDate(moment().add(1, 'days').format('X'))
+                                        setDate(moment().add(1, 'days').format('X'));
                                     }}
                                 >
                                     Khóa tài khoản

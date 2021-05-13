@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import PropTypes from 'prop-types';
 import CustomExpander from '../CustomExpander';
-import { StayCurrentPortraitTwoTone } from '@material-ui/icons';
 import { useAuth } from '../../../../context/AuthContext';
+import 'moment/locale/vi';
+import moment from 'moment';
+import Moment from 'react-moment';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
@@ -17,6 +19,81 @@ ShopList.defaultProps = {
     toggledClearRows: false,
 };
 
+const status = [
+    {
+        id: 1,
+        name: 'Đang hoạt động',
+        className: 'label label-sm label-light-success label-inline py-4 flex-shrink-0',
+    },
+    {
+        id: 2,
+        name: 'Tạm thời khóa',
+        className: 'label label-sm label-light-warning label-inline py-4 flex-shrink-0',
+    },
+    {
+        id: 3,
+        name: 'Khóa vĩnh viễn',
+        className: 'label label-sm label-light-danger label-inline py-4 flex-shrink-0',
+    },
+];
+
+const columns = [
+    {
+        name: 'ID',
+        selector: 'id',
+        sortable: true,
+        omit: true,
+    },
+    {
+        name: 'Email',
+        selector: 'email',
+        sortable: true,
+    },
+    {
+        name: 'Trạng thái / Khóa',
+        selector: 'lock_time',
+        sortable: true,
+        cell: (row) => <LockTime row={row} />,
+    },
+    {
+        name: 'Họ tên',
+        selector: 'fullname',
+        sortable: true,
+    },
+
+    {
+        name: 'Số điện thoại',
+        selector: 'phone',
+        sortable: true,
+    },
+    {
+        name: 'Địa chỉ',
+        selector: 'address',
+        sortable: true,
+        right: true,
+    },
+];
+
+const LockTime = ({ row }) => (
+    <>
+        {row.lock_time && row.lock_time > '4129589471' && (
+            <span className={status[2].className}>
+                <i className="fad fa-clock mr-1 text-chartjs"></i>
+                {status[2].name}
+            </span>
+        )}
+        {row.lock_time && row.lock_time < '4129589471' && (
+            <span className={status[1].className}>
+                <i className="fad fa-clock mr-1 text-warning"></i>
+                <Moment interval={1000} unix durationFromNow format="HH [h] mm [m] ss">
+                    {row.lock_time}
+                </Moment>
+            </span>
+        )}
+        {!row.lock_time && <span className={status[0].className}>{status[0].name}</span>}
+    </>
+);
+
 function ShopList(props) {
     const { listShop, getSelected, toggledClearRows } = props;
     const { currentUser } = useAuth();
@@ -27,56 +104,7 @@ function ShopList(props) {
         data = listShop;
     }
 
-    const status = [
-        {
-            id: 1,
-            name: 'Đang hoạt động',
-            className: 'label label-sm label-inprocess label-inline py-4 flex-shrink-0',
-        },
-        {
-            id: 2,
-            name: 'Vô hiệu hóa',
-            className: 'label label-sm label-inline py-4 flex-shrink-0',
-        },
-    ];
-
-    const columns = [
-        {
-            name: 'ID',
-            selector: 'id',
-            sortable: true,
-        },
-        {
-            name: 'Trạng thái',
-            selector: 'role',
-            sortable: true,
-        },
-        {
-            name: 'Email',
-            selector: 'email',
-            sortable: true,
-        },
-        {
-            name: 'Họ tên',
-            selector: 'fullname',
-            sortable: true,
-        },
-
-        {
-            name: 'Số điện thoại',
-            selector: 'phone',
-            sortable: true,
-        },
-        {
-            name: 'Địa chỉ',
-            selector: 'address',
-            sortable: true,
-            right: true,
-        },
-    ];
-
     const handleChange = (state) => {
-        console.log('Số hàng đã chọn: ', state.selectedRows);
         if (getSelected) {
             getSelected(state.selectedRows);
         }
