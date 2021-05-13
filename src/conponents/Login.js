@@ -83,7 +83,7 @@ function Login1(props) {
         }
     };
 
-    const updateRole = async () => {
+    async function updateRole() {
         await db
             .collection('ShopProfile')
             .doc(currentUser.uid)
@@ -94,17 +94,21 @@ function Login1(props) {
 
     if (currentUser) {
         async function checkRole() {
-            await db
-                .collection('ShopProfile')
-                .doc(currentUser.uid)
-                .get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        if (doc.data().lock_time < moment().format('X')) {
-                            updateRole()
+            try {
+                await db
+                    .collection('ShopProfile')
+                    .doc(currentUser.uid)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            if (doc.data().lock_time < moment().format('X') && doc.data().role !== '1' && doc.data().role !== '9') {
+                                updateRole()
+                            }
                         }
-                    }
-                })
+                    })
+            } catch (err) {
+                console.log(err)
+            }
         }
 
         async function fetchRole() {

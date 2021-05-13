@@ -23,6 +23,7 @@ function AdminPanel(props) {
     const [flexible, setFlexible] = useState(false);
     const [date, setDate] = useState(moment().format('X'));
     const [selectedData, setSelectedData] = useState([]);
+    const [type, setType] = useState();
 
     const [show, setShow] = useState(false);
 
@@ -82,9 +83,9 @@ function AdminPanel(props) {
         }
 
         if (isShopList === true) {
-            if (date === '0') {
+            if (type === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: reason });
+                    db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: reason, lock_time: date });
                 });
             } else {
                 await selectedData.map((data) => {
@@ -92,9 +93,9 @@ function AdminPanel(props) {
                 });
             }
         } else {
-            if (date === '0') {
+            if (type === '0') {
                 await selectedData.map((data) => {
-                    db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: reason });
+                    db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: reason, lock_time: date });
                 });
             } else {
                 await selectedData.map((data) => {
@@ -116,6 +117,7 @@ function AdminPanel(props) {
                 db.collection('ProfileShipper').doc(data.id).update({ role: '1', lock_time: time, reason: '' });
             });
         }
+        setShow(false);
         return alert('Thao tác thành công !');
     };
 
@@ -131,7 +133,8 @@ function AdminPanel(props) {
 
     const convertLockTime = (type) => {
         if (type === '0') {
-            setDate('0');
+            setDate(moment().add(100, 'years').format('X'));
+            setType('0');
         } else {
             setDate(moment().add(type, 'days').format('X'));
         }
