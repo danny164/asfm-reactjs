@@ -4,6 +4,7 @@ import random from 'randomstring';
 import React, { useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import InputMask from 'react-input-mask';
 import { Link, useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import '../assets/css/portal.scss';
@@ -13,8 +14,37 @@ import { db } from '../firebase';
 import Version from './common/Version';
 import Logo from './Logo';
 
+const firstUppercase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const convertString = (value) => {
+    const allLowerCase = value.toLowerCase();
+    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
+
+    const removeSpecialChars = removeSpace.replace(
+        /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
+        ''
+    );
+
+    const splitString = removeSpecialChars.split(' ');
+
+    const result = [];
+
+    splitString.forEach((string) => {
+        return result.push(firstUppercase(string));
+    });
+
+    return result.join(' ');
+};
+
 function Register(props) {
     const schema = yup.object().shape({
+        fullname: yup.string().required('Vui lòng điền họ tên').max(50, 'Vượt quá ${max} kí tự được cho phép').min(5, 'Tối thiểu ${min} kí tự'),
+        phone: yup
+            .string()
+            .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
+            .required('Vui lòng điền số điện thoại khách hàng'),
         email: yup
             .string()
             .email('Email không hợp lệ')
@@ -61,15 +91,15 @@ function Register(props) {
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
             setLoading(false);
-            setAlert('success !');
+            setAlert('Đăng kí thành công !');
         } catch (err) {
             setAlert('#f27173');
             // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
             const errorCode = err.code;
             if (errorCode === 'auth/email-already-in-use') {
-                setError('Tài khoản đã tồn tại');
+                setError('Tài khoản đã tồn tại !');
             } else {
-                setError('Đăng kí thất bại');
+                setError('Đăng kí thất bại !');
             }
         }
         setLoading(false);
@@ -90,7 +120,7 @@ function Register(props) {
                     .collection('ShopProfile')
                     .doc(currentUser.uid)
                     .set({
-                        fullname: fullNameRef.current.value,
+                        fullname: convertString(fullNameRef.current.value),
                         phone: phoneRef.current.value,
                         email: currentUser.email,
                         id:
@@ -166,12 +196,27 @@ function Register(props) {
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group mb-5">
-                                        <input className={checkingFullname} type="text" placeholder="Họ và Tên" ref={fullNameRef} />
+                                        <input
+                                            className={checkingFullname}
+                                            type="text"
+                                            placeholder="Họ và Tên"
+                                            {...register('fullname')}
+                                            ref={fullNameRef}
+                                        />
                                     </div>
+                                    <p className="text-chartjs">{errors.fullname?.message}</p>
 
                                     <div className="form-group mb-5">
-                                        <input className={checkingPhone} type="text" placeholder="Số điện thoại" ref={phoneRef} />
+                                        <InputMask
+                                            mask="9999 999 999"
+                                            className={checkingPhone}
+                                            type="text"
+                                            placeholder="Số điện thoại"
+                                            {...register('phone')}
+                                            ref={phoneRef}
+                                        />
                                     </div>
+                                    <p className="text-chartjs">{errors.phone?.message}</p>
 
                                     <div className="form-group mb-5">
                                         <input
