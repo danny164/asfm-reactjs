@@ -46,7 +46,7 @@ function Banned(props) {
             <section className="banned--container">
                 <h1>403</h1>
                 <p className="alert">Tài khoản của bạn đã bị khóa !</p>
-                <p className="reason">Lý do: Vi phạm chính sách sử dụng !</p>
+                <p className="reason">Lý do: {data.reason}</p>
                 <Link to="#" className="btn btn-light-warning font-weight-bold mr-2" onClick={handleLogout}>
                     Đăng xuất
                 </Link>

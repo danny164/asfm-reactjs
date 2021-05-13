@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import PropTypes from 'prop-types';
 import CustomExpander from '../CustomExpander';
+import { StayCurrentPortraitTwoTone } from '@material-ui/icons';
+import { useAuth } from '../../../../context/AuthContext';
 
 ShopList.propTypes = {
     listShop: PropTypes.array,
     getSelected: PropTypes.func,
+    toggledClearRows: PropTypes.bool,
 };
 
 ShopList.defaultProps = {
     listShop: null,
     getSelected: null,
+    toggledClearRows: false,
 };
 
 function ShopList(props) {
-    const { listShop, getSelected } = props;
+    const { listShop, getSelected, toggledClearRows } = props;
+    const { currentUser } = useAuth();
 
     let data = [];
 
@@ -77,6 +82,8 @@ function ShopList(props) {
         }
     };
 
+    const rowSelectCritera = (row) => row.uid === currentUser.uid;
+
     return (
         <>
             <DataTable
@@ -93,6 +100,8 @@ function ShopList(props) {
                 selectableRowsVisibleOnly={true}
                 selectableRowsHighlight={true}
                 onSelectedRowsChange={handleChange}
+                clearSelectedRows={toggledClearRows}
+                selectableRowDisabled={rowSelectCritera}
             />
         </>
     );

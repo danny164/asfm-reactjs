@@ -7,15 +7,17 @@ import CustomExpander from '../CustomExpander';
 ShipperList.propTypes = {
     listShipper: PropTypes.array,
     getSelected: PropTypes.func,
+    toggledClearRows: PropTypes.bool,
 };
 
 ShipperList.defaultProps = {
     listShipper: null,
     getSelected: null,
+    toggledClearRows: false,
 };
 
 function ShipperList(props) {
-    const { listShipper, getSelected } = props;
+    const { listShipper, getSelected, toggledClearRows } = props;
 
     let data = [];
 
@@ -75,6 +77,7 @@ function ShipperList(props) {
                 selectableRowsVisibleOnly={true}
                 selectableRowsHighlight={true}
                 onSelectedRowsChange={handleChange}
+                clearSelectedRows={toggledClearRows}
             />
         </>
     );
