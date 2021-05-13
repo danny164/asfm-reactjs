@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import AuthProvider from '../context/AuthContext';
+import BanRoute from '../context/routes/BanRoute';
 import CheckRoute from '../context/routes/CheckRoute';
 import PrivateRoute from '../context/routes/PrivateRoute';
-import BanRoute from "../context/routes/BanRoute"
 import AdminPanel from '../views/admin/index';
 import HomePage from '../views/web/HomePage';
 import PostOrder from '../views/web/PostOrder';
@@ -11,11 +11,11 @@ import Profile from '../views/web/Profile';
 import ChangePw from './ChangePw';
 import ForgotPw from './ForgotPw';
 import Login from './Login';
+import Banned from './pages/Banned';
 import Chart from './pages/Chart';
-import Map from './pages/Map/Map';
+import GoogleMaps from './pages/Map/googleMap';
 import NotFoundPage from './pages/NotFound';
 import Register from './SignUp';
-import Banned from './pages/Banned';
 
 function Application() {
     return (
@@ -33,7 +33,7 @@ function Application() {
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
                     <BanRoute path="/banned" component={Banned} />
-                    <PrivateRoute path="/map" component={Map} />
+                    <PrivateRoute path="/map" component={GoogleMaps} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>

@@ -43,6 +43,11 @@ const columns = [
         omit: true,
     },
     {
+        name: 'Email',
+        selector: 'email',
+        sortable: true,
+    },
+    {
         name: 'Trạng thái / Khóa',
         selector: 'lock_time',
         sortable: true,
