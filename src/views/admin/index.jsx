@@ -23,7 +23,7 @@ function AdminPanel(props) {
     const [flexible, setFlexible] = useState(false);
     const [date, setDate] = useState(moment().add(1, 'days').format('X'));
     const [selectedData, setSelectedData] = useState([]);
-    const [type, setType] = useState();
+    const [lockType, setLockType] = useState();
 
     const [toggledClearRows, setToggledClearRows] = useState(false);
 
@@ -85,7 +85,7 @@ function AdminPanel(props) {
         }
 
         if (isShopList === true) {
-            if (type === '0') {
+            if (date > '4129589471') {
                 await selectedData.map((data) => {
                     db.collection('ShopProfile').doc(data.uid).update({ role: '0', reason: reason, lock_time: date });
                 });
@@ -95,9 +95,10 @@ function AdminPanel(props) {
                 });
             }
         } else {
-            if (type === '0') {
+            if (date > '4129589471') {
                 await selectedData.map((data) => {
                     db.collection('ProfileShipper').doc(data.id).update({ role: '0', reason: reason, lock_time: date });
+                    setDate()
                 });
             } else {
                 await selectedData.map((data) => {
@@ -112,6 +113,9 @@ function AdminPanel(props) {
     };
 
     const unLocked = async () => {
+        if (selectedData.length === 0) {
+            return alert('Bạn chưa chọn người dùng nào !');
+        }
         let time = moment().format('X');
         if (isShopList === true) {
             await selectedData.map((data) => {
@@ -124,7 +128,7 @@ function AdminPanel(props) {
         }
         setToggledClearRows(true);
         setToggledClearRows(false);
-        setShow(false)
+        setShow(false);
         return alert('Thao tác thành công !');
     };
 
@@ -138,14 +142,16 @@ function AdminPanel(props) {
     const timeFixed = (e) => {
         setFlexible(false);
         convertLockTime(e.target.value);
+        console.log(e.target.value);
     };
 
     // set 0 to lock forever, others to lock temporary
     const convertLockTime = (type) => {
         if (type === '0') {
+            // setLockType('0');
             setDate(moment().add(100, 'years').format('X'));
-            setType('0');
         } else {
+            setLockType('');
             setDate(moment().add(type, 'days').format('X'));
         }
     };
@@ -153,8 +159,6 @@ function AdminPanel(props) {
     const getSelected = (selected) => {
         setSelectedData(selected);
     };
-
-    console.log(date);
 
     return (
         <div className="header-fixed sidebar-enabled bg">
@@ -176,7 +180,14 @@ function AdminPanel(props) {
                                 <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={unLocked}>
                                     Mở khóa
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={() => setShow(true)}>
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-light-danger ml-3"
+                                    onClick={() => {
+                                        setShow(true);
+                                        setDate(moment().add(1, 'days').format('X'))
+                                    }}
+                                >
                                     Khóa tài khoản
                                 </button>
                             </div>

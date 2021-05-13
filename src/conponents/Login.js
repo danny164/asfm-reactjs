@@ -119,7 +119,7 @@ function Login1(props) {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            if (doc.data().role === '1') {
+                            if (doc.data().role === '1' || doc.data().role === '2') {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);
                                 localStorage.setItem('role', doc.data().role);
@@ -145,7 +145,7 @@ function Login1(props) {
                 console.log(error);
             }
         }
-        checkRole();
+        checkRole()
         fetchRole();
     }
 

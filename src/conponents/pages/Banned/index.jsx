@@ -6,7 +6,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { db } from '../../../firebase';
 
 function Banned(props) {
-    const [data, setData] = useState();
+    const [data, setData] = useState({});
     const { currentUser } = useAuth();
 
     useEffect(() => {
@@ -18,7 +18,9 @@ function Banned(props) {
                     .doc(currentUser.uid)
                     .get()
                     .then((doc) => {
-                        if (doc.exist) setData(doc.data());
+                        if (doc.exists) {
+                            setData(doc.data());
+                        }
                     });
             } catch (err) {
                 console.log(err);
@@ -45,8 +47,8 @@ function Banned(props) {
         <>
             <section className="banned--container">
                 <h1>403</h1>
-                <p className="alert">Tài khoản của bạn đã bị khóa !</p>
-                <p className="reason">Lý do: {data.reason}</p>
+                <p className="alert">Tài khoản của bạn đã bị khóa vĩnh viễn !</p>
+                <p className="reason">Lý do: {data && data.reason}</p>
                 <Link to="#" className="btn btn-light-warning font-weight-bold mr-2" onClick={handleLogout}>
                     Đăng xuất
                 </Link>
