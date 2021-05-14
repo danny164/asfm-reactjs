@@ -142,6 +142,7 @@ function ShopList(props) {
             <DataTable
                 title="Danh sách quản lý Shop"
                 expandableRows={true}
+                expandOnRowClicked={true}
                 expandableRowsComponent={<CustomExpander data={data} now={now} />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}

@@ -5,14 +5,24 @@ import './styles.scss';
 CustomExpander.propTypes = {
     data: PropTypes.object,
     now: PropTypes.string,
+    shipper: PropTypes.bool,
 };
 CustomExpander.defaultProps = {
     data: null,
     now: '',
+    shipper: false,
+};
+
+const convertPhone = (phone) => {
+    const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
+    if (match) {
+        return [match[1], match[2], match[3]].join(' ');
+    }
+    return null;
 };
 
 function CustomExpander(props) {
-    const { data, now } = props;
+    const { data, now, shipper } = props;
 
     const checkStatus = () => {
         if (data.lock_time && data.lock_time > '4129589471') {
@@ -57,7 +67,7 @@ function CustomExpander(props) {
                                     </span>
                                 </p>
                             )}
-                            {data.role && !data.rate_star && (
+                            {data.role && !shipper && (
                                 <p>
                                     Vai trò:
                                     <span className="font-weight-bold text-warning ml-2">
@@ -77,7 +87,7 @@ function CustomExpander(props) {
                             )}
                             <p>
                                 Số điện thoại:
-                                <span className="font-weight-bold text-chartjs ml-2">{data.phone}</span>
+                                <span className="font-weight-bold text-chartjs ml-2">{shipper ? convertPhone(data.phone) : data.phone}</span>
                             </p>
                             <p className="mb-0">
                                 Địa chỉ:

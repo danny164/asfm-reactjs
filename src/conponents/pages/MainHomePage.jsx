@@ -431,9 +431,12 @@ function MainHomePage(props) {
                                 </>
                             )}
 
-                            {dataModal.status === '2' && <CustomRating shipper_id={shipperInfor.id} post_id={dataModal.id_post} />}
-
-                            <div className="separator separator-dashed my-5" />
+                            {dataModal.status === '2' && (
+                                <>
+                                    <CustomRating shipper_id={shipperInfor.id} post_id={dataModal.id_post} />
+                                    <div className="separator separator-dashed my-5" />
+                                </>
+                            )}
 
                             {(dataModal.status === '0' || fetchLoading) && <SkeletonShipper status={dataModal.status} />}
 

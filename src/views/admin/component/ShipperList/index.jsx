@@ -70,6 +70,7 @@ const columns = [
         name: 'Số điện thoại',
         selector: 'phone',
         sortable: true,
+        cell: (row) => <Phone row={row} />,
     },
     {
         name: 'Địa chỉ',
@@ -78,6 +79,16 @@ const columns = [
         right: true,
     },
 ];
+
+const convertPhone = (phone) => {
+    const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
+    if (match) {
+        return [match[1], match[2], match[3]].join(' ');
+    }
+    return null;
+};
+
+const Phone = ({ row }) => <>{row.phone && convertPhone(row.phone)}</>;
 
 const Star = ({ row }) => (
     <>
@@ -132,7 +143,7 @@ function ShipperList(props) {
             <DataTable
                 title="Danh sách quản lý Shipper"
                 expandableRows={true}
-                expandableRowsComponent={<CustomExpander data={data} now={now} />}
+                expandableRowsComponent={<CustomExpander data={data} now={now} shipper={true} />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}
