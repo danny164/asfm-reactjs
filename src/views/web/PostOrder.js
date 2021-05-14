@@ -5,13 +5,15 @@ import MainPostOrder from "../../conponents/pages/MainPostOrder";
 import AsideLeft from "../../conponents/pages/AsideLeft";
 import { useAuth } from "../../context/AuthContext";
 import { db, realtime } from "../../firebase";
-
-
+import queryString from 'query-string';
+import axios from 'axios'
 
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
     const [defaultAddressError, setDefaultAddressError] = useState()
+    const [mapAPI, setMapAPI] = useState()
+
     let tamung = '0'
     let address = ''
 
@@ -23,6 +25,29 @@ function PostOrder(props) {
         ward: '',
         detailAddress: ''
     })
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'dataType': 'json',
+        "Access-Control-Allow-Origin": '*',
+        "Access-Control-Allow-Methods": 'GET',
+    };
+
+    var config = {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Methods": 'GET',
+        }
+    };
+
+    async function getLngLatAndDistance(startLocation, endLocation) {
+        await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&key=AIzaSyAZh8iua6hndIGaIWcodmhUEHmX2-QBjrg`, config)
+            .then(res => {
+                console.log(res)
+                setMapAPI(res.routes[0])
+            })
+    }
+
     //post order function
     async function PostOrder(dataPostOrder, newAddress) {
         if (localStorage.getItem("role") === "2") {
@@ -41,6 +66,12 @@ function PostOrder(props) {
             if (dataPostOrder.phi_ung !== '') {
                 tamung = dataPostOrder.phi_ung
             }
+
+            // address.split(" ").join("+")
+            //lấy location, khoảng cách của điểm nhận và điểm giao
+
+            getLngLatAndDistance(queryString.stringify(address), queryString.stringify(dataPostOrder.noi_giao));
+
             try {
                 //tao bảng newsfeed
                 await realtime.ref("newsfeed/" + dataPostOrder.idPost).set({
@@ -48,7 +79,7 @@ function PostOrder(props) {
                     noi_giao: dataPostOrder.noi_giao,
                     noi_nhan: address,
                     ghi_chu: dataPostOrder.ghi_chu,
-                    km: dataPostOrder.km,
+                    km: mapAPI.legs[0].distance.text,
                     thoi_gian: dataPostOrder.thoi_gian,
                     sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
                     ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
@@ -57,7 +88,11 @@ function PostOrder(props) {
                     phi_giao: dataPostOrder.phi_giao,
                     phi_ung: tamung,
                     id_shop: currentUser.uid,
-                    status: ""
+                    status: "",
+                    receiveLng: mapAPI.legs[0].start_location.lng,
+                    receiveLat: mapAPI.legs[0].start_location.lat,
+                    shipLng: mapAPI.legs[0].end_location.lng,
+                    shipLat: mapAPI.legs[0].end_location.lat,
                 });
 
                 //tạo bảng orderstatus
@@ -68,7 +103,7 @@ function PostOrder(props) {
                     noi_giao: dataPostOrder.noi_giao,
                     noi_nhan: address,
                     ghi_chu: dataPostOrder.ghi_chu,
-                    km: dataPostOrder.km,
+                    km: mapAPI.legs[0].distance.text,
                     thoi_gian: dataPostOrder.thoi_gian,
                     sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
                     ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
