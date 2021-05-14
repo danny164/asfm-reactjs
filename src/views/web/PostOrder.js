@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import AsideLeft from "../../conponents/pages/AsideLeft";
 import AsideRight from "../../conponents/pages/AsideRight";
 import MainPostOrder from "../../conponents/pages/MainPostOrder";
-import AsideLeft from "../../conponents/pages/AsideLeft";
 import { useAuth } from "../../context/AuthContext";
 import { db, realtime } from "../../firebase";
-import queryString from 'query-string';
-import axios from 'axios'
 
 function PostOrder(props) {
     const { currentUser } = useAuth();
@@ -26,26 +25,22 @@ function PostOrder(props) {
         detailAddress: ''
     })
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'dataType': 'json',
-        "Access-Control-Allow-Origin": '*',
-        "Access-Control-Allow-Methods": 'GET',
-    };
-
-    var config = {
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            "Access-Control-Allow-Methods": 'GET',
-        }
-    };
-
     async function getLngLatAndDistance(startLocation, endLocation) {
-        await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&key=AIzaSyAZh8iua6hndIGaIWcodmhUEHmX2-QBjrg`, config)
-            .then(res => {
-                console.log(res)
-                setMapAPI(res.routes[0])
+        try {
+            const res = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&key=AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE`, {
+                headers: {
+                    'Access-Control-Allow-Origin': 'http://localhost:3000',
+                    'Authorization': "AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE",
+                    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+                    "Access-Control-Allow-Headers": "Origin, Content/Type",
+                    'Accept': 'application/json',
+                }
             })
+            console.log(res)
+            setMapAPI(res)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     //post order function
@@ -70,7 +65,7 @@ function PostOrder(props) {
             // address.split(" ").join("+")
             //lấy location, khoảng cách của điểm nhận và điểm giao
 
-            getLngLatAndDistance(queryString.stringify(address), queryString.stringify(dataPostOrder.noi_giao));
+            getLngLatAndDistance(address, dataPostOrder.noi_giao);
 
             try {
                 //tao bảng newsfeed
