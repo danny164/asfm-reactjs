@@ -57,7 +57,7 @@ function CustomExpander(props) {
                                     </span>
                                 </p>
                             )}
-                            {data.role && (
+                            {data.role && !data.rate_star && (
                                 <p>
                                     Vai trò:
                                     <span className="font-weight-bold text-warning ml-2">

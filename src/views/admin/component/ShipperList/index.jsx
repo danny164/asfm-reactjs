@@ -1,3 +1,4 @@
+import moment from 'moment';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -89,6 +90,8 @@ const Star = ({ row }) => (
     </>
 );
 
+const now = moment().format('X');
+
 const LockTime = ({ row }) => (
     <>
         {row.lock_time && row.lock_time > '4129589471' && (
@@ -97,7 +100,7 @@ const LockTime = ({ row }) => (
                 {status[2].name}
             </span>
         )}
-        {row.lock_time && row.lock_time < '4129589471' && (
+        {row.lock_time > now && row.lock_time < '4129589471' && (
             <span className={status[1].className}>
                 <i className="fad fa-clock mr-1 text-warning"></i>
                 <Moment interval={1000} unix durationFromNow format="HH [h] mm [m] ss">
@@ -105,7 +108,7 @@ const LockTime = ({ row }) => (
                 </Moment>
             </span>
         )}
-        {!row.lock_time && <span className={status[0].className}>{status[0].name}</span>}
+        {(!row.lock_time || row.lock_time < now) && <span className={status[0].className}>{status[0].name}</span>}
     </>
 );
 
@@ -129,7 +132,7 @@ function ShipperList(props) {
             <DataTable
                 title="Danh sách quản lý Shipper"
                 expandableRows={true}
-                expandableRowsComponent={<CustomExpander />}
+                expandableRowsComponent={<CustomExpander data={data} now={now} />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}
