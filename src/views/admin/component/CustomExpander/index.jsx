@@ -2,7 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.scss';
 
+CustomExpander.propTypes = {
+    data: PropTypes.object,
+    now: PropTypes.string,
+};
+CustomExpander.defaultProps = {
+    data: null,
+    now: '',
+};
+
 function CustomExpander(props) {
+    const { data, now } = props;
+
+    const checkStatus = () => {
+        if (data.lock_time && data.lock_time > '4129589471') {
+            return <span className="font-weight-bold ml-2 text-danger">Khóa vĩnh viễn</span>;
+        }
+        if (data.lock_time && data.lock_time < '4129589471') {
+            return <span className="font-weight-bold ml-2 text-warning">Bị hạn chế</span>;
+        }
+        if (!data.lock_time || data.lock_time < now) {
+            return <span className="font-weight-bold ml-2 text-success">Đang hoạt động</span>;
+        }
+    };
     return (
         <>
             <div className="d-flex align-items-start ml-7 my-5">
@@ -11,28 +33,55 @@ function CustomExpander(props) {
                     <section className="card-info content">
                         <div className="custom-expander">
                             <p>
-                                Shop ID:
-                                <span className="font-weight-bold ml-2">#123456</span>
+                                ID:
+                                <span className="font-weight-bold ml-2">{data.id}</span>
                             </p>
                             <p>
                                 Tình trạng:
-                                <span className="font-weight-bold ml-2 text-success">Đang hoạt động</span>
+                                {checkStatus()}
                             </p>
                             <p>
                                 Họ tên:
-                                <span className="font-weight-bold ml-2">Nguyễn Văn Quỳnh</span>
+                                <span className="font-weight-bold ml-2">{data.fullname}</span>
                             </p>
                             <p>
                                 Email:
-                                <span className="font-weight-bold text-primary-2 ml-2">qnv164@gmail.com</span>
+                                <span className="font-weight-bold text-primary-2 ml-2">{data.email}</span>
                             </p>
+                            {data.rate_star && (
+                                <p>
+                                    Rating:
+                                    <span className="font-weight-bold text-warning ml-2">
+                                        {data.rate_star}
+                                        <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
+                                    </span>
+                                </p>
+                            )}
+                            {data.role && (
+                                <p>
+                                    Vai trò:
+                                    <span className="font-weight-bold text-warning ml-2">
+                                        {data.role === '9' ? (
+                                            <>
+                                                <span className="font-weight-bold text-warning">Admin</span>
+                                                <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="text-muted">Shop Owner</span>
+                                                <i className="fad fa-star-shooting text-muted rate-star ml-1"></i>
+                                            </>
+                                        )}
+                                    </span>
+                                </p>
+                            )}
                             <p>
                                 Số điện thoại:
-                                <span className="font-weight-bold text-chartjs ml-2">0344 063 164</span>
+                                <span className="font-weight-bold text-chartjs ml-2">{data.phone}</span>
                             </p>
                             <p className="mb-0">
                                 Địa chỉ:
-                                <span className="font-weight-bold ml-2">986, Ngô Quyền, Phường An Hải Bắc, Quận Sơn Trà, Thành phố Đà Nẵng</span>
+                                <span className="font-weight-bold ml-2">{data.address}</span>
                             </p>
                         </div>
                     </section>
@@ -43,7 +92,5 @@ function CustomExpander(props) {
         </>
     );
 }
-
-CustomExpander.propTypes = {};
 
 export default CustomExpander;

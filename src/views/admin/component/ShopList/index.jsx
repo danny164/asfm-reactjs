@@ -14,7 +14,7 @@ ShopList.propTypes = {
 };
 
 ShopList.defaultProps = {
-    listShop: null,
+    listShop: [],
     getSelected: null,
     toggledClearRows: false,
 };
@@ -60,6 +60,12 @@ const columns = [
         selector: 'fullname',
         sortable: true,
     },
+    {
+        name: 'Vai trò',
+        selector: 'role',
+        sortable: true,
+        cell: (row) => <Role row={row} />,
+    },
 
     {
         name: 'Số điện thoại',
@@ -75,6 +81,22 @@ const columns = [
 ];
 
 const now = moment().format('X');
+
+const Role = ({ row }) => (
+    <>
+        {row.role === '9' ? (
+            <>
+                <span className="font-weight-bold text-warning">Admin</span>
+                <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
+            </>
+        ) : (
+            <>
+                <span className="text-muted">Shop Owner</span>
+                <i className="fad fa-star-shooting text-muted rate-star ml-1"></i>
+            </>
+        )}
+    </>
+);
 
 const LockTime = ({ row }) => (
     <>
@@ -120,7 +142,7 @@ function ShopList(props) {
             <DataTable
                 title="Danh sách quản lý Shop"
                 expandableRows={true}
-                expandableRowsComponent={<CustomExpander />}
+                expandableRowsComponent={<CustomExpander data={data} now={now} />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}
                 data={data}

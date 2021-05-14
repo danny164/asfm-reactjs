@@ -4,6 +4,7 @@ import React from 'react';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import CustomExpander from '../CustomExpander';
+import './styles.scss';
 
 ShipperList.propTypes = {
     listShipper: PropTypes.array,
@@ -12,7 +13,7 @@ ShipperList.propTypes = {
 };
 
 ShipperList.defaultProps = {
-    listShipper: null,
+    listShipper: [],
     getSelected: null,
     toggledClearRows: false,
 };
@@ -55,8 +56,14 @@ const columns = [
     },
     {
         name: 'Họ tên',
-        selector: 'name',
+        selector: 'fullname',
         sortable: true,
+    },
+    {
+        name: 'Rating',
+        selector: 'rate_star',
+        sortable: true,
+        cell: (row) => <Star row={row} />,
     },
     {
         name: 'Số điện thoại',
@@ -70,6 +77,17 @@ const columns = [
         right: true,
     },
 ];
+
+const Star = ({ row }) => (
+    <>
+        {row.rate_star && (
+            <span className="font-weight-bold text-warning ml-2">
+                {row.rate_star}
+                <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
+            </span>
+        )}
+    </>
+);
 
 const LockTime = ({ row }) => (
     <>
