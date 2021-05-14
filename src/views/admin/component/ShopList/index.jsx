@@ -100,7 +100,7 @@ const Role = ({ row }) => (
 
 const LockTime = ({ row }) => (
     <>
-        {row.lock_time && row.lock_time > '4129589471' && (
+        {row.lock_time > '4129589471' && (
             <span className={status[2].className}>
                 <i className="fad fa-clock mr-1 text-chartjs"></i>
                 {status[2].name}

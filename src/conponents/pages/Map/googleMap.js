@@ -15,7 +15,7 @@ export default function App2() {
         <div style={{ width: '100vw', height: '100vh' }}>
             <MapWrapped
                 googleMapURL={
-                    'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAZh8iua6hndIGaIWcodmhUEHmX2-QBjrg'
+                    'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE'
                 }
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `100%` }} />}
