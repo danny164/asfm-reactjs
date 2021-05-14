@@ -135,7 +135,7 @@ function ShopList(props) {
         }
     };
 
-    const rowSelectCritera = (row) => row.uid === currentUser.uid;
+    const rowSelectCritera = (row) => row.uid === currentUser.uid || row.role === '9';
 
     return (
         <>
