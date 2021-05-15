@@ -1,7 +1,9 @@
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import { useAuth } from '../../../../context/AuthContext';
@@ -36,6 +38,25 @@ const status = [
         className: 'label label-sm label-light-danger label-inline py-4 flex-shrink-0',
     },
 ];
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
+
+const LinearIndeterminate = () => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <LinearProgress />
+        </div>
+    );
+};
 
 const columns = [
     {
@@ -122,11 +143,20 @@ function ShopList(props) {
     const { listShop, getSelected, toggledClearRows } = props;
     const { currentUser } = useAuth();
 
+    const [pending, setPending] = useState(true);
+
     let data = [];
 
     if (listShop) {
         data = listShop;
     }
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     const handleChange = (state) => {
         console.log('Số rows', state.selectedRows);
@@ -136,6 +166,13 @@ function ShopList(props) {
     };
 
     const rowSelectCritera = (row) => row.uid === currentUser.uid || row.role === '9';
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     return (
         <>
@@ -156,6 +193,8 @@ function ShopList(props) {
                 onSelectedRowsChange={handleChange}
                 clearSelectedRows={toggledClearRows}
                 selectableRowDisabled={rowSelectCritera}
+                progressPending={pending}
+                progressComponent={<LinearIndeterminate />}
             />
         </>
     );

@@ -1,7 +1,9 @@
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import CustomExpander from '../CustomExpander';
@@ -36,6 +38,25 @@ const status = [
         className: 'label label-sm label-light-danger label-inline py-4 flex-shrink-0',
     },
 ];
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
+
+const LinearIndeterminate = () => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <LinearProgress />
+        </div>
+    );
+};
 
 const columns = [
     {
@@ -126,17 +147,33 @@ const LockTime = ({ row }) => (
 function ShipperList(props) {
     const { listShipper, getSelected, toggledClearRows } = props;
 
+    const [pending, setPending] = useState(true);
+
     let data = [];
 
     if (listShipper) {
         data = listShipper;
     }
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, []);
+
     const handleChange = (state) => {
         if (getSelected) {
             getSelected(state.selectedRows);
         }
     };
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     return (
         <>
@@ -155,6 +192,8 @@ function ShipperList(props) {
                 selectableRowsHighlight={true}
                 onSelectedRowsChange={handleChange}
                 clearSelectedRows={toggledClearRows}
+                progressPending={pending}
+                progressComponent={<LinearIndeterminate />}
             />
         </>
     );
