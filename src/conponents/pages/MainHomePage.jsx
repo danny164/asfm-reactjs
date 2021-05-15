@@ -37,6 +37,14 @@ var renderStatus = [];
 var lastStatus = [];
 var sortStatus = [];
 
+const convertPhone = (phone) => {
+    const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
+    if (match) {
+        return [match[1], match[2], match[3]].join(' ');
+    }
+    return null;
+};
+
 function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
     const { currentUser } = useAuth();
@@ -454,8 +462,14 @@ function MainHomePage(props) {
                                             <div className="avatar-shipper-sm">
                                                 {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
                                             </div>
-                                            <div className="mr-5 font-weight-bold text-chartjs">{shipperInfor.name}</div>
-                                            <span>{shipperInfor.phone}</span>
+                                            <div className="mr-5 font-weight-bold text-brown">{shipperInfor.fullname}</div>
+                                            <div>
+                                                {shipperInfor.phone && convertPhone(shipperInfor.phone)}
+                                                <span className="font-weight-bold middle-dot text-brown">
+                                                    {shipperInfor.rate_star}
+                                                    <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
+                                                </span>
+                                            </div>
                                         </div>
 
                                         {dataModal.status === '1' && (

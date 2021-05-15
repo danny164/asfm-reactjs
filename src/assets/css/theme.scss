@@ -12,6 +12,13 @@ body {
     text-align: left;
 }
 
+.middle-dot:before {
+    content: '\00b7';
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    color: rgb(170, 170, 170);
+}
+
 .top--4 {
     top: -4px !important;
 }
