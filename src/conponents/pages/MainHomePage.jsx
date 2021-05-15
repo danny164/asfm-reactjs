@@ -15,6 +15,7 @@ import Chat from './Chat/Chat';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
+import GoogleMaps from './Map/googleMap';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -71,6 +72,10 @@ function MainHomePage(props) {
         ten_nguoi_nhan: '',
         thoi_gian: '',
         ma_bi_mat: '',
+        receiveLat: 0,
+        receiveLng: 0,
+        shipLat: 0,
+        shipLng: 0,
     });
     const [show, setShow] = useState(false);
 
@@ -463,8 +468,18 @@ function MainHomePage(props) {
                                     <div className="separator separator-dashed my-5" />
                                 </>
                             )}
+                            {dataModal.status !== '2' && (
+                                <>
+                                    <p className="font-weight-bold">Theo dõi đơn hàng:</p>
 
-                            <p className="font-weight-bold">Theo dõi đơn hàng:</p>
+                                    <GoogleMaps
+                                        receiveLat={dataModal.receiveLat}
+                                        receiveLng={dataModal.receiveLng}
+                                        shipLat={dataModal.shipLat}
+                                        shipLng={dataModal.shipLng}
+                                    />
+                                </>
+                            )}
                         </Modal.Body>
 
                         <Modal.Footer className="d-flex justify-content-between">

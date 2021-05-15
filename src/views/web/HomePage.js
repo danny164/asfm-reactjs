@@ -26,6 +26,10 @@ function HomePage() {
         phi_ung: '',
         status: '',
         ghi_chu: '',
+        receiveLat: 0,
+        receiveLng: 0,
+        shipLat: 0,
+        shipLng: 0,
     });
 
     const [notification, setNotification] = useState();

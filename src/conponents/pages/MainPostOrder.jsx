@@ -34,7 +34,7 @@ const dataList = {
         'Phường Nam Dương',
         'Phường Phước Ninh',
         'Phường Thạch Thang',
-        'Phường Thạnh Bình',
+        'Phường Thanh Bình',
         'Phường Thuận Phước',
     ],
     'Quận Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam', 'Phường Hòa Khánh Bắc', 'Phường Hòa Khánh Nam', 'Phường Hòa Minh'],
