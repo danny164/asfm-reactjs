@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GoogleMap, withScriptjs, withGoogleMap, Marker, DirectionsRenderer } from 'react-google-maps';
-import marker_1 from '../../../assets/media/marker_1.jpg'
-import googleMapsApi from '../../../api/googleMapsApi';
 /* global google */
 
 GoogleMaps.propTypes = {
@@ -10,8 +8,6 @@ GoogleMaps.propTypes = {
     receiveLng: PropTypes.number,
     shipLat: PropTypes.number,
     shipLng: PropTypes.number,
-    receiveAddress: PropTypes.string,
-    shipAddress: PropTypes.string
 };
 
 GoogleMaps.defaultProps = {
@@ -19,8 +15,6 @@ GoogleMaps.defaultProps = {
     receiveLng: 0,
     shipLat: 0,
     shipLng: 0,
-    receiveAddress: '',
-    shipAddress: ''
 }
 
 
