@@ -84,7 +84,7 @@ function ChatModal(props) {
     return (
         <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
             <Modal.Header>
-                <Modal.Title>Chat với {shipperInfor.name}</Modal.Title>
+                <Modal.Title>Chat với {shipperInfor.fullname}</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>
                     Đóng
                 </Button>
@@ -96,7 +96,7 @@ function ChatModal(props) {
                             <img src={shipperInfor.avatar} alt="Avatar Shipper" />
                         </div>
 
-                        <span className="shipper-name">{shipperInfor.name}</span>
+                        <span className="shipper-name">{shipperInfor.fullname}</span>
                         <span className="note">Hãy trò chuyện với shipper để trao đổi thêm nhé</span>
                     </div>
                     <div className="chat-body">
