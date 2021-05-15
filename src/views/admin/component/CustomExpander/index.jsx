@@ -25,10 +25,10 @@ function CustomExpander(props) {
     const { data, now, shipper } = props;
 
     const checkStatus = () => {
-        if (data.lock_time && data.lock_time > '4129589471') {
+        if (data.lock_time > '4129589471') {
             return <span className="font-weight-bold ml-2 text-danger">Khóa vĩnh viễn</span>;
         }
-        if (data.lock_time && data.lock_time < '4129589471') {
+        if (data.lock_time > now && data.lock_time < '4129589471') {
             return <span className="font-weight-bold ml-2 text-warning">Bị hạn chế</span>;
         }
         if (!data.lock_time || data.lock_time < now) {
