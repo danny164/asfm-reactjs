@@ -15,6 +15,7 @@ import Chat from './Chat/Chat';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
+import GoogleMaps from './Map/GoogleMaps';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -79,6 +80,10 @@ function MainHomePage(props) {
         ten_nguoi_nhan: '',
         thoi_gian: '',
         ma_bi_mat: '',
+        receiveLat: 0,
+        receiveLng: 0,
+        shipLat: 0,
+        shipLng: 0,
     });
     const [show, setShow] = useState(false);
 
@@ -477,10 +482,22 @@ function MainHomePage(props) {
                                     <div className="separator separator-dashed my-5" />
                                 </>
                             )}
-
-                            <p className="font-weight-bold">
-                                Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
-                            </p>
+                            {dataModal.status !== '2' && (
+                                <>
+                                    <p className="font-weight-bold">
+                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                    </p>
+                                    <GoogleMaps
+                                        receiveLat={dataModal.receiveLat}
+                                        receiveLng={dataModal.receiveLng}
+                                        shipLat={dataModal.shipLat}
+                                        shipLng={dataModal.shipLng}
+                                        noiNhan={dataModal.noi_nhan}
+                                        noiGiao={dataModal.noi_giao}
+                                    />
+                                    {console.log(dataModal.receiveLat, dataModal.receiveLng)}
+                                </>
+                            )}
                         </Modal.Body>
 
                         <Modal.Footer className="d-flex justify-content-between">

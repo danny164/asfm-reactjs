@@ -13,7 +13,6 @@ import ForgotPw from './ForgotPw';
 import Login from './Login';
 import Banned from './pages/Banned';
 import Chart from './pages/Chart';
-import GoogleMaps from './pages/Map/googleMap';
 import NotFoundPage from './pages/NotFound';
 import Register from './SignUp';
 
@@ -33,7 +32,6 @@ function Application() {
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
                     <BanRoute path="/banned" component={Banned} />
-                    <PrivateRoute path="/map" component={GoogleMaps} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>
