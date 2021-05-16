@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
+import './map.scss';
 
 GoogleMaps.propTypes = {
     receiveLat: PropTypes.number,
@@ -53,25 +54,27 @@ export default function GoogleMaps(props) {
         },
     ];
 
-    const directionsCallback = useCallback(
-        (result) => {
-            if (result !== null) {
-                if (result.status == 'OK') {
-                    setResponse(result);
-                } else {
-                    console.log('response: ', response);
-                }
+    const directionsCallback = (result) => {
+        count += 1;
+        if (result !== null && count === 2) {
+            if (result.status === 'OK') {
+                setResponse(result);
+            } else {
+                console.log('response: ', response);
             }
-            console.log(count++);
-        },
-        [response]
-    );
+        }
+    };
 
     console.log(response);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE">
-            <GoogleMap mapContainerStyle={mapStyles} zoom={13} center={defaultCenter}>
+        <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
+            <GoogleMap
+                mapContainerStyle={mapStyles}
+                zoom={13}
+                center={defaultCenter}
+                options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
+            >
                 {locations.map((item) => {
                     return <Marker key={item.name} position={item.location} />;
                 })}
@@ -84,10 +87,11 @@ export default function GoogleMaps(props) {
                         }}
                         callback={directionsCallback}
                         onLoad={(directionsService) => {
-                            console.log('DirectionsService onLoad directionsService: ', directionsService);
+                            console.log('DirectionsService onLoad', directionsService);
                         }}
                         onUnmount={(directionsService) => {
-                            console.log('DirectionsService onUnmount directionsService: ', directionsService);
+                            count = 0;
+                            console.log('DirectionsService onUnmount', directionsService);
                         }}
                     />
                 }
@@ -98,10 +102,10 @@ export default function GoogleMaps(props) {
                             directions: response,
                         }}
                         onLoad={(directionsRenderer) => {
-                            console.log('DirectionsRenderer onLoad directionsRenderer: ', directionsRenderer);
+                            console.log('DirectionsRenderer onLoad', directionsRenderer);
                         }}
                         onUnmount={(directionsRenderer) => {
-                            console.log('DirectionsRenderer onUnmount directionsRenderer: ', directionsRenderer);
+                            console.log('DirectionsRenderer onUnmount', directionsRenderer);
                         }}
                     />
                 )}
