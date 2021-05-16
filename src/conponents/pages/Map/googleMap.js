@@ -20,41 +20,42 @@ GoogleMaps.defaultProps = {
     shipperLng: 0
 };
 
+function GoogleMapss() {
+    return <GoogleMap defaultZoom={12} defaultCenter={{ lat: 16.057723868641794, lng: 108.20189873237138 }} >
+        {/* <Marker position={{ lat: receiveLat, lng: receiveLng }} title="Điểm nhận" />
+        <Marker position={{ lat: shipLat, lng: shipLng }} title="Điểm giao" />
+        {shipperLat !== 0 && <Marker position={{ lat: shipperLat, lng: shipperLng }} />}
+        {directions && <DirectionsRenderer directions={directions} />} */}
+    </GoogleMap>;
+}
+
+const MapWrapped = withScriptjs(withGoogleMap(GoogleMapss));
 
 export default function GoogleMaps(props) {
     const { shipperLat, shipperLng, receiveLat, receiveLng, shipLat, shipLng } = props;
     let [directions, setDirections] = useState("");
 
-    useEffect(() => {
-        async function getDirection() {
-            var DirectionsService = new google.maps.DirectionsService();
-            await DirectionsService.route({
-                origin: new google.maps.LatLng(receiveLat, receiveLng),
-                destination: new google.maps.LatLng(shipLat, shipLng),
-                travelMode: google.maps.TravelMode.DRIVING,
-            },
-                (result, status) => {
-                    if (status === google.maps.DirectionsStatus.OK) {
-                        setDirections(result);
-                    } else {
-                        console.error(`error fetching directions ${result}`);
-                    }
-                })
-        }
-        getDirection()
-    })
+    // useEffect(() => {
+    //     async function getDirection() {
+    //         var DirectionsService = new google.maps.DirectionsService();
+    //         await DirectionsService.route({
+    //             origin: new google.maps.LatLng(receiveLat, receiveLng),
+    //             destination: new google.maps.LatLng(shipLat, shipLng),
+    //             travelMode: google.maps.TravelMode.DRIVING,
+    //         },
+    //             (result, status) => {
+    //                 if (status === google.maps.DirectionsStatus.OK) {
+    //                     setDirections(result);
+    //                 } else {
+    //                     console.error(`error fetching directions ${result}`);
+    //                 }
+    //             })
+    //     }
+    //     getDirection()
+    // })
 
 
-    function GoogleMapss() {
-        return <GoogleMap defaultZoom={12} defaultCenter={{ lat: 16.057723868641794, lng: 108.20189873237138 }} >
-            <Marker position={{ lat: receiveLat, lng: receiveLng }} title="Điểm nhận" />
-            <Marker position={{ lat: shipLat, lng: shipLng }} title="Điểm giao" />
-            {shipperLat !== 0 && <Marker position={{ lat: shipperLat, lng: shipperLng }} />}
-            {directions && <DirectionsRenderer directions={directions} />}
-        </GoogleMap>;
-    }
 
-    const MapWrapped = withScriptjs(withGoogleMap(GoogleMapss));
 
     return (
         <div style={{ width: '100%', height: '100vh' }}>
