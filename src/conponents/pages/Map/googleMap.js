@@ -39,6 +39,8 @@ export default function GoogleMaps(props) {
             })
     }, [])
 
+
+
     function GoogleMapss() {
         return <GoogleMap defaultZoom={12} defaultCenter={{ lat: 16.057723868641794, lng: 108.20189873237138 }} >
             <Marker position={{ lat: receiveLat, lng: receiveLng }} title="Điểm nhận" />

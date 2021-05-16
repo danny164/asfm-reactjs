@@ -484,8 +484,9 @@ function MainHomePage(props) {
                             )}
                             {dataModal.status !== '2' && (
                                 <>
-                                    <p className="font-weight-bold">Theo dõi đơn hàng:</p>
-
+                                    <p className="font-weight-bold">
+                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                    </p>
                                     <GoogleMaps
                                         receiveLat={dataModal.receiveLat}
                                         receiveLng={dataModal.receiveLng}
