@@ -62,6 +62,8 @@ function MainHomePage(props) {
         id_shipper: '',
         id_shop: '',
         status: '',
+        shipperLat: 0,
+        shipperLng: 0,
     });
 
     const [dataModal, setDataModal] = useState({
@@ -484,9 +486,13 @@ function MainHomePage(props) {
                             )}
                             {dataModal.status !== '2' && (
                                 <>
-                                    <p className="font-weight-bold">Theo dõi đơn hàng:</p>
+                                    <p className="font-weight-bold">
+                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                    </p>
 
                                     <GoogleMaps
+                                        shipperLat={transactionInfor.shipperLat}
+                                        shipperLng={transactionInfor.shipperLng}
                                         receiveLat={dataModal.receiveLat}
                                         receiveLng={dataModal.receiveLng}
                                         shipLat={dataModal.shipLat}

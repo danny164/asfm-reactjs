@@ -100,6 +100,8 @@ function PostOrder(props) {
                 status: '0',
                 ma_bi_mat: dataPostOrder.ma_bi_mat,
                 thoi_gian: dataPostOrder.thoi_gian,
+                shipperLat: 0,
+                shipperLng: 0,
             });
 
             //tạo bảng thông báo

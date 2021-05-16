@@ -7,6 +7,8 @@ GoogleMaps.propTypes = {
     receiveLng: PropTypes.number,
     shipLat: PropTypes.number,
     shipLng: PropTypes.number,
+    shipperLat: PropTypes.number,
+    shipperLng: PropTypes.number
 };
 
 GoogleMaps.defaultProps = {
@@ -14,11 +16,13 @@ GoogleMaps.defaultProps = {
     receiveLng: 0,
     shipLat: 0,
     shipLng: 0,
-}
+    shipperLat: 0,
+    shipperLng: 0
+};
 
 
 export default function GoogleMaps(props) {
-    const { receiveLat, receiveLng, shipLat, shipLng } = props;
+    const { shipperLat, shipperLng, receiveLat, receiveLng, shipLat, shipLng } = props;
     let [directions, setDirections] = useState("");
 
     useEffect(() => {
@@ -45,6 +49,7 @@ export default function GoogleMaps(props) {
         return <GoogleMap defaultZoom={12} defaultCenter={{ lat: 16.057723868641794, lng: 108.20189873237138 }} >
             <Marker position={{ lat: receiveLat, lng: receiveLng }} title="Điểm nhận" />
             <Marker position={{ lat: shipLat, lng: shipLng }} title="Điểm giao" />
+            {shipperLat !== 0 && <Marker position={{ lat: shipperLat, lng: shipperLng }} />}
             {directions && <DirectionsRenderer directions={directions} />}
         </GoogleMap>;
     }
