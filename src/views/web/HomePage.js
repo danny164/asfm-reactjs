@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
 import MainHomePage from '../../conponents/pages/MainHomePage';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
+import { updateNotification } from './Slice/notificationSlice';
 
 function HomePage() {
     const { currentUser } = useAuth();
@@ -28,7 +30,7 @@ function HomePage() {
         ghi_chu: '',
     });
 
-    const [notification, setNotification] = useState();
+    const dispatch = useDispatch();
 
     //fetch user infor
     useEffect(() => {
@@ -39,8 +41,6 @@ function HomePage() {
                     .doc(id)
                     .onSnapshot((doc) => {
                         if (doc.exists) {
-                            // localStorage.setItem('fullname', doc.data().fullname);
-                            // localStorage.setItem('email', currentUser.email);
                             if (doc.data().role === '0') {
                                 localStorage.setItem('role', doc.data().role);
                                 window.location.reload();
@@ -76,14 +76,13 @@ function HomePage() {
         fetchOrder();
     }, []);
 
-    //fetch notification  .orderByKey("thoi_gian").startAt(moment()
-    // .subtract(1, 'day').format('X'))
     useEffect(() => {
         const fetchNotification = async () => {
             try {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot !== null) {
-                        setNotification(snapshot.val());
+                        const action = updateNotification(snapshot.val());
+                        dispatch(action);
                     }
                 });
             } catch (err) {
@@ -107,8 +106,8 @@ function HomePage() {
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainHomePage datas={data} DeleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
-                <AsideRight name={input.fullname} Notification={notification} />
+                <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
+                <AsideRight name={input.fullname} />
             </div>
         </div>
     );

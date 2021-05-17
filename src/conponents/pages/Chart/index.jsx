@@ -10,6 +10,8 @@ import LineChart from './component/LineChart';
 import VerticalChart from './component/VerticalChart';
 import './styles.scss';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { changeFilter } from 'conponents/common/filterSlice';
 
 var lastStatus = [];
 function Chart(props) {
@@ -29,8 +31,11 @@ function Chart(props) {
     let totalOrder = 0;
 
     const [data, setData] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(changeFilter('all'));
+
         const fetchOrder = async () => {
             try {
                 await realtime.ref('OrderStatus/' + currentUser.uid).on('value', (snapshot) => {
@@ -54,9 +59,6 @@ function Chart(props) {
         });
         return returnArr;
     };
-
-    if (data !== []) {
-    }
 
     const last24hrs = (sortByRange, dataTime) => {
         if (sortByRange === '7') {

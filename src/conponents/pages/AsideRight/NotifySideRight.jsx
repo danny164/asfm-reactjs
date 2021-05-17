@@ -1,20 +1,12 @@
+import 'moment/locale/vi';
 import React from 'react';
-import PropTypes from 'prop-types';
+import Moment from 'react-moment';
+import { useSelector } from 'react-redux';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import './styles.scss';
-import 'moment/locale/vi';
-import Moment from 'react-moment';
-
-NotifySideRight.propTypes = {
-    Notification: PropTypes.object,
-};
-
-NotifySideRight.defaultProps = {
-    Notification: null,
-};
 
 function NotifySideRight(props) {
-    const { Notification } = props;
+    const notification = useSelector((state) => state.notification);
 
     const baseOnStatus = [
         {
@@ -58,8 +50,8 @@ function NotifySideRight(props) {
                 </h3>
             </div>
             <div className="card-body card-body--notify pt-2 px-5">
-                {Notification &&
-                    Object.values(Notification).map((data) => (
+                {notification &&
+                    Object.values(notification).map((data) => (
                         <>
                             <div className="separator separator-dashed my-2" />
                             <div className="py-1" key={`${data.id_post} ${data.status}`}>

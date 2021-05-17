@@ -10,7 +10,6 @@ function Header(props) {
 
     const handleFilterClick = (filter) => {
         const action = changeFilter(filter);
-        console.log(action);
         dispatch(action);
     };
 

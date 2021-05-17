@@ -13,6 +13,8 @@ import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
 import './styles.scss';
+import { useDispatch } from 'react-redux';
+import { changeFilter } from 'conponents/common/filterSlice';
 
 function AdminPanel(props) {
     const [isShopList, setIsShopList] = useState(true);
@@ -30,8 +32,11 @@ function AdminPanel(props) {
 
     const noteRef = useRef();
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         document.body.classList.add('bg');
+        dispatch(changeFilter('all'));
     }, []);
 
     const toShipperList = () => {

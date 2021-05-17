@@ -23,14 +23,14 @@ MainHomePage.propTypes = {
     idShop: PropTypes.string,
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
-    DeleteOrder: PropTypes.func,
+    deleteOrder: PropTypes.func,
 };
 
 MainHomePage.defaultProps = {
     shopInfo: null,
     datas: null,
     ChangeOrderStatus: null,
-    DeleteOrder: null,
+    deleteOrder: null,
     idShop: '',
 };
 
@@ -47,7 +47,7 @@ const convertPhone = (phone) => {
 };
 
 function MainHomePage(props) {
-    const { datas, DeleteOrder, shopInfo, idShop } = props;
+    const { datas, deleteOrder, shopInfo, idShop } = props;
     const { currentUser } = useAuth();
 
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -85,6 +85,7 @@ function MainHomePage(props) {
         shipLat: 0,
         shipLng: 0,
     });
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -166,9 +167,9 @@ function MainHomePage(props) {
 
     /////////////////////////////////////////////////////////
     // ! Xóa đơn
-    const handleDeleteOrder = async (id) => {
-        if (DeleteOrder) {
-            await DeleteOrder(id);
+    const handledeleteOrder = async (id) => {
+        if (deleteOrder) {
+            await deleteOrder(id);
             setShow(false);
         }
     };
@@ -505,7 +506,7 @@ function MainHomePage(props) {
                         <Modal.Footer className="d-flex justify-content-between">
                             <div>
                                 {dataModal.status === '0' && (
-                                    <Button variant="chartjs" onClick={() => handleDeleteOrder(dataModal.id_post)}>
+                                    <Button variant="chartjs" onClick={() => handledeleteOrder(dataModal.id_post)}>
                                         Xóa đơn
                                     </Button>
                                 )}
