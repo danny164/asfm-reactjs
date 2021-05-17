@@ -92,7 +92,7 @@ function Chart(props) {
         lastStatus.map((data) => {
             setPercent(data.status);
         });
-        totalOrder = data.length;
+        totalOrder = lastStatus.length;
     }
 
     percentS1 = Math.round((percent1 / totalOrder) * 100);

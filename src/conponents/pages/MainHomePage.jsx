@@ -34,10 +34,6 @@ MainHomePage.defaultProps = {
     idShop: '',
 };
 
-var renderStatus = [];
-var lastStatus = [];
-var sortStatus = [];
-
 const convertPhone = (phone) => {
     const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
     if (match) {
@@ -48,6 +44,8 @@ const convertPhone = (phone) => {
 
 function MainHomePage(props) {
     const { datas, deleteOrder, shopInfo, idShop } = props;
+
+    const [sortStatus, setSortStatus] = useState([]);
     const { currentUser } = useAuth();
 
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -143,25 +141,25 @@ function MainHomePage(props) {
     // ! delay loading chờ lấy thông tin
     const [loading, setLoading] = useState(false);
 
-    if (datas) {
-        renderStatus = Object.values(datas).filter((data) => filter === 'all' || filter === data.status);
-        lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
-        sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
-    } else {
-        sortStatus = [];
-    }
-
     useEffect(() => {
         setLoading(true);
 
         const timer = setTimeout(() => {
+            if (datas) {
+                const renderStatus = Object.values(datas).filter(
+                    (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
+                );
+                setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+            } else {
+                setSortStatus([]);
+            }
+
             setLoading(false);
-            // console.log(loading);
         }, 1500);
         return () => {
             clearTimeout(timer);
         };
-    }, []);
+    }, [filter, datas, sortByRange]);
 
     // console.log(sortStatus);
 
@@ -314,11 +312,11 @@ function MainHomePage(props) {
                         </div>
                     </header>
                     <section className="card-body pt-1 newsfeed">
-                        {loading && sortStatus.length === 0 && <SkeletonCard />}
-                        {sortStatus.map((data, index) => (
-                            <>
-                                {loading && <SkeletonCard />}
-                                {!loading && (
+                        {console.log(loading, sortStatus.length)}
+                        {loading && <SkeletonCard />}
+                        {!loading &&
+                            sortStatus.map((data, index) => (
+                                <>
                                     <article
                                         className="order"
                                         key={index}
@@ -365,18 +363,15 @@ function MainHomePage(props) {
                                         </div>
                                         <div className="separator separator-dashed my-5" />
                                     </article>
-                                )}
-                            </>
-                        ))}
-                        {sortStatus.length === 0 && (
+                                </>
+                            ))}
+                        {!loading && sortStatus.length === 0 && (
                             <>
-                                {!loading && (
-                                    <article className="empty-order">
-                                        <span className="text menu-in-progress">
-                                            Bạn không có đơn nào {titleStatus} {subTitleStatus} !
-                                        </span>
-                                    </article>
-                                )}
+                                <article className="empty-order">
+                                    <span className="text menu-in-progress">
+                                        Bạn không có đơn nào {titleStatus} {subTitleStatus} !
+                                    </span>
+                                </article>
                             </>
                         )}
                     </section>

@@ -9,6 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
+import FeeRec from './ShipFeeRecommend/FeeRec';
+import Button from 'react-bootstrap/Button';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -27,7 +29,7 @@ const dataList = {
         'Phường Bình Thuận',
         'Phường Hải Châu 1',
         'Phường Hải Châu 2',
-        'Phường Hòa Cương Bắc',
+        'Phường Hòa Cường Bắc',
         'Phường Hòa Cường Nam',
         'Phường Hòa Thuận Đông',
         'Phường Hòa Thuận Tây',
@@ -78,15 +80,11 @@ const dataList = {
 function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const { postOrder, defaultAddressError } = props;
-    const newAddress = { district: '', ward: '', address: '' };
+    const [show, setShow] = useState(false);
 
     const [receiveAddress, setReceiveAddress] = useState(false);
     ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
-    // console.log(dateTime);
-    // const test = moment().subtract(1, 'day').format('X');
-    // console.log(test);
-
     //////////////////////////////////////////////////////
     const idPost =
         moment().format('YYYYMMDD-HHmmssSSS') +
@@ -340,6 +338,10 @@ function MainPostOrder(props) {
         } else {
             setReceiveAddress(true);
         }
+    };
+
+    const onHandleClose = () => {
+        setShow(false);
     };
 
     return (
@@ -664,6 +666,13 @@ function MainPostOrder(props) {
                     </div>
                 </div>
             </section>
+
+            <Button variant="primary" onClick={() => setShow(true)}>
+                Launch demo modal
+            </Button>
+
+            <FeeRec show={show} onHandleClose={onHandleClose} />
+
             <Footer />
         </main>
     );

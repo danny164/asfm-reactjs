@@ -470,6 +470,17 @@ h3.card-label {
     background-color: #ffe2e5;
 }
 
+.label-active {
+    color: #ffa800;
+    background-color: #fff4de;
+    border-color: transparent;
+}
+.label-active:hover {
+    color: #ffa800;
+    background-color: #fff4de;
+    border-color: transparent;
+}
+
 .delivery {
     font-size: 13px;
     font-weight: 500;
