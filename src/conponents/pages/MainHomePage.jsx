@@ -16,6 +16,7 @@ import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import GoogleMaps from './Map/GoogleMaps';
+import { useSelector } from 'react-redux';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -49,7 +50,6 @@ function MainHomePage(props) {
     const { datas, DeleteOrder, shopInfo, idShop } = props;
     const { currentUser } = useAuth();
 
-    const [filteredStatus, setFilteredStatus] = useState('all');
     const [titleStatus, setTitleStatus] = useState('gần đây');
 
     const [sortByRange, setSortByRange] = useState('1');
@@ -106,14 +106,16 @@ function MainHomePage(props) {
 
     /////////////////////////////////////////////////////////
     // ! Lọc theo sự kiện click trên header
-    const handleFilterStatus = (status) => {
-        setFilteredStatus(status);
-        status === 'all' && setTitleStatus('gần đây');
-        status === '0' && setTitleStatus('đang xử lý');
-        status === '1' && setTitleStatus('đã nhận');
-        status === '2' && setTitleStatus('hoàn thành');
-        status === '3' && setTitleStatus('bị hủy');
-    };
+
+    const filter = useSelector((state) => state.filter);
+
+    useEffect(() => {
+        if (filter === 'all') setTitleStatus('gần đây');
+        if (filter === '0') setTitleStatus('đang xử lý');
+        if (filter === '1') setTitleStatus('đã nhận');
+        if (filter === '2') setTitleStatus('hoàn thành');
+        if (filter === '3') setTitleStatus('bị hủy');
+    }, [filter]);
 
     // * Lọc theo phạm vi, trả về kết quả theo ngày, tháng, tuần cho lastStatus []
     const last24hrs = (sortByRange, dataTime) => {
@@ -141,7 +143,7 @@ function MainHomePage(props) {
     const [loading, setLoading] = useState(false);
 
     if (datas) {
-        renderStatus = Object.values(datas).filter((data) => filteredStatus === 'all' || filteredStatus === data.status);
+        renderStatus = Object.values(datas).filter((data) => filter === 'all' || filter === data.status);
         lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
         sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
     } else {
@@ -271,7 +273,7 @@ function MainHomePage(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            <Header onClickFilterStatus={handleFilterStatus} filteredStatus={filteredStatus} />
+            <Header />
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">
                     <header className="card-header border-0">

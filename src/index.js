@@ -1,6 +1,8 @@
+import store from './app/store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Moment from 'react-moment';
+import { Provider } from 'react-redux';
 import './assets/css/all.min.css';
 import './assets/css/plugins.css';
 import './assets/css/styles.scss';
@@ -12,7 +14,9 @@ Moment.clearPooledTimer();
 
 ReactDOM.render(
     <React.StrictMode>
-        <Application />
+        <Provider store={store}>
+            <Application />
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );

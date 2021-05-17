@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Avatar from '../../../assets/media/avatar.png';
 import './styles.scss';
 
 ChatModal.propTypes = {
