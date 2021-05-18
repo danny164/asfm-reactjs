@@ -42,8 +42,15 @@ const convertPhone = (phone) => {
     }
     return null;
 };
-
+//20 | 5
 function MainHomePage(props) {
+    // var renderStatus = [];
+    // var lastStatus = [];
+    // var sortStatus = [];
+
+    // const [renderStatus, setRenderStatus] = useState([]);
+    // const [lastStatus, setLastStatus] = useState([]);
+
     const { datas, deleteOrder, shopInfo, idShop } = props;
 
     const [sortStatus, setSortStatus] = useState([]);
@@ -500,7 +507,6 @@ function MainHomePage(props) {
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
                                     />
-                                    {console.log(dataModal.receiveLat, dataModal.receiveLng)}
                                 </>
                             )}
                         </Modal.Body>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -7,20 +7,74 @@ FeeRec.propTypes = {
     km: PropTypes.number,
     show: PropTypes.bool,
     onHandleClose: PropTypes.func,
+    onSubmit: PropTypes.func
 };
 
 FeeRec.defaultProps = {
-    km: 0,
+    km: 6,
     show: false,
     onHandleClose: null,
-};
+    onSubmit: null
+}
+
+
+
 function FeeRec(props) {
-    const { show, onHandleClose } = props;
+    const { show, onHandleClose, km, onSubmit } = props;
+    const [feeRec, setFeeRec] = useState()
+    const [newPrice, setNewPrice] = useState(0)
+    const newPriceRef = useRef(0)
 
     const handleClose = () => {
         if (!onHandleClose) return;
         onHandleClose(false);
     };
+
+    function shipFeeRec(km) {
+        let fee = []
+        console.log(km)
+        const price = Math.round(5 * km)
+        fee.push(price * 1000)
+        for (let i = 0; i < 2; i++) {
+            if (i === 0) {
+                if ((price % 10) < 5) {
+                    fee.push(price * 1000 + (5 - price % 10) * 1000)
+                } else {
+                    fee.push(price * 1000 + (10 - price % 10) * 1000)
+                }
+            }
+            else {
+                if ((price % 10) < 5) {
+                    fee.push(price * 1000 + (5 - price % 10) * 1000 + i * 5000)
+                } else {
+                    fee.push(price * 1000 + (10 - price % 10) * 1000 + i * 5000)
+                }
+            }
+        }
+        setFeeRec(fee)
+        console.log(fee)
+    }
+
+    useEffect(() => {
+        if (km) {
+            shipFeeRec(km)
+        }
+    }, [km])
+
+    const handleClick = (type) => {
+        if (type === "1") {
+            if (newPrice === 0) {
+                return alert("Vui lòng chọn giá tiền mới !")
+            } else {
+                if (onSubmit) {
+                    onSubmit(newPrice)
+                }
+            }
+        } else {
+            onSubmit(0, 1)
+        }
+    }
+
     return (
         <>
             <Modal show={show} onHide={handleClose}>
@@ -29,19 +83,16 @@ function FeeRec(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <div className="mb-5">
-                        Dựa theo khoảng cách <span className="text-primary-2 font-weight-bold">7.4km</span> của đơn hàng, chúng tôi có đề xuất lại cho
+                        Dựa theo khoảng cách <span className="text-primary-2 font-weight-bold">{km} km</span> của đơn hàng, chúng tôi có đề xuất lại cho
                         bạn các mức giá sau
                     </div>
                     <div className="d-flex justify-content-around">
-                        <button type="button" class="btn btn-light">
-                            10,000
-                        </button>
-                        <button type="button" class="btn label-active">
-                            20,000
-                        </button>
-                        <button type="button" class="btn btn-light">
-                            30,000
-                        </button>
+                        {feeRec && feeRec.map((data) =>
+                            <button key={data.key} type="button" class="btn btn-light" onClick={() => setNewPrice(data)}>
+                                {data}
+                            </button>
+                        )}
+
                     </div>
                     <div className="separator separator-dashed my-5" />
                     <div className="d-flex">
@@ -54,8 +105,8 @@ function FeeRec(props) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary">Tôi vẫn muốn giữ nguyên</Button>
-                    <Button variant="light-danger">Thay đổi</Button>
+                    <Button variant="secondary" onClick={() => handleClick("0")}>Tôi vẫn muốn giữ nguyên</Button>
+                    <Button variant="light-danger" onClick={() => handleClick("1")}>Thay đổi</Button>
                 </Modal.Footer>
             </Modal>
         </>

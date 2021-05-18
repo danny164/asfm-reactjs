@@ -36,7 +36,7 @@ const dataList = {
         'Phường Nam Dương',
         'Phường Phước Ninh',
         'Phường Thạch Thang',
-        'Phường Thạnh Bình',
+        'Phường Thanh Bình',
         'Phường Thuận Phước',
     ],
     'Quận Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam', 'Phường Hòa Khánh Bắc', 'Phường Hòa Khánh Nam', 'Phường Hòa Minh'],
@@ -83,6 +83,7 @@ function MainPostOrder(props) {
     const [show, setShow] = useState(false);
 
     const [receiveAddress, setReceiveAddress] = useState(false);
+    const [km, setKm] = useState();
     ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
     //////////////////////////////////////////////////////
@@ -228,6 +229,11 @@ function MainPostOrder(props) {
         return input + ' 000';
     };
 
+    const convertNewPrice = (value) => {
+        const input = value / 1000 + ' 000'; // 20 000
+        return input;
+    };
+
     const firstUppercase = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
@@ -260,7 +266,7 @@ function MainPostOrder(props) {
 
     ///////////////////////////////////////////////////
     // Handle submitForm
-    const onSubmit = (e) => {
+    const onSubmit = async (newPrice, notChange) => {
         const newAddress = { district: '', ward: '', address: '' };
         if (receiveAddress !== false) {
             if (
@@ -314,21 +320,35 @@ function MainPostOrder(props) {
             charset: 'numeric',
         });
 
+        let shipFee = 0;
+
+        if (Number.isInteger(newPrice) && newPrice !== 0) {
+            shipFee = convertNewPrice(newPrice);
+        } else {
+            shipFee = reverseString(shipFeeRef.current.value);
+        }
+
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
             ghi_chu: noteRef.current.value,
-            km: '3km',
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
             ten_nguoi_nhan: convertString(customerRef.current.value),
-            phi_giao: reverseString(shipFeeRef.current.value),
+            phi_giao: shipFee,
             phi_ung: reverseString(depositFeeRef.current.value),
             id_roomchat: idChat,
             ma_bi_mat: code,
         };
 
-        postOrder && postOrder(dataPostOrder, newAddress);
+        if (postOrder) {
+            const check = await postOrder(dataPostOrder, newAddress, notChange);
+            console.log(check);
+            if (check !== 0) {
+                setKm(check);
+                setShow(true);
+            }
+        }
     };
 
     const handleDefaultAddressChange = (e) => {
@@ -667,11 +687,7 @@ function MainPostOrder(props) {
                 </div>
             </section>
 
-            <Button variant="primary" onClick={() => setShow(true)}>
-                Launch demo modal
-            </Button>
-
-            <FeeRec show={show} onHandleClose={onHandleClose} />
+            <FeeRec km={km} show={show} onHandleClose={onHandleClose} onSubmit={onSubmit} />
 
             <Footer />
         </main>

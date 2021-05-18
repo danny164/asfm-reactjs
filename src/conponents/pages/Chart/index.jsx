@@ -64,7 +64,9 @@ function Chart(props) {
         if (sortByRange === '7') {
             return dataTime >= moment().subtract(7, 'days').format('X');
         }
-        if (sortByRange === '30') return dataTime >= moment().subtract(1, 'month').format('X');
+        if (sortByRange === '30') {
+            return dataTime >= moment().subtract(1, 'month').format('X');
+        }
         return dataTime >= moment().subtract(1, 'day').format('X');
     };
 
@@ -88,7 +90,6 @@ function Chart(props) {
 
     if (data !== []) {
         lastStatus = data.filter((data) => last24hrs(sortByRange, data.thoi_gian));
-
         lastStatus.map((data) => {
             setPercent(data.status);
         });
