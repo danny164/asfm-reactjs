@@ -28,6 +28,9 @@ function PostOrder(props) {
         let lngLatList = await googleMapsApi.getAll(startPoint, endPoint);
 
         try {
+            if (Number((dataPostOrder.phi_giao).replace(" ", "")) < Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000) {
+                return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1))
+            }
             //tao bảng newsfeed
             await realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
                 id_post: dataPostOrder.idPost,
@@ -97,6 +100,7 @@ function PostOrder(props) {
         } catch (error) {
             console.log(error);
         }
+        return 0
     };
 
     //post order function

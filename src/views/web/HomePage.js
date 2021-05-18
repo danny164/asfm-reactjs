@@ -103,13 +103,15 @@ function HomePage() {
     }
 
     return (
-        <div className="header-fixed sidebar-enabled bg">
-            <div className="d-flex flex-row flex-column-fluid page">
-                <AsideLeft />
-                <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
-                <AsideRight name={input.fullname} />
+        <>
+            <div className="header-fixed sidebar-enabled bg" >
+                <div className="d-flex flex-row flex-column-fluid page">
+                    <AsideLeft />
+                    <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
+                    <AsideRight name={input.fullname} />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

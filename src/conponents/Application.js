@@ -14,6 +14,7 @@ import Login from './Login';
 import Banned from './pages/Banned';
 import Chart from './pages/Chart';
 import NotFoundPage from './pages/NotFound';
+import FeeRec from './pages/ShipFeeRecommend/FeeRec';
 import Register from './SignUp';
 
 function Application() {
@@ -31,6 +32,7 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
+                    <PrivateRoute path="/test" component={FeeRec} />
                     <BanRoute path="/banned" component={Banned} />
                     <Route component={NotFoundPage} />
                 </Switch>

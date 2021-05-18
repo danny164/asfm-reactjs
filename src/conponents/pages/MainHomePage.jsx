@@ -34,10 +34,6 @@ MainHomePage.defaultProps = {
     idShop: '',
 };
 
-var renderStatus = [];
-var lastStatus = [];
-var sortStatus = [];
-
 const convertPhone = (phone) => {
     const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
     if (match) {
@@ -45,9 +41,18 @@ const convertPhone = (phone) => {
     }
     return null;
 };
-
+//20 | 5
 function MainHomePage(props) {
+    // var renderStatus = [];
+    // var lastStatus = [];
+    // var sortStatus = [];
+
+    // const [renderStatus, setRenderStatus] = useState([]);
+    // const [lastStatus, setLastStatus] = useState([]);
+    const [sortStatus, setSortStatus] = useState([]);
+
     const { datas, deleteOrder, shopInfo, idShop } = props;
+
     const { currentUser } = useAuth();
 
     const [titleStatus, setTitleStatus] = useState('gần đây');
@@ -143,13 +148,18 @@ function MainHomePage(props) {
     // ! delay loading chờ lấy thông tin
     const [loading, setLoading] = useState(false);
 
-    if (datas) {
-        renderStatus = Object.values(datas).filter((data) => filter === 'all' || filter === data.status);
-        lastStatus = Object.values(renderStatus).filter((data) => last24hrs(sortByRange, data.thoi_gian));
-        sortStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
-    } else {
-        sortStatus = [];
-    }
+    useEffect(() => {
+        let renderStatus = [];
+        let lastStatus = [];
+        if (datas) {
+            renderStatus = Object.values(datas).filter((data) => filter === 'all' || filter === data.status);
+            lastStatus = renderStatus.filter((data) => last24hrs(sortByRange, data.thoi_gian));
+            const newRenderStatus = lastStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1));
+            setSortStatus(newRenderStatus);
+        } else {
+            setSortStatus(...sortStatus);
+        }
+    }, [filter, datas]);
 
     useEffect(() => {
         setLoading(true);
@@ -498,7 +508,6 @@ function MainHomePage(props) {
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
                                     />
-                                    {console.log(dataModal.receiveLat, dataModal.receiveLng)}
                                 </>
                             )}
                         </Modal.Body>

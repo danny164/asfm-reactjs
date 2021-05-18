@@ -9,6 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
+import Modal from 'react-bootstrap/Modal';
+import FeeRec from './ShipFeeRecommend/FeeRec';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -81,6 +83,8 @@ function MainPostOrder(props) {
     const newAddress = { district: '', ward: '', address: '' };
 
     const [receiveAddress, setReceiveAddress] = useState(false);
+    const [isRecFee, setIsRecFee] = useState(false);
+    const [km, setKm] = useState();
     ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
     // console.log(dateTime);
@@ -320,7 +324,6 @@ function MainPostOrder(props) {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
             ghi_chu: noteRef.current.value,
-            km: '3km',
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
             ten_nguoi_nhan: convertString(customerRef.current.value),
@@ -330,7 +333,13 @@ function MainPostOrder(props) {
             ma_bi_mat: code,
         };
 
-        postOrder && postOrder(dataPostOrder, newAddress);
+        if (postOrder) {
+            const check = postOrder(dataPostOrder, newAddress);
+            if (check !== 0) {
+                setKm(check);
+                setIsRecFee(true);
+            }
+        }
     };
 
     const handleDefaultAddressChange = (e) => {
@@ -663,6 +672,8 @@ function MainPostOrder(props) {
                         </form>
                     </div>
                 </div>
+
+            
             </section>
             <Footer />
         </main>
