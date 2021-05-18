@@ -74,7 +74,6 @@ function HomePage() {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     if (snapshot !== null) {
                         setData(snapshot.val());
-                        // console.log(snapshot.val());
                     }
                 });
             } catch (error) {
@@ -113,7 +112,7 @@ function HomePage() {
 
     return (
         <>
-            <div className="header-fixed sidebar-enabled bg" >
+            <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
                     <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
