@@ -1,4 +1,3 @@
-import { update } from 'conponents/common/totalSlice';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AsideLeft from '../../conponents/pages/AsideLeft';
@@ -104,7 +103,7 @@ function HomePage() {
 
     return (
         <>
-            <div className="header-fixed sidebar-enabled bg" >
+            <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
                     <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
