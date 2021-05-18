@@ -1,3 +1,4 @@
+import { update } from 'conponents/common/totalSlice';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AsideLeft from '../../conponents/pages/AsideLeft';
@@ -66,7 +67,6 @@ function HomePage() {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     if (snapshot !== null) {
                         setData(snapshot.val());
-                        // console.log(snapshot.val());
                     }
                 });
             } catch (error) {

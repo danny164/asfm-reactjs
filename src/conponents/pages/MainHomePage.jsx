@@ -17,6 +17,7 @@ import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import GoogleMaps from './Map/GoogleMaps';
 import { useSelector } from 'react-redux';
+import SkeletonSortLength from './Skeleton/SkeletonSortLength';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -278,7 +279,14 @@ function MainHomePage(props) {
                     <header className="card-header border-0">
                         <div className="card-title py-4">
                             <h3 className="card-label">
-                                <span className="d-block title">Danh sách đơn {titleStatus}</span>
+                                <span className="d-block title">
+                                    Danh sách đơn {titleStatus}
+                                    {loading && <SkeletonSortLength />}
+                                    {!loading && (
+                                        <span className="label label-sm label-light label-rounded font-weight-bolder ml-2">{sortStatus.length}</span>
+                                    )}
+                                </span>
+
                                 <span className="d-block text-time mt-2 font-size-sm">{subTitleStatus}</span>
                             </h3>
                         </div>
@@ -312,7 +320,6 @@ function MainHomePage(props) {
                         </div>
                     </header>
                     <section className="card-body pt-1 newsfeed">
-                        {console.log(loading, sortStatus.length)}
                         {loading && <SkeletonCard />}
                         {!loading &&
                             sortStatus.map((data, index) => (

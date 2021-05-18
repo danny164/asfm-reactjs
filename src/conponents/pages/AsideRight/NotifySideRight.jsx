@@ -37,6 +37,13 @@ function NotifySideRight(props) {
             classname: `text-cancelled`,
             icon: <i className="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
         },
+        {
+            id: 5,
+            action: 'đã',
+            name: 'xóa thành công',
+            classname: `text-cancelled`,
+            icon: <i className="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
+        },
     ];
 
     return (
@@ -50,6 +57,7 @@ function NotifySideRight(props) {
                 </h3>
             </div>
             <div className="card-body card-body--notify pt-2 px-5">
+                {/* Id chỉ làm cảnh =)), dựa vào data.status = [0, 1, 2, 3, 4] tương ứng vs độ dài mảng baseOnStatus */}
                 {notification &&
                     Object.values(notification).map((data) => (
                         <>
