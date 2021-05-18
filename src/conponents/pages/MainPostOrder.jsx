@@ -9,8 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
-import Modal from 'react-bootstrap/Modal';
 import FeeRec from './ShipFeeRecommend/FeeRec';
+import Button from 'react-bootstrap/Button';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -29,14 +29,14 @@ const dataList = {
         'Phường Bình Thuận',
         'Phường Hải Châu 1',
         'Phường Hải Châu 2',
-        'Phường Hòa Cương Bắc',
+        'Phường Hòa Cường Bắc',
         'Phường Hòa Cường Nam',
         'Phường Hòa Thuận Đông',
         'Phường Hòa Thuận Tây',
         'Phường Nam Dương',
         'Phường Phước Ninh',
         'Phường Thạch Thang',
-        'Phường Thạnh Bình',
+        'Phường Thanh Bình',
         'Phường Thuận Phước',
     ],
     'Quận Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam', 'Phường Hòa Khánh Bắc', 'Phường Hòa Khánh Nam', 'Phường Hòa Minh'],
@@ -80,17 +80,12 @@ const dataList = {
 function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const { postOrder, defaultAddressError } = props;
-    const newAddress = { district: '', ward: '', address: '' };
+    const [show, setShow] = useState(false);
 
     const [receiveAddress, setReceiveAddress] = useState(false);
-    const [isRecFee, setIsRecFee] = useState(false);
     const [km, setKm] = useState();
     ////////////////////////////////////////////////////
     const dateTime = moment().format('X');
-    // console.log(dateTime);
-    // const test = moment().subtract(1, 'day').format('X');
-    // console.log(test);
-
     //////////////////////////////////////////////////////
     const idPost =
         moment().format('YYYYMMDD-HHmmssSSS') +
@@ -234,6 +229,11 @@ function MainPostOrder(props) {
         return input + ' 000';
     };
 
+    const convertNewPrice = (value) => {
+        const input = value / 1000 + ' 000'; // 20 000
+        return input;
+    };
+
     const firstUppercase = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
@@ -266,7 +266,7 @@ function MainPostOrder(props) {
 
     ///////////////////////////////////////////////////
     // Handle submitForm
-    const onSubmit = (e) => {
+    const onSubmit = async (newPrice, notChange) => {
         const newAddress = { district: '', ward: '', address: '' };
         if (receiveAddress !== false) {
             if (
@@ -320,6 +320,14 @@ function MainPostOrder(props) {
             charset: 'numeric',
         });
 
+        let shipFee = 0;
+
+        if (Number.isInteger(newPrice) && newPrice !== 0) {
+            shipFee = convertNewPrice(newPrice);
+        } else {
+            shipFee = reverseString(shipFeeRef.current.value);
+        }
+
         const dataPostOrder = {
             idPost: idPost,
             noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
@@ -327,17 +335,18 @@ function MainPostOrder(props) {
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
             ten_nguoi_nhan: convertString(customerRef.current.value),
-            phi_giao: reverseString(shipFeeRef.current.value),
+            phi_giao: shipFee,
             phi_ung: reverseString(depositFeeRef.current.value),
             id_roomchat: idChat,
             ma_bi_mat: code,
         };
 
         if (postOrder) {
-            const check = postOrder(dataPostOrder, newAddress);
+            const check = await postOrder(dataPostOrder, newAddress, notChange);
+            console.log(check);
             if (check !== 0) {
                 setKm(check);
-                setIsRecFee(true);
+                setShow(true);
             }
         }
     };
@@ -349,6 +358,10 @@ function MainPostOrder(props) {
         } else {
             setReceiveAddress(true);
         }
+    };
+
+    const onHandleClose = () => {
+        setShow(false);
     };
 
     return (
@@ -672,9 +685,10 @@ function MainPostOrder(props) {
                         </form>
                     </div>
                 </div>
-
-            
             </section>
+
+            <FeeRec km={km} show={show} onHandleClose={onHandleClose} onSubmit={onSubmit} />
+
             <Footer />
         </main>
     );

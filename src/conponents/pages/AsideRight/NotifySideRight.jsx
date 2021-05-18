@@ -55,7 +55,7 @@ function NotifySideRight(props) {
                         <>
                             <div className="separator separator-dashed my-2" />
                             <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span>{' '}
+                                {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
                                 {baseOnStatus[data.status].action}{' '}
                                 <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
                                 <span className="font-size-sm text-time">
@@ -66,6 +66,12 @@ function NotifySideRight(props) {
                             </div>
                         </>
                     ))}
+                {!notification && (
+                    <>
+                        <div className="separator separator-dashed my-2" />
+                        <div className="py-1">Bạn chưa có thông báo nào !</div>
+                    </>
+                )}
             </div>
         </section>
     );

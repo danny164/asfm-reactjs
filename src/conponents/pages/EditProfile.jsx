@@ -28,7 +28,7 @@ const dataList = {
         'Phường Bình Thuận',
         'Phường Hải Châu 1',
         'Phường Hải Châu 2',
-        'Phường Hòa Cương Bắc',
+        'Phường Hòa Cường Bắc',
         'Phường Hòa Cường Nam',
         'Phường Hòa Thuận Đông',
         'Phường Hòa Thuận Tây',

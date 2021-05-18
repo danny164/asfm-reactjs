@@ -24,87 +24,9 @@ function PostOrder(props) {
         detailAddress: '',
     });
 
-    const fetchLngLat = async (startPoint, endPoint, dataPostOrder) => {
-        let lngLatList = await googleMapsApi.getAll(startPoint, endPoint);
-
-        try {
-            if (Number((dataPostOrder.phi_giao).replace(" ", "")) < Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000) {
-                return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1))
-            }
-            //tao bảng newsfeed
-            await realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: address,
-                ghi_chu: dataPostOrder.ghi_chu,
-                km: lngLatList.data.routes[0].legs[0].distance.text,
-                thoi_gian: dataPostOrder.thoi_gian,
-                sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                sdt_nguoi_gui: userInfor.phone,
-                ten_nguoi_gui: userInfor.fullname,
-                phi_giao: dataPostOrder.phi_giao,
-                phi_ung: tamung,
-                id_shop: currentUser.uid,
-                status: '',
-                receiveLng: lngLatList.data.routes[0].legs[0].start_location.lng,
-                receiveLat: lngLatList.data.routes[0].legs[0].start_location.lat,
-                shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
-                shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
-            });
-
-            //tạo bảng orderstatus
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                id_shop: currentUser.uid,
-                status: '0',
-                noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: address,
-                ghi_chu: dataPostOrder.ghi_chu,
-                km: lngLatList.data.routes[0].legs[0].distance.text,
-                thoi_gian: dataPostOrder.thoi_gian,
-                sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                sdt_nguoi_gui: userInfor.phone,
-                ten_nguoi_gui: userInfor.fullname,
-                phi_giao: dataPostOrder.phi_giao,
-                phi_ung: tamung,
-                ma_bi_mat: dataPostOrder.ma_bi_mat,
-            });
-
-            //tạo bảng transaction
-            await realtime.ref('Transaction/' + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
-                id_shop: currentUser.uid,
-                id_shipper: '',
-                id_roomchat: dataPostOrder.id_roomchat,
-                status: '0',
-                ma_bi_mat: dataPostOrder.ma_bi_mat,
-                thoi_gian: dataPostOrder.thoi_gian,
-            });
-
-            //tạo bảng thông báo
-            await realtime
-                .ref('Notification/' + currentUser.uid)
-                .push()
-                .set({
-                    id_post: dataPostOrder.idPost,
-                    id_shop: currentUser.uid,
-                    id_shipper: '',
-                    status: '0',
-                    thoi_gian: dataPostOrder.thoi_gian,
-                });
-
-            //tạo bảng chatroom
-            history.push('/home');
-        } catch (error) {
-            console.log(error);
-        }
-        return 0
-    };
 
     //post order function
-    async function PostOrder(dataPostOrder, newAddress) {
+    async function PostOrder(dataPostOrder, newAddress, notChange) {
         if (localStorage.getItem('role') === '2') {
             return alert('tài khoản của bạn tạm thời không được phép đăng đơn !');
         } else {
@@ -122,7 +44,85 @@ function PostOrder(props) {
                 tamung = dataPostOrder.phi_ung;
             }
 
-            fetchLngLat(address, dataPostOrder.noi_giao, dataPostOrder);
+            let lngLatList = await googleMapsApi.getAll(address, dataPostOrder.noi_giao);
+
+            if (!Number.isInteger(notChange)) {
+                if (parseInt((dataPostOrder.phi_giao).replace(" ", "")) < (Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000)) {
+                    return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1))
+                }
+            }
+
+            try {
+                //tao bảng newsfeed
+                await realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    noi_giao: dataPostOrder.noi_giao,
+                    noi_nhan: address,
+                    ghi_chu: dataPostOrder.ghi_chu,
+                    km: lngLatList.data.routes[0].legs[0].distance.text,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
+                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
+                    sdt_nguoi_gui: userInfor.phone,
+                    ten_nguoi_gui: userInfor.fullname,
+                    phi_giao: dataPostOrder.phi_giao,
+                    phi_ung: tamung,
+                    id_shop: currentUser.uid,
+                    status: '',
+                    receiveLng: lngLatList.data.routes[0].legs[0].start_location.lng,
+                    receiveLat: lngLatList.data.routes[0].legs[0].start_location.lat,
+                    shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
+                    shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
+                });
+
+                //tạo bảng orderstatus
+                await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    status: '0',
+                    noi_giao: dataPostOrder.noi_giao,
+                    noi_nhan: address,
+                    ghi_chu: dataPostOrder.ghi_chu,
+                    km: lngLatList.data.routes[0].legs[0].distance.text,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
+                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
+                    sdt_nguoi_gui: userInfor.phone,
+                    ten_nguoi_gui: userInfor.fullname,
+                    phi_giao: dataPostOrder.phi_giao,
+                    phi_ung: tamung,
+                    ma_bi_mat: dataPostOrder.ma_bi_mat,
+                });
+
+                //tạo bảng transaction
+                await realtime.ref('Transaction/' + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    id_shipper: '',
+                    id_roomchat: dataPostOrder.id_roomchat,
+                    status: '0',
+                    ma_bi_mat: dataPostOrder.ma_bi_mat,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                });
+
+                //tạo bảng thông báo
+                await realtime
+                    .ref('Notification/' + currentUser.uid)
+                    .push()
+                    .set({
+                        id_post: dataPostOrder.idPost,
+                        id_shop: currentUser.uid,
+                        id_shipper: '',
+                        status: '0',
+                        thoi_gian: dataPostOrder.thoi_gian,
+                    });
+
+                //tạo bảng chatroom
+                history.push('/home');
+            } catch (error) {
+                console.log(error);
+            }
+            return 0
         }
     }
 
