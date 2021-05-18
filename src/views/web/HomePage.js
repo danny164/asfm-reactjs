@@ -61,6 +61,14 @@ function HomePage() {
 
     //fetch data post order
     useEffect(() => {
+        async function deleteExpiredOrder() {
+            try {
+                await realtime.ref('OrderStatus/' + id).orderByChild("")
+            
+            } catch (error) {
+                console.log(error);
+            }
+        }
         async function fetchOrder() {
             try {
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
@@ -73,6 +81,7 @@ function HomePage() {
                 console.log(error);
             }
         }
+        deleteExpiredOrder();
         fetchOrder();
     }, []);
 
