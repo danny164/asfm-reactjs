@@ -14,6 +14,8 @@ function SkeletonShipper(props) {
     const { status } = props;
     return (
         <>
+            <div className="separator separator-dashed my-5" />
+
             <p className="font-weight-bold">{status === '0' ? 'Chờ shipper nhận đơn bạn nhé !' : 'Người nhận đơn:'} </p>
 
             <div className="d-flex justify-content-between align-items-center">
@@ -26,8 +28,6 @@ function SkeletonShipper(props) {
                     </div>
                 </div>
             </div>
-
-            <div className="separator separator-dashed my-5" />
         </>
     );
 }

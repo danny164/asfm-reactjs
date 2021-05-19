@@ -12,8 +12,8 @@ import Header from '../common/Header';
 import Cancelled from '../labels/Cancelled';
 import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
-import BookAgain from './BookAgain';
 import Picked from '../labels/Picked';
+import BookAgain from './BookAgain';
 import Chat from './Chat/Chat';
 import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
@@ -148,6 +148,7 @@ function MainHomePage(props) {
     const [loading, setLoading] = useState(false);
     const [items, setItems] = useState([]);
 
+    // Chạy lần đầu bắt buộc phải có loading
     useEffect(() => {
         setLoading(true);
 
@@ -167,6 +168,19 @@ function MainHomePage(props) {
         return () => {
             clearTimeout(timer);
         };
+    }, [filter, sortByRange]);
+
+    // Chạy lần 2 data status thay đổi sẽ không bị dính loading
+    useEffect(() => {
+        if (datas) {
+            const renderStatus = Object.values(datas).filter(
+                (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
+            );
+            setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+            setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
+        } else {
+            setSortStatus([]);
+        }
     }, [filter, datas, sortByRange]);
 
     // console.log(sortStatus);
@@ -361,7 +375,7 @@ function MainHomePage(props) {
                                 endMessage={
                                     items.length !== 0 && (
                                         <p style={{ textAlign: 'center' }}>
-                                            <span className="font-weight-bold">Yay! Hết cái để xem rồi !</span>
+                                            <span className="font-weight-bold">Yay! Hết cái để xem {subTitleStatus} rồi !</span>
                                         </p>
                                     )
                                 }
@@ -407,12 +421,7 @@ function MainHomePage(props) {
                                                             {data.status === '0' && <InProcessing />}
                                                             {data.status === '1' && <Picked />}
                                                             {data.status === '2' && <Completed />}
-                                                            {data.status === '3' && (
-                                                                <div>
-                                                                    <BookAgain />
-                                                                    <Cancelled />
-                                                                </div>
-                                                            )}
+                                                            {data.status === '3' && <Cancelled />}
                                                         </div>
                                                     </section>
                                                 </div>
@@ -435,8 +444,10 @@ function MainHomePage(props) {
                     </section>
 
                     <Modal size="lg" show={show} onHide={handleClose}>
-                        <Modal.Header closeButton>
+                        <Modal.Header>
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
+
+                            {dataModal.status === '3' && <BookAgain />}
                         </Modal.Header>
                         <Modal.Body>
                             <div className="d-flex align-items-start">
@@ -489,28 +500,29 @@ function MainHomePage(props) {
                                     </section>
                                 </div>
                             </div>
-                            <div className="separator separator-dashed my-5" />
-                            {dataModal.ghi_chu && (
+
+                            {dataModal.ghi_chu && dataModal.status !== '3' && (
                                 <>
+                                    <div className="separator separator-dashed my-5" />
                                     <p>
                                         <span className="label label-xl label-inline label-inprogress label-rounded mr-2">Ghi chú:</span>
                                         {dataModal.ghi_chu}
                                     </p>
-                                    <div className="separator separator-dashed my-5" />
                                 </>
                             )}
 
                             {dataModal.status === '2' && (
                                 <>
-                                    <CustomRating shipper_id={shipperInfor.id} post_id={dataModal.id_post} />
                                     <div className="separator separator-dashed my-5" />
+                                    <CustomRating shipper_id={shipperInfor.id} post_id={dataModal.id_post} />
                                 </>
                             )}
 
-                            {(dataModal.status === '0' || fetchLoading) && <SkeletonShipper status={dataModal.status} />}
+                            {(dataModal.status === '0' || fetchLoading) && dataModal.status !== '3' && <SkeletonShipper status={dataModal.status} />}
 
-                            {!fetchLoading && dataModal.status !== '0' && (
+                            {!fetchLoading && dataModal.status !== '0' && dataModal.status !== '3' && (
                                 <>
+                                    <div className="separator separator-dashed my-5" />
                                     <p className="font-weight-bold">Người nhận đơn:</p>
 
                                     <div className="d-flex justify-content-between align-items-center">
@@ -534,13 +546,20 @@ function MainHomePage(props) {
                                             </span>
                                         )}
                                     </div>
-
-                                    <div className="separator separator-dashed my-5" />
                                 </>
                             )}
-                            {dataModal.status === '3' && <p className="justify-content-center">Đơn hàng đã bị hủy !</p>}
+                            {dataModal.status === '3' && (
+                                <>
+                                    <div className="separator separator-dashed my-5" />
+                                    <div>
+                                        <span className="font-weight-bold">Lý do hủy:</span>
+                                        <span className="text-muted ml-2">Đơn sau 24h tự động hủy bởi hệ thống !</span>
+                                    </div>
+                                </>
+                            )}
                             {dataModal.status !== '2' && (
                                 <>
+                                    <div className="separator separator-dashed my-5" />
                                     <p className="font-weight-bold">
                                         Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
                                     </p>
