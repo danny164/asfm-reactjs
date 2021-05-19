@@ -88,7 +88,7 @@ function FeeRec(props) {
                     </div>
                     <div className="d-flex justify-content-around">
                         {feeRec && feeRec.map((data) =>
-                            <button key={data.key} type="button" class="btn btn-light" onClick={() => setNewPrice(data)}>
+                            <button key={data.key} type="button" className="btn btn-light" onClick={() => setNewPrice(data)}>
                                 {data / 1000 + " 000 đ"}
                             </button>
                         )}

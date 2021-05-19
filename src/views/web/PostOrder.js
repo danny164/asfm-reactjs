@@ -54,7 +54,7 @@ function PostOrder(props) {
 
             try {
                 //tao bảng newsfeed
-                await realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
+                realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
                     id_post: dataPostOrder.idPost,
                     noi_giao: dataPostOrder.noi_giao,
                     noi_nhan: address,
@@ -75,6 +75,29 @@ function PostOrder(props) {
                     shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                 });
 
+                //tạo bảng transaction
+                realtime.ref('Transaction/' + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    id_shipper: '',
+                    id_roomchat: dataPostOrder.id_roomchat,
+                    status: '0',
+                    ma_bi_mat: dataPostOrder.ma_bi_mat,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                });
+
+                //tạo bảng thông báo
+                realtime
+                    .ref('Notification/' + currentUser.uid)
+                    .push()
+                    .set({
+                        id_post: dataPostOrder.idPost,
+                        id_shop: currentUser.uid,
+                        id_shipper: '',
+                        status: '0',
+                        thoi_gian: dataPostOrder.thoi_gian,
+                    });
+
                 //tạo bảng orderstatus
                 await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).set({
                     id_post: dataPostOrder.idPost,
@@ -93,29 +116,6 @@ function PostOrder(props) {
                     phi_ung: tamung,
                     ma_bi_mat: dataPostOrder.ma_bi_mat,
                 });
-
-                //tạo bảng transaction
-                await realtime.ref('Transaction/' + dataPostOrder.idPost).set({
-                    id_post: dataPostOrder.idPost,
-                    id_shop: currentUser.uid,
-                    id_shipper: '',
-                    id_roomchat: dataPostOrder.id_roomchat,
-                    status: '0',
-                    ma_bi_mat: dataPostOrder.ma_bi_mat,
-                    thoi_gian: dataPostOrder.thoi_gian,
-                });
-
-                //tạo bảng thông báo
-                await realtime
-                    .ref('Notification/' + currentUser.uid)
-                    .push()
-                    .set({
-                        id_post: dataPostOrder.idPost,
-                        id_shop: currentUser.uid,
-                        id_shipper: '',
-                        status: '0',
-                        thoi_gian: dataPostOrder.thoi_gian,
-                    });
 
                 //tạo bảng chatroom
                 history.push('/home');
