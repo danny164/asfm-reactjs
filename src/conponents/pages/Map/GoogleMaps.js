@@ -10,6 +10,7 @@ GoogleMaps.propTypes = {
     shipLng: PropTypes.number,
     noiNhan: PropTypes.string,
     noiGiao: PropTypes.string,
+    shipperLocation: PropTypes.object
 };
 
 GoogleMaps.defaultProps = {
@@ -19,6 +20,10 @@ GoogleMaps.defaultProps = {
     shipLng: 0,
     noiNhan: '',
     noiGiao: '',
+    shipperLocation: {
+        lat: 16.057723868641794,
+        lng: 108.20189873237138,
+    }
 };
 
 const mapStyles = {
@@ -33,7 +38,7 @@ const defaultCenter = {
 
 let count = 0;
 export default function GoogleMaps(props) {
-    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao } = props;
+    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao, shipperLocation } = props;
 
     const [response, setResponse] = useState(null);
 
@@ -65,7 +70,7 @@ export default function GoogleMaps(props) {
         }
     };
 
-    console.log(response);
+    console.log(shipperLocation);
 
     return (
         <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
@@ -78,6 +83,12 @@ export default function GoogleMaps(props) {
                 {locations.map((item) => {
                     return <Marker key={item.name} position={item.location} />;
                 })}
+
+                {/* hiển thị vị trí shipper */}
+                {shipperLocation !== null &&
+                    <Marker position={shipperLocation} />
+                }
+
                 {
                     <DirectionsService
                         options={{
@@ -110,6 +121,6 @@ export default function GoogleMaps(props) {
                     />
                 )}
             </GoogleMap>
-        </LoadScript>
+        </LoadScript >
     );
 }

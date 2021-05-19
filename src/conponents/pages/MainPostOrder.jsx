@@ -10,7 +10,6 @@ import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
 import FeeRec from './ShipFeeRecommend/FeeRec';
-import Button from 'react-bootstrap/Button';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,

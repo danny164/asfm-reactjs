@@ -158,7 +158,7 @@ function ShipperList(props) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPending(false);
-        }, 2000);
+        }, 1200);
         return () => clearTimeout(timeout);
     }, []);
 
@@ -171,7 +171,7 @@ function ShipperList(props) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPending(false);
-        }, 2000);
+        }, 1200);
         return () => clearTimeout(timeout);
     }, []);
 

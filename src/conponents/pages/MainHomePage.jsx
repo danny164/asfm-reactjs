@@ -65,6 +65,7 @@ function MainHomePage(props) {
         id_shop: '',
         status: '',
     });
+    const [trackingShipper, setTrackingShipper] = useState(null);
 
     const [dataModal, setDataModal] = useState({
         ghi_chu: '',
@@ -80,6 +81,7 @@ function MainHomePage(props) {
         status: '',
         ten_nguoi_gui: '',
         ten_nguoi_nhan: '',
+        ma_bi_mat: '',
         thoi_gian: '',
         ma_bi_mat: '',
         receiveLat: 0,
@@ -193,6 +195,7 @@ function MainHomePage(props) {
     /////////////////////////////////////////////////////////
     // ! Fetch thông tin của shipper khi nhận đơn
 
+    //
     const fetchDataShipper = async (idPost, data) => {
         console.log('idpost: ' + idPost);
         try {
@@ -222,6 +225,9 @@ function MainHomePage(props) {
                             .then((doc) => {
                                 if (doc.exists) {
                                     setShipperInfor(doc.data());
+                                    realtime.ref('Location_Shipper/' + doc.data().id).on('value', (snapshot) => {
+                                        if (snapshot !== null) setTrackingShipper(snapshot.val());
+                                    });
                                 } else {
                                     console.log('Không fetch được dữ liệu !');
                                 }
@@ -516,7 +522,7 @@ function MainHomePage(props) {
                                             <div>
                                                 {shipperInfor.phone && convertPhone(shipperInfor.phone)}
                                                 <span className="font-weight-bold middle-dot text-brown">
-                                                    {shipperInfor.rate_star}
+                                                    {shipperInfor.rate_star && shipperInfor.rate_star}
                                                     <i className="fad fa-star-shooting text-warning rate-star ml-1"></i>
                                                 </span>
                                             </div>
@@ -532,6 +538,7 @@ function MainHomePage(props) {
                                     <div className="separator separator-dashed my-5" />
                                 </>
                             )}
+                            {dataModal.status === '3' && <p className="justify-content-center">Đơn hàng đã bị hủy !</p>}
                             {dataModal.status !== '2' && (
                                 <>
                                     <p className="font-weight-bold">
@@ -544,6 +551,7 @@ function MainHomePage(props) {
                                         shipLng={dataModal.shipLng}
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
+                                        shipperLocation={trackingShipper}
                                     />
                                 </>
                             )}
@@ -553,7 +561,7 @@ function MainHomePage(props) {
                             <div>
                                 {dataModal.status === '0' && (
                                     <Button variant="chartjs" onClick={() => handledeleteOrder(dataModal.id_post)}>
-                                        Xóa đơn
+                                        Hủy đơn
                                     </Button>
                                 )}
                             </div>

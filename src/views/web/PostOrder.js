@@ -42,7 +42,6 @@ function PostOrder(props) {
                     enqueueSnackbar('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
                     return 0;
                 }
-                address = userInfor.address;
             }
 
             if (dataPostOrder.phi_ung !== '') {
@@ -62,7 +61,7 @@ function PostOrder(props) {
 
             try {
                 //tao bảng newsfeed
-                await realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
+                realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
                     id_post: dataPostOrder.idPost,
                     noi_giao: dataPostOrder.noi_giao,
                     noi_nhan: address,
@@ -83,27 +82,8 @@ function PostOrder(props) {
                     shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                 });
 
-                //tạo bảng orderstatus
-                await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).set({
-                    id_post: dataPostOrder.idPost,
-                    id_shop: currentUser.uid,
-                    status: '0',
-                    noi_giao: dataPostOrder.noi_giao,
-                    noi_nhan: address,
-                    ghi_chu: dataPostOrder.ghi_chu,
-                    km: lngLatList.data.routes[0].legs[0].distance.text,
-                    thoi_gian: dataPostOrder.thoi_gian,
-                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                    sdt_nguoi_gui: userInfor.phone,
-                    ten_nguoi_gui: userInfor.fullname,
-                    phi_giao: dataPostOrder.phi_giao,
-                    phi_ung: tamung,
-                    ma_bi_mat: dataPostOrder.ma_bi_mat,
-                });
-
                 //tạo bảng transaction
-                await realtime.ref('Transaction/' + dataPostOrder.idPost).set({
+                realtime.ref('Transaction/' + dataPostOrder.idPost).set({
                     id_post: dataPostOrder.idPost,
                     id_shop: currentUser.uid,
                     id_shipper: '',
@@ -114,7 +94,7 @@ function PostOrder(props) {
                 });
 
                 //tạo bảng thông báo
-                await realtime
+                realtime
                     .ref('Notification/' + currentUser.uid)
                     .push()
                     .set({
