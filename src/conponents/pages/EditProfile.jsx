@@ -308,9 +308,9 @@ function EditProfile(props) {
         enqueueSnackbar('Cập nhật thành công', { variant: 'success' });
     };
 
-    const checkingFullname = `form-control form-control-lg ${errors.fullname || fullNameEmpty !== '' ? 'is-invalid' : ''}`;
+    const checkingFullname = `form-control form-control-lg ${errors.fullname ? 'is-invalid' : ''}`;
     const checkingPhone = `form-control form-control-lg ${errors.phone ? 'is-invalid' : ''}`;
-    const checkingAddress = `form-control form-control-lg ${errors.address || addressEmpty !== '' ? 'is-invalid' : ''}`;
+    const checkingAddress = `form-control form-control-lg ${errors.address ? 'is-invalid' : ''}`;
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
