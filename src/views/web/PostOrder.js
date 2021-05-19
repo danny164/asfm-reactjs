@@ -35,9 +35,10 @@ function PostOrder(props) {
             } else {
                 if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
                     setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
-                    return;
+                    return 0;
+                } else {
+                    address = userInfor.address;
                 }
-                address = userInfor.address;
             }
 
             if (dataPostOrder.phi_ung !== '') {

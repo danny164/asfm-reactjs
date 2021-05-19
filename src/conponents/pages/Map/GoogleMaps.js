@@ -20,7 +20,10 @@ GoogleMaps.defaultProps = {
     shipLng: 0,
     noiNhan: '',
     noiGiao: '',
-    shipperLocation: null
+    shipperLocation: {
+        lat: 16.057723868641794,
+        lng: 108.20189873237138,
+    }
 };
 
 const mapStyles = {
@@ -83,7 +86,9 @@ export default function GoogleMaps(props) {
 
                 {/* hiển thị vị trí shipper */}
                 {shipperLocation !== null &&
-                    <Marker position={shipperLocation} />}
+                    <Marker position={shipperLocation} />
+                }
+
                 {
                     <DirectionsService
                         options={{
@@ -116,6 +121,6 @@ export default function GoogleMaps(props) {
                     />
                 )}
             </GoogleMap>
-        </LoadScript>
+        </LoadScript >
     );
 }
