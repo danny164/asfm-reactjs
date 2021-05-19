@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
 import './map.scss';
+import { realtime } from '../../../firebase';
 
 GoogleMaps.propTypes = {
     receiveLat: PropTypes.number,
@@ -20,7 +21,7 @@ GoogleMaps.defaultProps = {
     shipLng: 0,
     noiNhan: '',
     noiGiao: '',
-    shipperLocation: {
+    shipperInfor: {
         lat: 16.057723868641794,
         lng: 108.20189873237138,
     }
@@ -38,8 +39,8 @@ const defaultCenter = {
 
 let count = 0;
 export default function GoogleMaps(props) {
-    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao, shipperLocation } = props;
-
+    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao, shipperInfor } = props;
+    const [shipperLocation, setShipperLocation] = useState()
     const [response, setResponse] = useState(null);
 
     const locations = [
@@ -69,6 +70,12 @@ export default function GoogleMaps(props) {
             }
         }
     };
+
+    useEffect(() => {
+        realtime.ref('Location_Shipper/' + shipperInfor.id).on('value', (snapshot) => {
+            if (snapshot !== null) setShipperLocation(snapshot.val());
+        });
+    }, [shipperInfor])
 
     console.log(shipperLocation);
 

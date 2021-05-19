@@ -65,11 +65,12 @@ function HomePage() {
     const last24hrs = (dataTime) => {
         return dataTime < moment().subtract(1, 'day').format('X');
     };
+
     useEffect(() => {
         async function fetchOrder() {
             try {
                 //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
-                await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
+                await realtime.ref('OrderStatus/' + id).once('value', (snapshot) => {
                     if (snapshot !== null) {
                         const renderStatus = Object.values(snapshot.val()).filter(
                             (data) => (data.status === '0') && last24hrs(data.thoi_gian)

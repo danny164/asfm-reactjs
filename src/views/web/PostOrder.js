@@ -41,6 +41,8 @@ function PostOrder(props) {
                     setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
                     enqueueSnackbar('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
                     return 0;
+                } else {
+                    address = userInfor.address;
                 }
             }
 
@@ -104,6 +106,24 @@ function PostOrder(props) {
                         status: '0',
                         thoi_gian: dataPostOrder.thoi_gian,
                     });
+                //tạo bảng orderstatus
+                await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).set({
+                    id_post: dataPostOrder.idPost,
+                    id_shop: currentUser.uid,
+                    status: '0',
+                    noi_giao: dataPostOrder.noi_giao,
+                    noi_nhan: address,
+                    ghi_chu: dataPostOrder.ghi_chu,
+                    km: lngLatList.data.routes[0].legs[0].distance.text,
+                    thoi_gian: dataPostOrder.thoi_gian,
+                    sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
+                    ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
+                    sdt_nguoi_gui: userInfor.phone,
+                    ten_nguoi_gui: userInfor.fullname,
+                    phi_giao: dataPostOrder.phi_giao,
+                    phi_ung: tamung,
+                    ma_bi_mat: dataPostOrder.ma_bi_mat,
+                });
 
                 // hiển thị thông báo
                 enqueueSnackbar('Bạn vừa đăng đơn mới thành công !', { variant: 'success' });

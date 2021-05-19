@@ -225,9 +225,6 @@ function MainHomePage(props) {
                             .then((doc) => {
                                 if (doc.exists) {
                                     setShipperInfor(doc.data());
-                                    realtime.ref('Location_Shipper/' + doc.data().id).on('value', (snapshot) => {
-                                        if (snapshot !== null) setTrackingShipper(snapshot.val());
-                                    });
                                 } else {
                                     console.log('Không fetch được dữ liệu !');
                                 }
@@ -551,7 +548,7 @@ function MainHomePage(props) {
                                         shipLng={dataModal.shipLng}
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
-                                        shipperLocation={trackingShipper}
+                                        shipperInfor={shipperInfor}
                                     />
                                 </>
                             )}
