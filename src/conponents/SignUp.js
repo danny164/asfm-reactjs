@@ -13,6 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import Version from './common/Version';
 import Logo from './Logo';
+import { useSnackbar } from 'notistack';
 
 const firstUppercase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -56,6 +57,7 @@ function Register(props) {
 
     const { currentUser } = useAuth();
     const history = useHistory();
+    const { enqueueSnackbar } = useSnackbar();
 
     const {
         register,
@@ -85,21 +87,23 @@ function Register(props) {
 
     const onSubmit = async (e) => {
         if (license === false) {
-            setAlert('#f27173');
-            return setError('Bạn phải đồng ý với các điều khoản !');
+            enqueueSnackbar('Bạn phải đồng ý với các điều khoản !', { variant: 'error' });
+
+            return;
         }
+
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
             setLoading(false);
-            setAlert('Đăng kí thành công !');
+            enqueueSnackbar('Đăng kí thành công !', { variant: 'success' });
         } catch (err) {
             setAlert('#f27173');
             // ! https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html#createuserwithemailandpassword
             const errorCode = err.code;
             if (errorCode === 'auth/email-already-in-use') {
-                setError('Tài khoản đã tồn tại !');
+                enqueueSnackbar('Tài khoản đã tồn tại !', { variant: 'error' });
             } else {
-                setError('Đăng kí thất bại !');
+                enqueueSnackbar('Đăng kí thất bại !', { variant: 'error' });
             }
         }
         setLoading(false);
@@ -192,8 +196,6 @@ function Register(props) {
                                     <h3>Đăng ký</h3>
                                     <div className="text-muted font-weight-bold">Nhập thông tin để tạo tài khoản</div>
                                 </div>
-
-                                {error && <Alert style={{ color: alert }}>{error}</Alert>}
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group mb-5">

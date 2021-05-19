@@ -1,5 +1,6 @@
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import googleMapsApi from '../../api/googleMapsApi';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
@@ -10,10 +11,10 @@ import { db, realtime } from '../../firebase';
 function PostOrder(props) {
     const { currentUser } = useAuth();
     const history = useHistory();
+
     const [defaultAddressError, setDefaultAddressError] = useState();
 
-    let tamung = '0';
-    let address = '';
+    const { enqueueSnackbar } = useSnackbar();
 
     const [userInfor, setUserInfor] = useState({
         fullname: '',
@@ -24,18 +25,22 @@ function PostOrder(props) {
         detailAddress: '',
     });
 
+    let tamung = '0';
+    let address = '';
 
     //post order function
     async function PostOrder(dataPostOrder, newAddress, notChange) {
         if (localStorage.getItem('role') === '2') {
-            return alert('tài khoản của bạn tạm thời không được phép đăng đơn !');
+            enqueueSnackbar('Tài khoản của bạn tạm thời không được phép đăng đơn mới!', { variant: 'info' });
+            return 0;
         } else {
             if (newAddress.district !== '') {
                 address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
             } else {
                 if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
                     setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
-                    return;
+                    enqueueSnackbar('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
+                    return 0;
                 }
                 address = userInfor.address;
             }
@@ -47,8 +52,11 @@ function PostOrder(props) {
             let lngLatList = await googleMapsApi.getAll(address, dataPostOrder.noi_giao);
 
             if (!Number.isInteger(notChange)) {
-                if (parseInt((dataPostOrder.phi_giao).replace(" ", "")) < (Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000)) {
-                    return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1))
+                if (
+                    parseInt(dataPostOrder.phi_giao.replace(' ', '')) <
+                    Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000
+                ) {
+                    return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1));
                 }
             }
 
@@ -117,12 +125,15 @@ function PostOrder(props) {
                         thoi_gian: dataPostOrder.thoi_gian,
                     });
 
+                // hiển thị thông báo
+                enqueueSnackbar('Bạn vừa đăng đơn mới thành công !', { variant: 'success' });
+
                 //tạo bảng chatroom
                 history.push('/home');
             } catch (error) {
-                console.log(error);
+                enqueueSnackbar('Đã có lỗi xảy ra !', { variant: 'error' });
             }
-            return 0
+            return 0;
         }
     }
 

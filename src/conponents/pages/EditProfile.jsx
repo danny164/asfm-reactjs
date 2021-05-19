@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import { uploadImage, getDownloadUrl } from '../../context/Upload';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { useSnackbar } from 'notistack';
 
 EditProfile.propTypes = {
     user: PropTypes.object,
@@ -143,6 +144,8 @@ function EditProfile(props) {
     const [phoneEmpty, setPhoneEmpty] = useState();
     const [addressEmpty, setAddressEmpty] = useState();
 
+    const { enqueueSnackbar } = useSnackbar();
+
     useEffect(() => {
         getDownloadUrl(user.uid).then((url) => {
             !!url && setImageUrl(url);
@@ -161,6 +164,12 @@ function EditProfile(props) {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setUploadProgress(progress);
     };
+
+    useEffect(() => {
+        if (uploadProgress === 100) {
+            enqueueSnackbar('Upload avatar thành công !', { variant: 'success' });
+        }
+    }, [uploadProgress]);
 
     //////////////////////////////////////////////////////
     const [district, setDistrict] = useState();
@@ -295,11 +304,13 @@ function EditProfile(props) {
             wardRef.current.value,
             convertAddress(addressRef.current.value)
         );
+
+        enqueueSnackbar('Cập nhật thành công', { variant: 'success' });
     };
 
-    const checkingFullname = `form-control form-control-lg ${errors.fullname ? 'is-invalid' : ''}`;
+    const checkingFullname = `form-control form-control-lg ${errors.fullname || fullNameEmpty !== '' ? 'is-invalid' : ''}`;
     const checkingPhone = `form-control form-control-lg ${errors.phone ? 'is-invalid' : ''}`;
-    const checkingAddress = `form-control form-control-lg ${errors.address ? 'is-invalid' : ''}`;
+    const checkingAddress = `form-control form-control-lg ${errors.address || addressEmpty !== '' ? 'is-invalid' : ''}`;
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -328,9 +339,6 @@ function EditProfile(props) {
                             </div>
                         </div>
                         {/* end wrap breadcrumb */}
-                        {/* tool bars */}
-                        {/* <div class="d-flex align-items-center">
-                        </div> */}
                     </div>
                 </div>
                 <div className="core d-flex flex-column flex-row-fluid container">
@@ -396,14 +404,13 @@ function EditProfile(props) {
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
                                         <input
-                                            className="form-control form-control-lg"
+                                            className="form-control form-control-lg form-control-solid"
                                             type="email"
                                             id="email"
                                             placeholder="Địa chỉ email"
                                             defaultValue={user.email}
                                             readOnly
                                         />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
                                     </div>
                                 </div>
                                 {/* full name */}
@@ -421,8 +428,8 @@ function EditProfile(props) {
                                             {...register('fullname')}
                                             ref={fullNameRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.fullname?.message}</span>
-                                        <span className="form-text text-muted text-chartjs">{fullNameEmpty !== '' && fullNameEmpty}</span>
+                                        <span className="form-text text-chartjs">{errors.fullname?.message}</span>
+                                        <span className="form-text text-chartjs">{fullNameEmpty !== '' && fullNameEmpty}</span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -442,8 +449,8 @@ function EditProfile(props) {
                                             {...register('phone')}
                                             ref={phoneRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.phone?.message}</span>{' '}
-                                        <span className="form-text text-muted text-chartjs">{phoneEmpty !== '' && phoneEmpty}</span>
+                                        <span className="form-text text-chartjs">{errors.phone?.message}</span>{' '}
+                                        <span className="form-text text-chartjs">{phoneEmpty !== '' && phoneEmpty}</span>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -483,7 +490,7 @@ function EditProfile(props) {
                                             <option value="">Chọn Quận/Huyện</option>
                                             {districtList()}
                                         </select>
-                                        <span className="form-text text-muted text-chartjs"></span>
+                                        <span className="form-text text-chartjs"></span>
                                     </div>
                                 </div>
 
@@ -502,7 +509,7 @@ function EditProfile(props) {
                                             <option value="">Chọn Phường/Xã</option>
                                             {wardList()}
                                         </select>
-                                        <span className="form-text text-muted text-chartjs"></span>
+                                        <span className="form-text text-chartjs"></span>
                                     </div>
                                 </div>
 
@@ -522,8 +529,8 @@ function EditProfile(props) {
                                             placeholder="Số nhà, tên đường"
                                             ref={addressRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.address?.message}</span>
-                                        <span className="form-text text-muted text-chartjs">{addressEmpty !== '' && addressEmpty}</span>
+                                        <span className="form-text text-chartjs">{errors.address?.message}</span>
+                                        <span className="form-text text-chartjs">{addressEmpty !== '' && addressEmpty}</span>
                                     </div>
                                 </div>
                             </div>

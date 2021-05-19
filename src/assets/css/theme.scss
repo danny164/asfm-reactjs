@@ -5,11 +5,17 @@ a:hover {
 
 body {
     font-family: 'Lexend', sans-serif;
-    font-size: 1rem;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.5;
     color: #3f4254;
     text-align: left;
+}
+
+.SnackbarItem-contentRoot-20 {
+    font-size: 13px !important;
+    font-family: 'Lexend', sans-serif !important;
+    line-height: 1.5 !important;
 }
 
 .middle-dot:before {
