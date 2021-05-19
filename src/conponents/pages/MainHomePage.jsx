@@ -20,6 +20,7 @@ import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
+import { useSnackbar } from 'notistack';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -48,6 +49,7 @@ function MainHomePage(props) {
     const { datas, deleteOrder, shopInfo, idShop } = props;
 
     const [hasMore, setHasMore] = useState(true);
+    const { enqueueSnackbar } = useSnackbar();
 
     const [sortStatus, setSortStatus] = useState([]);
     const { currentUser } = useAuth();
@@ -66,6 +68,10 @@ function MainHomePage(props) {
         status: '',
     });
     const [trackingShipper, setTrackingShipper] = useState(null);
+
+    const handleBtnClick = () => {
+        enqueueSnackbar('Đang thử nội dung test', { variant: 'success' });
+    };
 
     const [dataModal, setDataModal] = useState({
         ghi_chu: '',
@@ -303,6 +309,9 @@ function MainHomePage(props) {
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />
+            <button className="btn btn-sm btn-light-danger" onClick={handleBtnClick}>
+                Click me !
+            </button>
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">
                     <header className="card-header border-0">

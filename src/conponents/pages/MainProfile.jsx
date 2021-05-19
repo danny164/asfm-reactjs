@@ -33,7 +33,6 @@ function MainProfile(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            {user.error && alert(user.error)}
             <Header />
 
             <section className="content d-flex flex-column flex-column-fluid">
@@ -60,9 +59,6 @@ function MainProfile(props) {
                             </div>
                         </div>
                         {/* end wrap breadcrumb */}
-                        {/* tool bars */}
-                        {/* <div class="d-flex align-items-center">
-                        </div> */}
                     </div>
                 </div>
                 {/* core content */}

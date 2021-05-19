@@ -1,5 +1,5 @@
+import { useSnackbar } from 'notistack';
 import React, { useRef, useState } from 'react';
-import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Footer from '../common/Footer';
@@ -8,36 +8,44 @@ import Header from '../common/Header';
 MainChangePw.propTypes = {};
 
 function MainChangePw(props) {
-    const [message, setMessage] = useState('');
-    const [alert, setAlert] = useState('');
     const [loading, setLoading] = useState(false);
 
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
     const oldPasswordRef = useRef();
 
-    const { updatePassword, currentUser } = useAuth();
+    const { enqueueSnackbar } = useSnackbar();
+
+    const { updatePassword } = useAuth();
 
     async function changePassWord(e) {
         e.preventDefault();
-        // if (currentUser.password !== oldPasswordRef.current.value) {
-        //     console.log('old pw: ' + currentUser.password);
-        //     setAlert('red');
-        //     return setMessage('Xác nhận mật khẩu cũ chưa chính xác !');
-        // }
-        if (passwordRef.current.value !== confirmPasswordRef.current.value || passwordRef.current.value < 6) {
-            setAlert('red');
-            return setMessage('Xác nhận mật khẩu chưa chính xác !');
+
+        if (oldPasswordRef.current.value === '' || passwordRef.current.value === '' || confirmPasswordRef.current.value === '') {
+            enqueueSnackbar('Vui lòng không để trống !', { variant: 'error' });
+            return;
+        }
+
+        if (
+            oldPasswordRef.current.value.split('').length < 6 ||
+            passwordRef.current.value.split('').length < 6 ||
+            confirmPasswordRef.current.value.split('').length < 6
+        ) {
+            enqueueSnackbar('Mật khẩu phải tối thiểu 6 kí tự !', { variant: 'error' });
+            return;
+        }
+
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            enqueueSnackbar('Mật khẩu mới và mật khẩu nhập lại không khớp !', { variant: 'error' });
+            return;
         }
 
         try {
             setLoading(true);
             await updatePassword(passwordRef.current.value);
-            setAlert('green');
-            setMessage('Change password success !');
+            enqueueSnackbar('Cập nhật mật khẩu thành công !', { variant: 'success' });
         } catch {
-            setAlert('red');
-            setMessage('Failed to change password !');
+            enqueueSnackbar('Thay đổi mật khẩu thất bại !', { variant: 'error' });
         }
         setLoading(false);
     }
@@ -69,9 +77,6 @@ function MainChangePw(props) {
                             </div>
                         </div>
                         {/* end wrap breadcrumb */}
-                        {/* tool bars */}
-                        {/* <div class="d-flex align-items-center">
-                        </div> */}
                     </div>
                 </div>
                 {/* core content */}
@@ -90,7 +95,6 @@ function MainChangePw(props) {
                         </header>
                         <form className="form">
                             <div className="card-body">
-                                {message && <Alert style={{ color: alert }}>{message}</Alert>}
                                 {/* current password */}
                                 <div className="form-group row">
                                     <label htmlFor="current-password" className="col-xl-3 col-lg-4 col-form-label">
@@ -104,7 +108,7 @@ function MainChangePw(props) {
                                             placeholder="Nhập mật khẩu cũ"
                                             ref={oldPasswordRef}
                                         />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted">Mật khẩu hiện tại bạn đang sử dụng</span>
                                     </div>
                                 </div>
                                 {/* new password */}
@@ -120,6 +124,7 @@ function MainChangePw(props) {
                                             ref={passwordRef}
                                             placeholder="Nhập mật khẩu mới"
                                         />
+                                        <span className="form-text text-muted">Mật khẩu mới ít nhất 6 kí tự</span>
                                     </div>
                                 </div>
                                 {/* confirm password */}
@@ -135,7 +140,7 @@ function MainChangePw(props) {
                                             placeholder="Nhập lại mật khẩu mới"
                                             ref={confirmPasswordRef}
                                         />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
+                                        <span className="form-text text-muted">Mật khẩu phải trùng khớp với mật khẩu mới vừa nhập</span>
                                     </div>
                                 </div>
                             </div>
