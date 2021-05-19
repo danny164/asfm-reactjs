@@ -16,10 +16,13 @@ import Chart from './pages/Chart';
 import NotFoundPage from './pages/NotFound';
 import FeeRec from './pages/ShipFeeRecommend/FeeRec';
 import Register from './SignUp';
+import ScrollToTop from 'react-scroll-to-top';
 
 function Application() {
     return (
         <Router>
+            <ScrollToTop smooth color="#6f00ff" />
+
             <AuthProvider>
                 <Switch>
                     <Redirect from="/" to="login" exact />
