@@ -10,7 +10,6 @@ import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
 import FeeRec from './ShipFeeRecommend/FeeRec';
-import Button from 'react-bootstrap/Button';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -75,6 +74,71 @@ const dataList = {
         'Xã Hòa Sơn',
         'Xã Hòa Tiến',
     ],
+};
+
+//////////////////////////////////////////////////////
+const reverseString = (value) => {
+    // 000 20 => 00020 => 20 + ' 000'
+    const input = parseInt(value.split(' ').join('')); // 20
+
+    if (input === 0 || isNaN(input)) return '0';
+
+    return input + ' 000';
+};
+
+const convertNewPrice = (value) => {
+    const input = value / 1000 + ' 000'; // 20 000
+    return input;
+};
+
+const firstUppercase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+// value: '        nguyen van       quynh      '
+// remove: 'nguyen van quynh'
+// split: ['nguyen', 'van', 'quynh']
+// result: ['Nguyen', 'Van', 'Quynh']
+// join: 'Nguyen Van Quynh'
+
+const convertString = (value) => {
+    const allLowerCase = value.toLowerCase();
+    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
+
+    const removeSpecialChars = removeSpace.replace(
+        /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
+        ''
+    );
+
+    const splitString = removeSpecialChars.split(' ');
+
+    const result = [];
+
+    splitString.forEach((string) => {
+        return result.push(firstUppercase(string));
+    });
+
+    return result.join(' ');
+};
+
+const convertAddress = (value) => {
+    const allLowerCase = value.toLowerCase();
+    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
+
+    const removeSpecialChars = removeSpace.replace(
+        /\.|\+|\-|\*|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]/g,
+        ''
+    );
+
+    const splitString = removeSpecialChars.split(' ');
+
+    const result = [];
+
+    splitString.forEach((string) => {
+        return result.push(firstUppercase(string));
+    });
+
+    return result.join(' ');
 };
 
 function MainPostOrder(props) {
@@ -200,7 +264,11 @@ function MainPostOrder(props) {
         shipFee: yup.string().required('Vui lòng nhập phí giao hàng bạn muốn trả'),
         tempFee: yup.string(),
         note: yup.string().max(100, 'Vượt quá ${max} kí tự được cho phép'),
-        shipAddress: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').required('Vui lòng cung cấp số nhà, tên đường'),
+        shipAddress: yup
+            .string()
+            .max(50, 'Vượt quá ${max} kí tự được cho phép')
+            .min(5, 'Tối thiểu ${min} kí tự')
+            .required('Vui lòng cung cấp số nhà, tên đường'),
     });
 
     const {
@@ -219,51 +287,6 @@ function MainPostOrder(props) {
     const checkingShopAddress = `form-control form-control-lg ${addressReceiveError ? 'is-invalid' : ''}`;
     const checkingShipAddress = `form-control form-control-lg ${errors.shipAddress ? 'is-invalid' : ''}`;
 
-    //////////////////////////////////////////////////////
-    const reverseString = (value) => {
-        // 000 20 => 00020 => 20 + ' 000'
-        const input = parseInt(value.split(' ').join('')); // 20
-
-        if (input === 0 || isNaN(input)) return '0';
-
-        return input + ' 000';
-    };
-
-    const convertNewPrice = (value) => {
-        const input = value / 1000 + ' 000'; // 20 000
-        return input;
-    };
-
-    const firstUppercase = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    };
-
-    // value: '        nguyen van       quynh      '
-    // remove: 'nguyen van quynh'
-    // split: ['nguyen', 'van', 'quynh']
-    // result: ['Nguyen', 'Van', 'Quynh']
-    // join: 'Nguyen Van Quynh'
-
-    const convertString = (value) => {
-        const allLowerCase = value.toLowerCase();
-        const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
-
-        const removeSpecialChars = removeSpace.replace(
-            /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
-            ''
-        );
-
-        const splitString = removeSpecialChars.split(' ');
-
-        const result = [];
-
-        splitString.forEach((string) => {
-            return result.push(firstUppercase(string));
-        });
-
-        return result.join(' ');
-    };
-
     ///////////////////////////////////////////////////
     // Handle submitForm
     const onSubmit = async (newPrice, notChange) => {
@@ -276,6 +299,9 @@ function MainPostOrder(props) {
                 shipDistrcitRef.current.value === '' ||
                 shipWardRef.current.value === ''
             ) {
+                if (convertAddress(receiveAddressRef.current.value).split('').length < 5) {
+                    setAddressReceiveError('Vui lòng cung cấp số nhà, tên đường !');
+                }
                 if (receiveAddressRef.current.value === '') {
                     setAddressReceiveError('Vui lòng cung cấp số nhà, tên đường !');
                 }
@@ -295,7 +321,7 @@ function MainPostOrder(props) {
             }
             newAddress.district = receiveDistrictRef.current.value;
             newAddress.ward = receiveWardRef.current.value;
-            newAddress.address = receiveAddressRef.current.value;
+            newAddress.address = convertAddress(receiveAddressRef.current.value);
         }
 
         if (shipDistrcitRef.current.value === '' || shipWardRef.current.value === '') {
@@ -311,8 +337,7 @@ function MainPostOrder(props) {
         // console.log(convertString(customerRef.current.value).split('').length);
 
         if (convertString(customerRef.current.value).split('').length < 5) {
-            setFullnameError('Vui lòng kiểm tra lại tên khách hàng !');
-            return;
+            return setFullnameError('Vui lòng kiểm tra lại tên khách hàng !');
         }
 
         let code = random.generate({
@@ -330,7 +355,13 @@ function MainPostOrder(props) {
 
         const dataPostOrder = {
             idPost: idPost,
-            noi_giao: shipAddressRef.current.value + ', ' + shipWardRef.current.value + ', ' + shipDistrcitRef.current.value + ', Thành phố Đà Nẵng',
+            noi_giao:
+                convertAddress(shipAddressRef.current.value) +
+                ', ' +
+                shipWardRef.current.value +
+                ', ' +
+                shipDistrcitRef.current.value +
+                ', Thành phố Đà Nẵng',
             ghi_chu: noteRef.current.value,
             thoi_gian: dateTime,
             sdt_nguoi_nhan: numberRef.current.value,
@@ -352,7 +383,6 @@ function MainPostOrder(props) {
     };
 
     const handleDefaultAddressChange = (e) => {
-        // console.log(e.target.checked);
         if (e.target.checked === true) {
             setReceiveAddress(false);
         } else {
@@ -402,7 +432,7 @@ function MainPostOrder(props) {
                                             placeholder="Tên khách hàng"
                                             ref={customerRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.fullname?.message}</span>
+                                        <span className="form-text text-chartjs">{errors.fullname?.message}</span>
                                     </div>
                                 </div>
                                 {/* phone number */}
@@ -420,7 +450,7 @@ function MainPostOrder(props) {
                                             placeholder="Số điện thoại"
                                             ref={numberRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.phone?.message}</span>
+                                        <span className="form-text text-chartjs">{errors.phone?.message}</span>
                                     </div>
                                 </div>
                                 {/* ship fee */}
@@ -446,7 +476,7 @@ function MainPostOrder(props) {
                                                 <span className="input-group-text">VND</span>
                                             </div>
                                         </div>
-                                        <span className="form-text text-muted text-chartjs">{errors.shipFee?.message}</span>
+                                        <span className="form-text text-chartjs">{errors.shipFee?.message}</span>
                                     </div>
                                 </div>
                                 {/* temp fee */}
@@ -470,7 +500,9 @@ function MainPostOrder(props) {
                                                 <span className="input-group-text">VND</span>
                                             </div>
                                         </div>
-                                        <span className="form-text text-muted text-chartjs">{errors.tempFee?.message}</span>
+                                        <span className="form-text text-muted">
+                                            Chi phí giao hàng và giá trị tạm ứng tối đa là 999,000 đ và là bội số của 1,000 đ
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -489,7 +521,7 @@ function MainPostOrder(props) {
                                                 ref={noteRef}
                                             />
                                         </div>
-                                        <span className="form-text text-muted text-chartjs">{errors.note?.message}</span>
+                                        <span className="form-text text-chartjs">{errors.note?.message}</span>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -508,7 +540,7 @@ function MainPostOrder(props) {
                                                 <span />
                                             </label>
                                         </span>
-                                        <span className="form-text text-muted text-chartjs">{defaultAddressError && defaultAddressError}</span>
+                                        <span className="form-text text-chartjs">{defaultAddressError && defaultAddressError}</span>
                                     </div>
                                 </div>
 
@@ -551,7 +583,7 @@ function MainPostOrder(props) {
                                                 <option value="">Chọn Quận/Huyện</option>
                                                 {districtList()}
                                             </select>
-                                            <span className="form-text text-muted text-chartjs">{districtReceiveError && districtReceiveError}</span>
+                                            <span className="form-text text-chartjs">{districtReceiveError && districtReceiveError}</span>
                                         </div>
                                     </div>
 
@@ -574,7 +606,7 @@ function MainPostOrder(props) {
                                                 <option value="">Chọn Phường/Xã</option>
                                                 {wardReceiveList()}
                                             </select>
-                                            <span className="form-text text-muted text-chartjs">{wardReceiveError && wardReceiveError}</span>
+                                            <span className="form-text text-chartjs">{wardReceiveError && wardReceiveError}</span>
                                         </div>
                                     </div>
 
@@ -596,7 +628,7 @@ function MainPostOrder(props) {
                                                 }}
                                                 ref={receiveAddressRef}
                                             />
-                                            <span className="form-text text-muted text-chartjs">{addressReceiveError && addressReceiveError}</span>
+                                            <span className="form-text text-chartjs">{addressReceiveError && addressReceiveError}</span>
                                         </div>
                                     </div>
                                 </Expand>
@@ -638,7 +670,7 @@ function MainPostOrder(props) {
                                             <option value="">Chọn Quận/Huyện</option>
                                             {districtList()}
                                         </select>
-                                        <span className="form-text text-muted text-chartjs">{districtError && districtError}</span>
+                                        <span className="form-text text-chartjs">{districtError && districtError}</span>
                                     </div>
                                 </div>
                                 {/* Xã */}
@@ -660,7 +692,7 @@ function MainPostOrder(props) {
                                             <option value="">Chọn Phường/Xã</option>
                                             {wardList()}
                                         </select>
-                                        <span className="form-text text-muted text-chartjs">{wardError && wardError}</span>
+                                        <span className="form-text text-chartjs">{wardError && wardError}</span>
                                     </div>
                                 </div>
                                 {/* Địa chỉ */}
@@ -678,7 +710,7 @@ function MainPostOrder(props) {
                                             placeholder="Số nhà, tên đường"
                                             ref={shipAddressRef}
                                         />
-                                        <span className="form-text text-muted text-chartjs">{errors.shipAddress?.message}</span>
+                                        <span className="form-text text-chartjs">{errors.shipAddress?.message}</span>
                                     </div>
                                 </div>
                             </div>

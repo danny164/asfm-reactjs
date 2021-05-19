@@ -154,7 +154,7 @@ function ShopList(props) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPending(false);
-        }, 2000);
+        }, 1200);
         return () => clearTimeout(timeout);
     }, []);
 
@@ -170,7 +170,7 @@ function ShopList(props) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPending(false);
-        }, 2000);
+        }, 1200);
         return () => clearTimeout(timeout);
     }, []);
 

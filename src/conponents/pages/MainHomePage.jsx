@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 import Footer from '../common/Footer';
@@ -10,13 +12,13 @@ import Header from '../common/Header';
 import Cancelled from '../labels/Cancelled';
 import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
+import BookAgain from './BookAgain';
 import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
+import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
-import GoogleMaps from './Map/GoogleMaps';
-import { useSelector } from 'react-redux';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
 
 MainHomePage.propTypes = {
@@ -34,7 +36,6 @@ MainHomePage.defaultProps = {
     deleteOrder: null,
     idShop: '',
 };
-
 const convertPhone = (phone) => {
     const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
     if (match) {
@@ -42,16 +43,11 @@ const convertPhone = (phone) => {
     }
     return null;
 };
-//20 | 5
+
 function MainHomePage(props) {
-    // var renderStatus = [];
-    // var lastStatus = [];
-    // var sortStatus = [];
-
-    // const [renderStatus, setRenderStatus] = useState([]);
-    // const [lastStatus, setLastStatus] = useState([]);
-
     const { datas, deleteOrder, shopInfo, idShop } = props;
+
+    const [hasMore, setHasMore] = useState(true);
 
     const [sortStatus, setSortStatus] = useState([]);
     const { currentUser } = useAuth();
@@ -69,6 +65,7 @@ function MainHomePage(props) {
         id_shop: '',
         status: '',
     });
+    const [trackingShipper, setTrackingShipper] = useState(null);
 
     const [dataModal, setDataModal] = useState({
         ghi_chu: '',
@@ -149,6 +146,7 @@ function MainHomePage(props) {
     /////////////////////////////////////////////////////////
     // ! delay loading chờ lấy thông tin
     const [loading, setLoading] = useState(false);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -159,6 +157,7 @@ function MainHomePage(props) {
                     (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
                 );
                 setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+                setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
             } else {
                 setSortStatus([]);
             }
@@ -196,6 +195,7 @@ function MainHomePage(props) {
     /////////////////////////////////////////////////////////
     // ! Fetch thông tin của shipper khi nhận đơn
 
+    //
     const fetchDataShipper = async (idPost, data) => {
         console.log('idpost: ' + idPost);
         try {
@@ -225,6 +225,9 @@ function MainHomePage(props) {
                             .then((doc) => {
                                 if (doc.exists) {
                                     setShipperInfor(doc.data());
+                                    realtime.ref('Location_Shipper/' + doc.data().id).on('value', (snapshot) => {
+                                        if (snapshot !== null) setTrackingShipper(snapshot.val());
+                                    });
                                 } else {
                                     console.log('Không fetch được dữ liệu !');
                                 }
@@ -279,6 +282,24 @@ function MainHomePage(props) {
         return box;
     };
 
+    const fetchMoreData = () => {
+        let index = items.length + 5;
+        console.log(index);
+
+        if (items.length >= sortStatus.length) {
+            setHasMore(false);
+            return;
+        }
+        setTimeout(() => {
+            setItems(sortStatus.slice(0, index));
+        }, 1500);
+    };
+
+    useEffect(() => {
+        setHasMore(true);
+    }, [sortByRange, datas, filter]);
+
+    console.log(items.length);
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />
@@ -327,59 +348,80 @@ function MainHomePage(props) {
                             </ul>
                         </div>
                     </header>
+
                     <section className="card-body pt-1 newsfeed">
                         {loading && <SkeletonCard />}
-                        {!loading &&
-                            sortStatus.map((data, index) => (
-                                <>
-                                    <article
-                                        className="order"
-                                        key={index}
-                                        onClick={() => {
-                                            setDataModal(data);
-                                            fetchDataShipper(data.id_post);
-                                            setShow(true);
-                                        }}
-                                    >
-                                        <div className="d-flex align-items-start">
-                                            <span className="bullet bullet-bar bg-orange align-self-stretch" />
-                                            <div className="d-flex flex-column flex-grow-1 ml-4">
-                                                <header className="card-title content">
-                                                    <span>#{data.id_post}</span>
-                                                    <span className="flex-shrink-0">
-                                                        {dateToFromNowDaily(data.thoi_gian)}
-                                                        {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
-                                                    </span>
-                                                </header>
-                                                <section className="card-info content">
-                                                    <div className="mb-3">
+                        {!loading && (
+                            <InfiniteScroll
+                                dataLength={items.length}
+                                next={fetchMoreData}
+                                hasMore={hasMore}
+                                loader={items.length !== 0 && <SkeletonCard />}
+                                endMessage={
+                                    items.length !== 0 && (
+                                        <p style={{ textAlign: 'center' }}>
+                                            <span className="font-weight-bold">Yay! Hết cái để xem rồi !</span>
+                                        </p>
+                                    )
+                                }
+                            >
+                                {items.map((data, index) => (
+                                    <>
+                                        <article
+                                            className="order"
+                                            key={index}
+                                            onClick={() => {
+                                                setDataModal(data);
+                                                fetchDataShipper(data.id_post);
+                                                setShow(true);
+                                            }}
+                                        >
+                                            <div className="d-flex align-items-start">
+                                                <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                                <div className="d-flex flex-column flex-grow-1 ml-4">
+                                                    <header className="card-title content">
+                                                        <span>#{data.id_post}</span>
+                                                        <span className="flex-shrink-0">
+                                                            {dateToFromNowDaily(data.thoi_gian)}
+                                                            {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
+                                                        </span>
+                                                    </header>
+                                                    <section className="card-info content">
                                                         <div className="mb-3">
-                                                            <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
-                                                            <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
+                                                            <div className="mb-3">
+                                                                <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
+                                                                <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
+                                                            </div>
+                                                            <div className="mb-1">
+                                                                Chi phí giao hàng:{' '}
+                                                                <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
+                                                            </div>
+                                                            <div className="mb-1">
+                                                                Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="mb-1">
-                                                            Chi phí giao hàng:{' '}
-                                                            <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
+                                                        <span className="delivery">Giao hàng tới</span>
+                                                        <div className="d-flex align-items-center justify-content-between">
+                                                            <address className="mb-0 pl-0">{data.noi_giao}</address>
+                                                            {data.status === '0' && <InProcessing />}
+                                                            {data.status === '1' && <Picked />}
+                                                            {data.status === '2' && <Completed />}
+                                                            {data.status === '3' && (
+                                                                <div>
+                                                                    <BookAgain />
+                                                                    <Cancelled />
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                        <div className="mb-1">
-                                                            Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
-                                                        </div>
-                                                    </div>
-                                                    <span className="delivery">Giao hàng tới</span>
-                                                    <div className="d-flex align-items-center justify-content-between">
-                                                        <address className="mb-0 pl-0">{data.noi_giao}</address>
-                                                        {data.status === '0' && <InProcessing />}
-                                                        {data.status === '1' && <Picked />}
-                                                        {data.status === '2' && <Completed />}
-                                                        {data.status === '3' && <Cancelled />}
-                                                    </div>
-                                                </section>
+                                                    </section>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="separator separator-dashed my-5" />
-                                    </article>
-                                </>
-                            ))}
+                                            <div className="separator separator-dashed my-5" />
+                                        </article>
+                                    </>
+                                ))}
+                            </InfiniteScroll>
+                        )}
                         {!loading && sortStatus.length === 0 && (
                             <>
                                 <article className="empty-order">
@@ -508,6 +550,7 @@ function MainHomePage(props) {
                                         shipLng={dataModal.shipLng}
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
+                                        shipperLocation={trackingShipper}
                                     />
                                 </>
                             )}

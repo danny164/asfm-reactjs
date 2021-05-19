@@ -76,6 +76,56 @@ const dataList = {
     ],
 };
 
+const firstUppercase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+// value: '        nguyen van       quynh      '
+// remove: 'nguyen van quynh'
+// split: ['nguyen', 'van', 'quynh']
+// result: ['Nguyen', 'Van', 'Quynh']
+// join: 'Nguyen Van Quynh'
+
+const convertString = (value) => {
+    const allLowerCase = value.toLowerCase();
+    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
+
+    const removeSpecialChars = removeSpace.replace(
+        /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
+        ''
+    );
+
+    const splitString = removeSpecialChars.split(' ');
+
+    const result = [];
+
+    splitString.forEach((string) => {
+        return result.push(firstUppercase(string));
+    });
+
+    return result.join(' ');
+};
+
+const convertAddress = (value) => {
+    const allLowerCase = value.toLowerCase();
+    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
+
+    const removeSpecialChars = removeSpace.replace(
+        /\.|\+|\-|\*|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]/g,
+        ''
+    );
+
+    const splitString = removeSpecialChars.split(' ');
+
+    const result = [];
+
+    splitString.forEach((string) => {
+        return result.push(firstUppercase(string));
+    });
+
+    return result.join(' ');
+};
+
 var save = '';
 function EditProfile(props) {
     const { user, edit } = props;
@@ -206,7 +256,7 @@ function EditProfile(props) {
     const schema = yup.object().shape({
         fullname: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').min(5, 'Tối thiểu ${min} kí tự'),
         phone: yup.string().matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ'),
-        address: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép'),
+        address: yup.string().max(50, 'Vượt quá ${max} kí tự được cho phép').min(5, 'Tối thiểu ${min} kí tự'),
     });
 
     const {
@@ -225,7 +275,7 @@ function EditProfile(props) {
             return setPhoneEmpty('Vui lòng điền số điện thoại của bạn !');
         }
 
-        if (fullNameRef.current.value === '') {
+        if (convertString(fullNameRef.current.value).split('').length < 5) {
             return setFullNameEmpty('Vui lòng nhập họ và tên của bạn !');
         }
 
@@ -233,17 +283,17 @@ function EditProfile(props) {
             return setPhoneEmpty('Vui lòng điền số điện thoại của bạn !');
         }
 
-        if (addressRef.current.value === '') {
+        if (convertAddress(addressRef.current.value).split('').length < 5) {
             return setAddressEmpty('Vui lòng cung cấp số nhà, tên đường !');
         }
 
         await edit(
-            fullNameRef.current.value,
+            convertString(fullNameRef.current.value),
             phoneRef.current.value,
-            addressRef.current.value + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
+            convertAddress(addressRef.current.value) + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
             districtRef.current.value,
             wardRef.current.value,
-            addressRef.current.value
+            convertAddress(addressRef.current.value)
         );
     };
 

@@ -62,27 +62,35 @@ function HomePage() {
     }, []);
 
     //fetch data post order
+    const last24hrs = (dataTime) => {
+        return dataTime < moment().subtract(1, 'day').format('X');
+    };
     useEffect(() => {
-        async function deleteExpiredOrder() {
-            try {
-                await realtime.ref('OrderStatus/' + id).orderByChild("")
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
         async function fetchOrder() {
             try {
+                //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     if (snapshot !== null) {
-                        setData(snapshot.val());
+                        const renderStatus = Object.values(snapshot.val()).filter(
+                            (data) => (data.status === '0') && last24hrs(data.thoi_gian)
+                        );
+
+                        renderStatus.map((data) => {
+                            handleDeleteOrder(data.id_post)
+                        })
                     }
                 });
+
+                //Đọc các đơn lên để hiển thị
+                await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
+                    if (snapshot !== null) {
+                        setData(snapshot.val())
+                    }
+                })
             } catch (error) {
                 console.log(error);
             }
         }
-        deleteExpiredOrder();
         fetchOrder();
     }, []);
 
@@ -171,6 +179,7 @@ function HomePage() {
         }
     }
 
+    //Hủy đơn 
     async function handleDeleteOrder(id) {
         try {
             realtime
@@ -187,7 +196,7 @@ function HomePage() {
             realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: "3", thoi_gian: moment().format('X') });
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: "3" });
         } catch (e) {
             console.log(e);
         }
