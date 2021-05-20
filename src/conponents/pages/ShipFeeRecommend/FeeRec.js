@@ -31,7 +31,7 @@ function FeeRec(props) {
     function shipFeeRec(km) {
         let fee = [];
         console.log(km);
-        const price = Math.round(5 * km);
+        const price = Math.round(5 * (km / 1000));
         fee.push(price * 1000);
         for (let i = 0; i < 2; i++) {
             if (i === 0) {
@@ -85,7 +85,7 @@ function FeeRec(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <div className="mb-5">
-                        Dựa theo khoảng cách <span className="text-primary-2 font-weight-bold">{km} km</span> của đơn hàng, chúng tôi có đề xuất lại
+                        Dựa theo khoảng cách <span className="text-primary-2 font-weight-bold">{`${km / 1000} km`} </span> của đơn hàng, chúng tôi có đề xuất lại
                         cho bạn các mức giá sau
                     </div>
                     <div className="d-flex justify-content-around">

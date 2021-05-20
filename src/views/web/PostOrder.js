@@ -52,12 +52,13 @@ function PostOrder(props) {
 
             let lngLatList = await googleMapsApi.getAll(address, dataPostOrder.noi_giao);
 
+            // nếu k chọn giữ nguyên thì sẽ check giá tiền và return về giá tiền để check điều kiện ở component con
             if (!Number.isInteger(notChange)) {
                 if (
                     parseInt(dataPostOrder.phi_giao.replace(' ', '')) <
-                    Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1)) * 5000
+                    lngLatList.data.routes[0].legs[0].distance.value * 5
                 ) {
-                    return Number(lngLatList.data.routes[0].legs[0].distance.text.split(' ', 1));
+                    return lngLatList.data.routes[0].legs[0].distance.value
                 }
             }
 

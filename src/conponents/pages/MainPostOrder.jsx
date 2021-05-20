@@ -374,7 +374,6 @@ function MainPostOrder(props) {
 
         if (postOrder) {
             const check = await postOrder(dataPostOrder, newAddress, notChange);
-            console.log(check);
             if (check !== 0) {
                 setKm(check);
                 setShow(true);
