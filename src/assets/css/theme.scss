@@ -12,6 +12,11 @@ body {
     text-align: left;
 }
 
+.required::after {
+    content: ' *';
+    color: #f64e60;
+}
+
 [class*=' SnackbarItem-contentRoot-'] {
     font-size: 13px !important;
     font-family: 'Lexend', sans-serif !important;

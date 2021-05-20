@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import './styles.scss';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { Link, Redirect } from 'react-router-dom';
 import { db } from '../../../firebase';
+import './styles.scss';
 
 function Banned(props) {
     const [data, setData] = useState({});

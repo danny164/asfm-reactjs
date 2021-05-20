@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import InputMask from 'react-input-mask';
 import Expand from 'react-expand-animated';
 import FeeRec from './ShipFeeRecommend/FeeRec';
+import classNames from 'classnames';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -419,7 +420,7 @@ function MainPostOrder(props) {
                             <div className="card-body post-order">
                                 {/* customer name */}
                                 <div className="form-group row">
-                                    <label htmlFor="fullname" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="fullname" className="col-xl-3 col-lg-4 col-form-label required">
                                         Khách hàng
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -436,7 +437,7 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* phone number */}
                                 <div className="form-group row">
-                                    <label htmlFor="phone_inputmask" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="phone_inputmask" className="col-xl-3 col-lg-4 col-form-label required">
                                         Số điện thoại
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -454,7 +455,7 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* ship fee */}
                                 <div className="form-group row">
-                                    <label htmlFor="ship_inputmask" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="ship_inputmask" className="col-xl-3 col-lg-4 col-form-label required">
                                         Chi phí giao hàng
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -475,7 +476,17 @@ function MainPostOrder(props) {
                                                 <span className="input-group-text">VND</span>
                                             </div>
                                         </div>
-                                        <span className="form-text text-chartjs">{errors.shipFee?.message}</span>
+                                        <span
+                                            className={classNames({
+                                                'form-text': true,
+                                                'text-chartjs': errors.shipFee?.message,
+                                                'text-muted': !errors.shipFee?.message,
+                                            })}
+                                        >
+                                            {errors.shipFee?.message
+                                                ? errors.shipFee?.message
+                                                : 'Chi phí giao hàng tối thiểu 10,000 đ, tối đa 999,000 đ và là bội số của 1,000 đ'}
+                                        </span>
                                     </div>
                                 </div>
                                 {/* temp fee */}
@@ -499,9 +510,7 @@ function MainPostOrder(props) {
                                                 <span className="input-group-text">VND</span>
                                             </div>
                                         </div>
-                                        <span className="form-text text-muted">
-                                            Chi phí giao hàng và giá trị tạm ứng tối đa là 999,000 đ và là bội số của 1,000 đ
-                                        </span>
+                                        <span className="form-text text-muted">Giá trị tạm ứng tối đa là 999,000đ và là bội số của 1,000 đ</span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -533,7 +542,7 @@ function MainPostOrder(props) {
                                 <div className="form-group row">
                                     <label className="col-xl-3 col-lg-4 col-form-label"></label>
                                     <div className="col-xl-9 col-lg-8">
-                                        <span className="switch">
+                                        <span className="switch switch-sm">
                                             <label>
                                                 <input type="checkbox" defaultChecked="checked" name="select" onChange={handleDefaultAddressChange} />
                                                 <span />
@@ -568,7 +577,7 @@ function MainPostOrder(props) {
 
                                     {/* Huyện */}
                                     <div className="form-group row">
-                                        <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
+                                        <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label required">
                                             Quận/Huyện
                                         </label>
                                         <div className="col-xl-9 col-lg-8">
@@ -588,7 +597,7 @@ function MainPostOrder(props) {
 
                                     {/* Xã */}
                                     <div className="form-group row">
-                                        <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
+                                        <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label required">
                                             Phường/Xã
                                         </label>
                                         <div className="col-xl-9 col-lg-8">
@@ -611,7 +620,7 @@ function MainPostOrder(props) {
 
                                     {/* Địa chỉ */}
                                     <div className="form-group row">
-                                        <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
+                                        <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label required">
                                             Địa chỉ
                                         </label>
                                         <div className="col-xl-9 col-lg-8">
@@ -655,7 +664,7 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* Huyện */}
                                 <div className="form-group row">
-                                    <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="district" className="col-xl-3 col-lg-4 col-form-label required">
                                         Quận/Huyện
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -674,7 +683,7 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* Xã */}
                                 <div className="form-group row">
-                                    <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="ward" className="col-xl-3 col-lg-4 col-form-label required">
                                         Phường/Xã
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -696,7 +705,7 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* Địa chỉ */}
                                 <div className="form-group row">
-                                    <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
+                                    <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label required">
                                         Địa chỉ
                                     </label>
                                     <div className="col-xl-9 col-lg-8">

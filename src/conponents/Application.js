@@ -14,15 +14,12 @@ import Login from './Login';
 import Banned from './pages/Banned';
 import Chart from './pages/Chart';
 import NotFoundPage from './pages/NotFound';
-import FeeRec from './pages/ShipFeeRecommend/FeeRec';
+import TotalOrder from './pages/TotalOrder';
 import Register from './SignUp';
-import ScrollToTop from 'react-scroll-to-top';
 
 function Application() {
     return (
         <Router>
-            <ScrollToTop smooth color="#6f00ff" />
-
             <AuthProvider>
                 <Switch>
                     <Redirect from="/" to="login" exact />
@@ -35,7 +32,7 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
-                    <PrivateRoute path="/test" component={FeeRec} />
+                    <PrivateRoute path="/order" component={TotalOrder} />
                     <BanRoute path="/banned" component={Banned} />
                     <Route component={NotFoundPage} />
                 </Switch>

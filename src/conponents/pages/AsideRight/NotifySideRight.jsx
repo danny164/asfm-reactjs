@@ -79,8 +79,6 @@ function NotifySideRight(props) {
             setItems(sortStatus.slice(0, index));
         }, 1500);
     };
-    console.log(sortStatus);
-    console.log(items);
 
     return (
         <section

@@ -15,6 +15,8 @@ function LineChart(props) {
     const [label, setLabel] = useState();
     const [labels, setLabels] = useState();
 
+    console.log(datas);
+
     const data = {
         labels: ['01/05', '02/05', '03/05', '04/05', '05/05', '06/05', '07/05'],
         datasets: [

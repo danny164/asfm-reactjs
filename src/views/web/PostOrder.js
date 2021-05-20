@@ -1,6 +1,7 @@
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import ScrollToTop from 'react-scroll-to-top';
 import googleMapsApi from '../../api/googleMapsApi';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
@@ -54,11 +55,8 @@ function PostOrder(props) {
 
             // nếu k chọn giữ nguyên thì sẽ check giá tiền và return về giá tiền để check điều kiện ở component con
             if (!Number.isInteger(notChange)) {
-                if (
-                    parseInt(dataPostOrder.phi_giao.replace(' ', '')) <
-                    lngLatList.data.routes[0].legs[0].distance.value * 5
-                ) {
-                    return lngLatList.data.routes[0].legs[0].distance.value
+                if (parseInt(dataPostOrder.phi_giao.replace(' ', '')) < lngLatList.data.routes[0].legs[0].distance.value * 5) {
+                    return lngLatList.data.routes[0].legs[0].distance.value;
                 }
             }
 
@@ -166,13 +164,16 @@ function PostOrder(props) {
     }, []);
 
     return (
-        <div className="header-fixed sidebar-enabled bg">
-            <section className="d-flex flex-row flex-column-fluid page">
-                <AsideLeft />
-                <MainPostOrder postOrder={PostOrder} defaultAddressError={defaultAddressError} />
-                <AsideRight name={userInfor.fullname} />
-            </section>
-        </div>
+        <>
+            <ScrollToTop smooth color="#6f00ff" />
+            <div className="header-fixed sidebar-enabled bg">
+                <section className="d-flex flex-row flex-column-fluid page">
+                    <AsideLeft />
+                    <MainPostOrder postOrder={PostOrder} defaultAddressError={defaultAddressError} />
+                    <AsideRight name={userInfor.fullname} />
+                </section>
+            </div>
+        </>
     );
 }
 

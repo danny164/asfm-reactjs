@@ -23,6 +23,13 @@ function AsideLeft(props) {
         },
         {
             id: 3,
+            name: 'order',
+            to: '/order',
+            className: 'nav-link btn btn-icon btn-lg btn-borderless',
+            icon: 'fad fa-clipboard-list-check',
+        },
+        {
+            id: 4,
             name: 'admin',
             to: '/admin',
             className: 'nav-link btn btn-icon btn-lg btn-borderless',
@@ -43,7 +50,7 @@ function AsideLeft(props) {
                 <ul className="nav flex-column">
                     {links.map((link) => (
                         <>
-                            {link.id !== 3 && (
+                            {link.id !== 4 && (
                                 <li className="nav-item mb-2" key={link.id}>
                                     <NavLink strict activeClassName="active" to={link.to} className={link.className}>
                                         <i className={link.icon} />
@@ -51,7 +58,7 @@ function AsideLeft(props) {
                                 </li>
                             )}
 
-                            {localStorage.getItem('role') === '9' && link.id === 3 && (
+                            {localStorage.getItem('role') === '9' && link.id === 4 && (
                                 <li className="nav-item mb-2" key={link.id}>
                                     <NavLink strict activeClassName="active" to={link.to} className={link.className}>
                                         <i className={link.icon} />

@@ -1,18 +1,22 @@
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import random from 'randomstring';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import ScrollToTop from 'react-scroll-to-top';
 import AsideLeft from '../../conponents/pages/AsideLeft';
 import AsideRight from '../../conponents/pages/AsideRight';
 import MainHomePage from '../../conponents/pages/MainHomePage';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 import { updateNotification } from './Slice/notificationSlice';
-import random from 'randomstring';
 
 function HomePage() {
     const { currentUser } = useAuth();
 
     const [id] = useState(currentUser.uid);
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const [input, setInput] = useState({
         fullname: '',
@@ -72,22 +76,20 @@ function HomePage() {
                 //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
                 await realtime.ref('OrderStatus/' + id).once('value', (snapshot) => {
                     if (snapshot !== null) {
-                        const renderStatus = Object.values(snapshot.val()).filter(
-                            (data) => (data.status === '0') && last24hrs(data.thoi_gian)
-                        );
+                        const renderStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian));
 
                         renderStatus.map((data) => {
-                            handleDeleteOrder(data.id_post, "Đơn hàng bị hủy vì trong 24 giờ chưa có shipper nhận !")
-                        })
+                            handleDeleteOrder(data.id_post, 'Đơn hàng bị hủy vì trong 24 giờ chưa có shipper nhận !');
+                        });
                     }
                 });
 
                 //Đọc các đơn lên để hiển thị
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
                     if (snapshot !== null) {
-                        setData(snapshot.val())
+                        setData(snapshot.val());
                     }
-                })
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -120,7 +122,8 @@ function HomePage() {
 
     const rePostOrder = async (dataPostOrder) => {
         if (localStorage.getItem('role') === '2') {
-            return alert('tài khoản của bạn tạm thời không được phép đăng đơn !');
+            enqueueSnackbar('Tài khoản của bạn tạm thời không được phép đăng đơn !', { variant: 'warning' });
+            return;
         }
 
         try {
@@ -150,12 +153,12 @@ function HomePage() {
                 id_roomchat: idChat,
                 status: '0',
                 ma_bi_mat: dataPostOrder.ma_bi_mat,
-                thoi_gian: moment().format("X"),
+                thoi_gian: moment().format('X'),
                 receiveLng: dataPostOrder.receiveLng,
                 receiveLat: dataPostOrder.receiveLat,
                 shipLng: dataPostOrder.shipLng,
                 shipLat: dataPostOrder.shipLat,
-                time_estimate: dataPostOrder.time_estimate
+                time_estimate: dataPostOrder.time_estimate,
             });
 
             //tạo bảng thông báo
@@ -167,21 +170,20 @@ function HomePage() {
                     id_shop: currentUser.uid,
                     id_shipper: '',
                     status: '0',
-                    thoi_gian: moment().format("X"),
+                    thoi_gian: moment().format('X'),
                 });
 
             //tạo bảng orderstatus
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.id_post).update({
                 status: '0',
-                thoi_gian: moment().format("X")
-            })
-
+                thoi_gian: moment().format('X'),
+            });
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
-    //Hủy đơn 
+    // Hủy đơn
     async function handleDeleteOrder(id, reason) {
         try {
             realtime
@@ -193,19 +195,22 @@ function HomePage() {
                     id_shipper: '',
                     status: '3',
                     thoi_gian: moment().format('X'),
-                })
+                });
 
             realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: "3", reason: reason });
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: '3', reason: reason });
+            enqueueSnackbar(`Đơn #${id} đã hủy thành công`, { variant: 'success' });
         } catch (e) {
-            console.log(e);
+            enqueueSnackbar(`Có lỗi xảy ra !`, { variant: 'error' });
         }
     }
 
     return (
         <>
+            <ScrollToTop smooth color="#6f00ff" />
+
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />

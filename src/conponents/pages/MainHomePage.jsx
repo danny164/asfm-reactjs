@@ -20,6 +20,7 @@ import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
+import { useSnackbar } from 'notistack';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -50,6 +51,7 @@ function MainHomePage(props) {
     const { rePostOrder, datas, deleteOrder, shopInfo, idShop } = props;
 
     const [hasMore, setHasMore] = useState(true);
+    const { enqueueSnackbar } = useSnackbar();
 
     const [sortStatus, setSortStatus] = useState([]);
     const { currentUser } = useAuth();
@@ -326,6 +328,7 @@ function MainHomePage(props) {
     const rePostOrderr = async (dataPostOrder) => {
         if (rePostOrder) {
             await rePostOrder(dataPostOrder);
+            enqueueSnackbar(`Đơn #${dataPostOrder.id_post} đã được đăng lại`, { variant: 'success' });
             setShow(false);
         }
     };
