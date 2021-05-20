@@ -5,20 +5,14 @@ import './map.scss';
 import { realtime } from '../../../firebase';
 
 GoogleMaps.propTypes = {
-    receiveLat: PropTypes.number,
-    receiveLng: PropTypes.number,
-    shipLat: PropTypes.number,
-    shipLng: PropTypes.number,
     noiNhan: PropTypes.string,
     noiGiao: PropTypes.string,
+    status: PropTypes.string,
     shipperLocation: PropTypes.object
 };
 
 GoogleMaps.defaultProps = {
-    receiveLat: 0,
-    receiveLng: 0,
-    shipLat: 0,
-    shipLng: 0,
+    status: '',
     noiNhan: '',
     noiGiao: '',
     shipperInfor: {
@@ -39,26 +33,9 @@ const defaultCenter = {
 
 let count = 0;
 export default function GoogleMaps(props) {
-    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao, shipperInfor } = props;
+    const { status, noiNhan, noiGiao, shipperInfor } = props;
     const [shipperLocation, setShipperLocation] = useState()
     const [response, setResponse] = useState(null);
-
-    const locations = [
-        {
-            name: 'Điểm nhận',
-            location: {
-                lat: receiveLat,
-                lng: receiveLng,
-            },
-        },
-        {
-            name: 'Điểm giao',
-            location: {
-                lat: shipLat,
-                lng: shipLng,
-            },
-        },
-    ];
 
     const directionsCallback = (result) => {
         count += 1;
@@ -77,7 +54,6 @@ export default function GoogleMaps(props) {
         });
     }, [shipperInfor])
 
-    console.log(shipperLocation);
 
     return (
         <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
@@ -87,12 +63,8 @@ export default function GoogleMaps(props) {
                 center={defaultCenter}
                 options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
             >
-                {locations.map((item) => {
-                    return <Marker key={item.name} position={item.location} />;
-                })}
-
                 {/* hiển thị vị trí shipper */}
-                {shipperLocation !== null &&
+                {shipperLocation !== null && status !== "3" &&
                     <Marker position={shipperLocation} />
                 }
 

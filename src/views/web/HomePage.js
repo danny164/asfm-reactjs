@@ -77,7 +77,7 @@ function HomePage() {
                         );
 
                         renderStatus.map((data) => {
-                            handleDeleteOrder(data.id_post)
+                            handleDeleteOrder(data.id_post, "Đơn hàng bị hủy vì trong 24 giờ chưa có shipper nhận !")
                         })
                     }
                 });
@@ -125,8 +125,8 @@ function HomePage() {
 
         try {
             //tao bảng newsfeed
-            realtime.ref('newsfeed/' + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
+            realtime.ref('newsfeed/' + dataPostOrder.id_post).set({
+                id_post: dataPostOrder.id_post,
                 noi_giao: dataPostOrder.noi_giao,
                 noi_nhan: dataPostOrder.noi_nhan,
                 ghi_chu: dataPostOrder.ghi_chu,
@@ -140,21 +140,22 @@ function HomePage() {
                 phi_ung: dataPostOrder.phi_ung,
                 id_shop: currentUser.uid,
                 status: '',
-                receiveLng: dataPostOrder.receiveLng,
-                receiveLat: dataPostOrder.receiveLat,
-                shipLng: dataPostOrder.shipLng,
-                shipLat: dataPostOrder.shipLat,
             });
 
             //tạo bảng transaction
-            realtime.ref('Transaction/' + dataPostOrder.idPost).set({
-                id_post: dataPostOrder.idPost,
+            realtime.ref('Transaction/' + dataPostOrder.id_post).set({
+                id_post: dataPostOrder.id_post,
                 id_shop: currentUser.uid,
                 id_shipper: '',
                 id_roomchat: idChat,
                 status: '0',
                 ma_bi_mat: dataPostOrder.ma_bi_mat,
                 thoi_gian: moment().format("X"),
+                receiveLng: dataPostOrder.receiveLng,
+                receiveLat: dataPostOrder.receiveLat,
+                shipLng: dataPostOrder.shipLng,
+                shipLat: dataPostOrder.shipLat,
+                time_estimate: dataPostOrder.time_estimate
             });
 
             //tạo bảng thông báo
@@ -162,7 +163,7 @@ function HomePage() {
                 .ref('Notification/' + currentUser.uid)
                 .push()
                 .set({
-                    id_post: dataPostOrder.idPost,
+                    id_post: dataPostOrder.id_post,
                     id_shop: currentUser.uid,
                     id_shipper: '',
                     status: '0',
@@ -170,10 +171,10 @@ function HomePage() {
                 });
 
             //tạo bảng orderstatus
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.idPost).update({
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.id_post).update({
                 status: '0',
                 thoi_gian: moment().format("X")
-            });
+            })
 
         } catch (error) {
             console.log(error);
@@ -181,7 +182,7 @@ function HomePage() {
     }
 
     //Hủy đơn 
-    async function handleDeleteOrder(id) {
+    async function handleDeleteOrder(id, reason) {
         try {
             realtime
                 .ref('Notification/' + currentUser.uid)
@@ -197,7 +198,7 @@ function HomePage() {
             realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: "3" });
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: "3", reason: reason });
         } catch (e) {
             console.log(e);
         }
@@ -208,7 +209,7 @@ function HomePage() {
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
-                    <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} />
+                    <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} rePostOrder={rePostOrder} />
                     <AsideRight name={input.fullname} />
                 </div>
             </div>
