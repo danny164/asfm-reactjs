@@ -65,7 +65,6 @@ function MainHomePage(props) {
         id_shop: '',
         status: '',
     });
-    const [trackingShipper, setTrackingShipper] = useState(null);
 
     const [dataModal, setDataModal] = useState({
         ghi_chu: '',
@@ -114,7 +113,10 @@ function MainHomePage(props) {
 
     const filter = useSelector((state) => state.filter);
 
+    const [checkLoading, setCheckLoading] = useState(false);
+
     useEffect(() => {
+        setCheckLoading(false);
         if (filter === 'all') setTitleStatus('gần đây');
         if (filter === '0') setTitleStatus('đang xử lý');
         if (filter === '1') setTitleStatus('đã nhận');
@@ -152,7 +154,32 @@ function MainHomePage(props) {
     useEffect(() => {
         setLoading(true);
 
-        const timer = setTimeout(() => {
+        const timer = setTimeout(async () => {
+            if (datas) {
+                const renderStatus = Object.values(datas).filter(
+                    (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
+                );
+                await setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+                await setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
+            } else {
+                setSortStatus([]);
+            }
+            setCheckLoading(true);
+            console.log(1, checkLoading);
+
+            setLoading(false);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+            console.log(2, checkLoading);
+        };
+    }, [filter, checkLoading, sortByRange]);
+
+    // Chạy lần 2 data status thay đổi sẽ không bị dính loading
+    useEffect(() => {
+        if (checkLoading) {
+            console.log('test');
             if (datas) {
                 const renderStatus = Object.values(datas).filter(
                     (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
@@ -162,24 +189,6 @@ function MainHomePage(props) {
             } else {
                 setSortStatus([]);
             }
-
-            setLoading(false);
-        }, 1500);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [filter, sortByRange]);
-
-    // Chạy lần 2 data status thay đổi sẽ không bị dính loading
-    useEffect(() => {
-        if (datas) {
-            const renderStatus = Object.values(datas).filter(
-                (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
-            );
-            setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
-            setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
-        } else {
-            setSortStatus([]);
         }
     }, [filter, datas, sortByRange]);
 
@@ -281,6 +290,7 @@ function MainHomePage(props) {
             clearTimeout(timer);
         };
     }, [dataModal, transactionInfor, shipperInfor]);
+    //////////////////////////////////////////////////////////
 
     // * Lấy key và value trong object lồng { id : { key: value}}
     const snapshotToObject = (snapshot) => {
@@ -293,9 +303,8 @@ function MainHomePage(props) {
         return box;
     };
 
-    const fetchMoreData = () => {
+    const fetchMoreData = async () => {
         let index = items.length + 5;
-        console.log(index);
 
         if (items.length >= sortStatus.length) {
             setHasMore(false);
@@ -310,7 +319,6 @@ function MainHomePage(props) {
         setHasMore(true);
     }, [sortByRange, datas, filter]);
 
-    console.log(items.length);
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />

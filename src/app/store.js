@@ -1,11 +1,11 @@
-import filterReducer from '../conponents/common/filterSlice';
-import totalReducer from '../conponents/common/totalSlice';
-import progressReducer from '../conponents/common/progressSlice';
-import pickedReducer from '../conponents/common/pickedSlice';
-import completedReducer from '../conponents/common/completedSlice';
-import cancelledReducer from '../conponents/common/cancelledSlice';
-import notificationReducer from '../views/web/Slice/notificationSlice';
 import { configureStore } from '@reduxjs/toolkit';
+import cancelledReducer from '../conponents/common/cancelledSlice';
+import completedReducer from '../conponents/common/completedSlice';
+import filterReducer from '../conponents/common/filterSlice';
+import pickedReducer from '../conponents/common/pickedSlice';
+import progressReducer from '../conponents/common/progressSlice';
+import totalReducer from '../conponents/common/totalSlice';
+import notificationReducer from '../views/web/Slice/notificationSlice';
 
 // state to use with useSelector
 const rootReducer = {
