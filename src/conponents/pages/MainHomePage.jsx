@@ -27,6 +27,7 @@ MainHomePage.propTypes = {
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
     deleteOrder: PropTypes.func,
+    rePostOrder: PropTypes.func,
 };
 
 MainHomePage.defaultProps = {
@@ -35,6 +36,7 @@ MainHomePage.defaultProps = {
     ChangeOrderStatus: null,
     deleteOrder: null,
     idShop: '',
+    rePostOrder: null,
 };
 const convertPhone = (phone) => {
     const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
@@ -45,7 +47,7 @@ const convertPhone = (phone) => {
 };
 
 function MainHomePage(props) {
-    const { datas, deleteOrder, shopInfo, idShop } = props;
+    const { rePostOrder, datas, deleteOrder, shopInfo, idShop } = props;
 
     const [hasMore, setHasMore] = useState(true);
 
@@ -84,10 +86,12 @@ function MainHomePage(props) {
         ma_bi_mat: '',
         thoi_gian: '',
         ma_bi_mat: '',
-        receiveLat: 0,
+        reason: '',
         receiveLng: 0,
-        shipLat: 0,
+        receiveLat: 0,
         shipLng: 0,
+        shipLat: 0,
+        time_estimate: 0,
     });
 
     const [show, setShow] = useState(false);
@@ -189,7 +193,7 @@ function MainHomePage(props) {
     // ! Xóa đơn
     const handledeleteOrder = async (id) => {
         if (deleteOrder) {
-            await deleteOrder(id);
+            await deleteOrder(id, 'Bạn đã thực hiện thao tác hủy trên hệ thống !');
             setShow(false);
         }
     };
@@ -309,6 +313,13 @@ function MainHomePage(props) {
     useEffect(() => {
         setHasMore(true);
     }, [sortByRange, datas, filter]);
+
+    const rePostOrderr = async (dataPostOrder) => {
+        if (rePostOrder) {
+            await rePostOrder(dataPostOrder);
+            setShow(false);
+        }
+    };
 
     console.log(items.length);
     return (
@@ -443,8 +454,16 @@ function MainHomePage(props) {
                     <Modal size="lg" show={show} onHide={handleClose}>
                         <Modal.Header>
                             <Modal.Title>Chi tiết đơn #{dataModal.id_post}</Modal.Title>
-
-                            {dataModal.status === '3' && <BookAgain />}
+                            {dataModal.status === '3' && (
+                                <button
+                                    className="btn btn-sm btn-light flex-shrink-0"
+                                    onClick={() => {
+                                        rePostOrderr(dataModal);
+                                    }}
+                                >
+                                    Đặt lại ngay
+                                </button>
+                            )}
                         </Modal.Header>
                         <Modal.Body>
                             <div className="d-flex align-items-start">
@@ -550,7 +569,7 @@ function MainHomePage(props) {
                                     <div className="separator separator-dashed my-5" />
                                     <div>
                                         <span className="font-weight-bold">Lý do hủy:</span>
-                                        <span className="text-muted ml-2">Đơn sau 24h tự động hủy bởi hệ thống !</span>
+                                        <span className="text-muted ml-2">{dataModal.reason}</span>
                                     </div>
                                 </>
                             )}
@@ -568,6 +587,7 @@ function MainHomePage(props) {
                                         noiNhan={dataModal.noi_nhan}
                                         noiGiao={dataModal.noi_giao}
                                         shipperInfor={shipperInfor}
+                                        status={dataModal.status}
                                     />
                                 </>
                             )}
