@@ -139,6 +139,8 @@ function FakeData(props) {
     }
 
     const fakeData = async () => {
+        enqueueSnackbar('Bắt đầu tiền trình tạo đơn', { variant: 'info' });
+
         const interval = setInterval(() => {
             PostOrder();
         }, 2000);
