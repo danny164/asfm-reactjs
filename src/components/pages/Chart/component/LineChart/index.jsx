@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 LineChart.propTypes = {
     datas: PropTypes.array,
@@ -14,9 +15,17 @@ function LineChart(props) {
     const { datas } = props;
     const [label, setLabel] = useState();
     const [labels, setLabels] = useState();
+    const [days, setDays] = useState();
 
     console.log(datas);
 
+    const getDay = (day) => {
+        const array = []
+        for (const i = 1; i <= day; i++) {
+            array.push(moment().subtract(i, 'day').format("dd/mm"))
+        }
+    };
+    //1 tuân 20 đơn.
     const data = {
         labels: ['01/05', '02/05', '03/05', '04/05', '05/05', '06/05', '07/05'],
         datasets: [

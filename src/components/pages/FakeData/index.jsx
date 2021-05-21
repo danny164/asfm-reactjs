@@ -80,6 +80,11 @@ function FakeData(props) {
                 phi_ung: dataPostOrder.phi_ung,
                 id_shop: currentUser.uid,
                 status: '',
+                receiveLng: lngLatList.data.routes[0].legs[0].start_location.lng,
+                receiveLat: lngLatList.data.routes[0].legs[0].start_location.lat,
+                shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
+                shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
+                time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
             });
 
             //tạo bảng transaction

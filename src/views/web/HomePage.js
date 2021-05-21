@@ -76,6 +76,7 @@ function HomePage() {
     const in24hrs = (dataTime) => {
         return dataTime > moment().subtract(1, 'day').format('X');
     };
+
     useEffect(() => {
         async function fetchOrder() {
             try {
