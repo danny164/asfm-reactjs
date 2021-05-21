@@ -82,7 +82,7 @@ function HomePage() {
             try {
                 //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
                 await realtime.ref('OrderStatus/' + id).once('value', (snapshot) => {
-                    if (snapshot !== null) {
+                    if (snapshot.val() !== null) {
                         const renderOldStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 1));
 
                         renderOldStatus.map((data) => {
@@ -97,7 +97,7 @@ function HomePage() {
 
                 //Đọc các đơn lên để hiển thị
                 await realtime.ref('OrderStatus/' + id).on('value', (snapshot) => {
-                    if (snapshot !== null) {
+                    if (snapshot.val() !== null) {
                         setData(snapshot.val());
                     }
                 });
@@ -112,7 +112,7 @@ function HomePage() {
         const fetchNotification = async () => {
             try {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
-                    if (snapshot !== null) {
+                    if (snapshot.val() !== null) {
                         const oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
 
                         oldNoti.map((data) => {

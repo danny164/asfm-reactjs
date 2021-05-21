@@ -77,11 +77,11 @@ function PostOrder(props) {
                     phi_ung: tamung,
                     id_shop: currentUser.uid,
                     status: '',
-                    receiveLng: lngLatList.data.routes[0].legs[0].start_location.lng,
-                    receiveLat: lngLatList.data.routes[0].legs[0].start_location.lat,
-                    shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
-                    shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
-                    time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
+                    receiveLng: `${lngLatList.data.routes[0].legs[0].start_location.lng}`,
+                    receiveLat: `${lngLatList.data.routes[0].legs[0].start_location.lat}`,
+                    shipLng: `${lngLatList.data.routes[0].legs[0].end_location.lng}`,
+                    shipLat: `${lngLatList.data.routes[0].legs[0].end_location.lat}`,
+                    time_estimate: `${lngLatList.data.routes[0].legs[0].duration.value}`,
                 });
 
                 //tạo bảng transaction
@@ -93,11 +93,6 @@ function PostOrder(props) {
                     status: '0',
                     ma_bi_mat: dataPostOrder.ma_bi_mat,
                     thoi_gian: dataPostOrder.thoi_gian,
-                    receiveLng: lngLatList.data.routes[0].legs[0].start_location.lng,
-                    receiveLat: lngLatList.data.routes[0].legs[0].start_location.lat,
-                    shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
-                    shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
-                    time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
                 });
 
                 //tạo bảng thông báo
