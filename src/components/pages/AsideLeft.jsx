@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import TheNightOwl from '../../assets/media/the-night-owl.png';
+import FakeData from './FakeData';
 
 function AsideLeft(props) {
     const { onHandleMenu } = props;
@@ -35,13 +36,6 @@ function AsideLeft(props) {
             className: 'nav-link btn btn-icon btn-lg btn-borderless',
             icon: 'fad fa-rocket-launch',
         },
-        {
-            id: 5,
-            name: 'fake',
-            to: '/fake',
-            className: 'nav-link btn btn-icon btn-lg btn-borderless',
-            icon: 'fad fa-yin-yang',
-        },
     ];
 
     return (
@@ -74,6 +68,7 @@ function AsideLeft(props) {
                             )}
                         </>
                     ))}
+                    {localStorage.getItem('role') === '9' && <FakeData />}
                 </ul>
             </nav>
             <footer className="d-flex flex-column align-items-center flex-column-auto py-8">

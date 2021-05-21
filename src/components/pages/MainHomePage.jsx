@@ -173,7 +173,7 @@ function MainHomePage(props) {
             console.log(1, checkLoading);
 
             setLoading(false);
-        }, 500);
+        }, 800);
 
         return () => {
             clearTimeout(timer);

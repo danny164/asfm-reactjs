@@ -6,6 +6,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { realtime } from '../../../firebase';
 import { name, noi_giao, noi_nhan, phi_giao, phi_ung, phone } from './data';
+import { useSnackbar } from 'notistack';
+
 FakeData.propTypes = {};
 
 const randomNumber = (number) => {
@@ -38,12 +40,14 @@ const randomIdChat = () => {
 function FakeData(props) {
     const { currentUser } = useAuth();
 
+    const { enqueueSnackbar } = useSnackbar();
+
     async function PostOrder() {
         const dataPostOrder = {
             idPost: randomIdPost(),
             noi_nhan: noi_nhan[Math.floor(Math.random() * 69)],
             noi_giao: noi_giao[Math.floor(Math.random() * 45)],
-            ghi_chu: 'fake data',
+            ghi_chu: 'Dữ liệu được Fake ngẫu nhiên !',
             thoi_gian: moment().format('X'),
             phone: phone[Math.floor(Math.random() * 30)],
             ten_nguoi_gui: name[Math.floor(Math.random() * 50)],
@@ -135,11 +139,13 @@ function FakeData(props) {
     }
 
     const fakeData = async () => {
-        const interval = setInterval(PostOrder, 2000);
+        const interval = setInterval(() => {
+            PostOrder();
+        }, 2000);
 
         const timer = setTimeout(() => {
             clearInterval(interval);
-            alert('Tiến trình hoàn tất !');
+            enqueueSnackbar('Tiến trình hoàn tất', { variant: 'success' });
         }, 11000);
 
         return () => {
@@ -149,18 +155,11 @@ function FakeData(props) {
     };
 
     return (
-        <div className="d-flex flex-column">
-            <div className="my-10">
-                <button className="btn btn-light-danger" onClick={fakeData}>
-                    Fake 5 order
-                </button>
-            </div>
-            <div>
-                <Link to="/home" className="btn btn-light">
-                    Go to home
-                </Link>
-            </div>
-        </div>
+        <li className="nav-item mb-2">
+            <span className="nav-link btn btn-icon btn-lg btn-borderless" onClick={fakeData}>
+                <i className="fad fa-yin-yang" />
+            </span>
+        </li>
     );
 }
 
