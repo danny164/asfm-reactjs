@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -13,14 +14,12 @@ import Cancelled from '../labels/Cancelled';
 import Completed from '../labels/Completed';
 import InProcessing from '../labels/InProcessing';
 import Picked from '../labels/Picked';
-import BookAgain from './BookAgain';
 import Chat from './Chat/Chat';
 import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
-import { useSnackbar } from 'notistack';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,

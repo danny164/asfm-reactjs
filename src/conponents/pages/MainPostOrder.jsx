@@ -1,16 +1,17 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import classNames from 'classnames';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import random from 'randomstring';
 import React, { useRef, useState } from 'react';
+import Expand from 'react-expand-animated';
+import { useForm } from 'react-hook-form';
+import InputMask from 'react-input-mask';
+import * as yup from 'yup';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import InputMask from 'react-input-mask';
-import Expand from 'react-expand-animated';
 import FeeRec from './ShipFeeRecommend/FeeRec';
-import classNames from 'classnames';
 
 MainPostOrder.propTypes = {
     postOrder: PropTypes.func,
@@ -146,6 +147,8 @@ function MainPostOrder(props) {
     //////////////////////////////////////////////////////
     const { postOrder, defaultAddressError } = props;
     const [show, setShow] = useState(false);
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const [receiveAddress, setReceiveAddress] = useState(false);
     const [km, setKm] = useState();
@@ -346,12 +349,18 @@ function MainPostOrder(props) {
             charset: 'numeric',
         });
 
+        //
         let shipFee = 0;
 
         if (Number.isInteger(newPrice) && newPrice !== 0) {
             shipFee = convertNewPrice(newPrice);
         } else {
-            shipFee = reverseString(shipFeeRef.current.value);
+            shipFee = reverseString(shipFeeRef.current.value); // 10 000
+        }
+
+        // Kiểm tra tiền < 10000
+        if (parseInt(shipFee.split(' ').join('')) < 10000) {
+            return enqueueSnackbar('Chi phí giao hàng tối thiểu phải 10,000đ trở lên !', { variant: 'info' });
         }
 
         const dataPostOrder = {
