@@ -86,7 +86,7 @@ function HomePage() {
                         const renderOldStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 1));
 
                         renderOldStatus.map((data) => {
-                            handleDeleteOrder(data.id_post, 'Đơn hàng bị hủy vì trong 24 giờ chưa có shipper nhận !');
+                            handleDeleteOrder(data.id_post, 'Đơn hàng trong 24 giờ tự động hủy vì không có shipper nhận !');
                         });
 
                         const renderStatus = Object.values(snapshot.val()).filter(
@@ -218,7 +218,7 @@ function HomePage() {
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: '3', reason: reason });
-            enqueueSnackbar(`Đơn #${id} đã hủy thành công`, { variant: 'success' });
+            enqueueSnackbar(`Đơn #${id} đã bị hủy`, { variant: 'success' });
         } catch (e) {
             enqueueSnackbar(`Có lỗi xảy ra !`, { variant: 'error' });
         }
