@@ -11,7 +11,7 @@ import VerticalChart from './component/VerticalChart';
 import './styles.scss';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { changeFilter } from 'conponents/common/filterSlice';
+import { changeFilter } from 'components/common/filterSlice';
 
 var lastStatus = [];
 function Chart(props) {

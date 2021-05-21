@@ -16,6 +16,7 @@ import Chart from './pages/Chart';
 import NotFoundPage from './pages/NotFound';
 import TotalOrder from './pages/TotalOrder';
 import Register from './SignUp';
+import FakeData from './pages/FakeData';
 
 function Application() {
     return (
@@ -33,6 +34,7 @@ function Application() {
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
                     <PrivateRoute path="/order" component={TotalOrder} />
+                    <PrivateRoute path="/fake" component={FakeData} />
                     <BanRoute path="/banned" component={Banned} />
                     <Route component={NotFoundPage} />
                 </Switch>

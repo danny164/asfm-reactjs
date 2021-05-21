@@ -1,4 +1,4 @@
-import { changeFilter } from 'conponents/common/filterSlice';
+import { changeFilter } from 'components/common/filterSlice';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import 'flatpickr/dist/themes/airbnb.css';
 import moment from 'moment';
@@ -9,9 +9,9 @@ import Modal from 'react-bootstrap/Modal';
 import Expand from 'react-expand-animated';
 import Flatpickr from 'react-flatpickr';
 import { useDispatch } from 'react-redux';
-import Footer from '../../conponents/common/Footer';
-import HeaderMobile from '../../conponents/common/HeaderMobile';
-import AsideLeft from '../../conponents/pages/AsideLeft';
+import Footer from '../../components/common/Footer';
+import HeaderMobile from '../../components/common/HeaderMobile';
+import AsideLeft from '../../components/pages/AsideLeft';
 import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';

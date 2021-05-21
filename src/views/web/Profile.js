@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ScrollToTop from 'react-scroll-to-top';
-import AsideLeft from '../../conponents/pages/AsideLeft';
-import AsideRight from '../../conponents/pages/AsideRight';
-import EditProfile from '../../conponents/pages/EditProfile.jsx';
-import MainProfile from '../../conponents/pages/MainProfile';
+import AsideLeft from '../../components/pages/AsideLeft';
+import AsideRight from '../../components/pages/AsideRight';
+import EditProfile from '../../components/pages/EditProfile.jsx';
+import MainProfile from '../../components/pages/MainProfile';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
 

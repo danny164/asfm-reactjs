@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ScrollToTop from 'react-scroll-to-top';
 import googleMapsApi from '../../api/googleMapsApi';
-import AsideLeft from '../../conponents/pages/AsideLeft';
-import AsideRight from '../../conponents/pages/AsideRight';
-import MainPostOrder from '../../conponents/pages/MainPostOrder';
+import AsideLeft from '../../components/pages/AsideLeft';
+import AsideRight from '../../components/pages/AsideRight';
+import MainPostOrder from '../../components/pages/MainPostOrder';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 

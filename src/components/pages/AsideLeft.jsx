@@ -35,6 +35,13 @@ function AsideLeft(props) {
             className: 'nav-link btn btn-icon btn-lg btn-borderless',
             icon: 'fad fa-rocket-launch',
         },
+        {
+            id: 5,
+            name: 'fake',
+            to: '/fake',
+            className: 'nav-link btn btn-icon btn-lg btn-borderless',
+            icon: 'fad fa-yin-yang',
+        },
     ];
 
     return (

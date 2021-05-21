@@ -4,9 +4,9 @@ import random from 'randomstring';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ScrollToTop from 'react-scroll-to-top';
-import AsideLeft from '../../conponents/pages/AsideLeft';
-import AsideRight from '../../conponents/pages/AsideRight';
-import MainHomePage from '../../conponents/pages/MainHomePage';
+import AsideLeft from '../../components/pages/AsideLeft';
+import AsideRight from '../../components/pages/AsideRight';
+import MainHomePage from '../../components/pages/MainHomePage';
 import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
 import { updateNotification } from './Slice/notificationSlice';
@@ -66,21 +66,31 @@ function HomePage() {
     }, []);
 
     //fetch data post order
-    const last24hrs = (dataTime) => {
+    const last24hrs = (dataTime, time) => {
+        if (time === 3) {
+            return dataTime < moment().subtract(3, 'days').format('X');
+        }
         return dataTime < moment().subtract(1, 'day').format('X');
     };
 
+    const in24hrs = (dataTime) => {
+        return dataTime > moment().subtract(1, 'day').format('X');
+    };
     useEffect(() => {
         async function fetchOrder() {
             try {
                 //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
                 await realtime.ref('OrderStatus/' + id).once('value', (snapshot) => {
                     if (snapshot !== null) {
-                        const renderStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian));
+                        const renderOldStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 1));
 
-                        renderStatus.map((data) => {
+                        renderOldStatus.map((data) => {
                             handleDeleteOrder(data.id_post, 'Đơn hàng bị hủy vì trong 24 giờ chưa có shipper nhận !');
                         });
+
+                        const renderStatus = Object.values(snapshot.val()).filter(
+                            (data) => data.status !== '0' || (data.status === '0' && in24hrs(data.thoi_gian))
+                        );
                     }
                 });
 
@@ -102,6 +112,12 @@ function HomePage() {
             try {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot !== null) {
+                        const oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
+
+                        oldNoti.map((data) => {
+                            realtime.ref('Notification/' + currentUser.uid).remove(data);
+                        });
+
                         const action = updateNotification(snapshot.val());
                         dispatch(action);
                     }
