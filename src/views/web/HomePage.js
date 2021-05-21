@@ -3,7 +3,6 @@ import { useSnackbar } from 'notistack';
 import random from 'randomstring';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import ScrollToTop from 'react-scroll-to-top';
 import AsideLeft from '../../components/pages/AsideLeft';
 import AsideRight from '../../components/pages/AsideRight';
 import MainHomePage from '../../components/pages/MainHomePage';
@@ -226,8 +225,6 @@ function HomePage() {
 
     return (
         <>
-            <ScrollToTop smooth color="#6f00ff" />
-
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />

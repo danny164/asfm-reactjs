@@ -1,7 +1,6 @@
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import ScrollToTop from 'react-scroll-to-top';
 import googleMapsApi from '../../api/googleMapsApi';
 import AsideLeft from '../../components/pages/AsideLeft';
 import AsideRight from '../../components/pages/AsideRight';
@@ -165,7 +164,6 @@ function PostOrder(props) {
 
     return (
         <>
-            <ScrollToTop smooth color="#6f00ff" />
             <div className="header-fixed sidebar-enabled bg">
                 <section className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />

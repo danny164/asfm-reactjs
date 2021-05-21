@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ScrollToTop from 'react-scroll-to-top';
 import AsideLeft from '../../components/pages/AsideLeft';
 import AsideRight from '../../components/pages/AsideRight';
 import EditProfile from '../../components/pages/EditProfile.jsx';
@@ -82,7 +81,6 @@ export default function Profile() {
 
     return (
         <>
-            <ScrollToTop smooth color="#6f00ff" />
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft isShowChange={isShowProfile} />
