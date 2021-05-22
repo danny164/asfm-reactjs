@@ -1,49 +1,60 @@
+import moment from 'moment';
 import 'moment/locale/vi';
 import React, { useEffect, useState } from 'react';
 import Moment from 'react-moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
-import './styles.scss';
-import moment from 'moment';
 import SkeletonNotification from '../Skeleton/SkeletonNotification';
+import { updateIdPost } from './idPostSlice';
+import './styles.scss';
+
+const baseOnStatus = [
+    {
+        id: 1,
+        action: 'đang',
+        name: 'được xử lý',
+        classname: `text-progress`,
+        icon: <i className="fad fa-spinner text-progress fa-sm mr-1"></i>,
+    },
+    {
+        id: 2,
+        action: 'đã',
+        name: 'có shipper nhận',
+        classname: `text-picked`,
+        icon: <i className="fad fa-box-full text-picked fa-sm mr-1"></i>,
+    },
+    {
+        id: 3,
+        action: 'đã',
+        name: 'giao hàng thành công',
+        classname: `text-done`,
+        icon: <i className="fad fa-check-circle text-done fa-sm mr-1"></i>,
+    },
+    {
+        id: 4,
+        action: 'đã',
+        name: 'bị hủy',
+        classname: `text-cancelled`,
+        icon: <i className="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
+    },
+];
 
 function NotifySideRight(props) {
     const notification = useSelector((state) => state.notification);
+
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const [loading, setLoading] = useState(false);
     const [sortStatus, setSortStatus] = useState([]);
     const [items, setItems] = useState([]);
 
-    const baseOnStatus = [
-        {
-            id: 1,
-            action: 'đang',
-            name: 'được xử lý',
-            classname: `text-progress`,
-            icon: <i className="fad fa-spinner text-progress fa-sm mr-1"></i>,
-        },
-        {
-            id: 2,
-            action: 'đã',
-            name: 'có shipper nhận',
-            classname: `text-picked`,
-            icon: <i className="fad fa-box-full text-picked fa-sm mr-1"></i>,
-        },
-        {
-            id: 3,
-            action: 'đã',
-            name: 'giao hàng thành công',
-            classname: `text-done`,
-            icon: <i className="fad fa-check-circle text-done fa-sm mr-1"></i>,
-        },
-        {
-            id: 4,
-            action: 'đã',
-            name: 'bị hủy',
-            classname: `text-cancelled`,
-            icon: <i className="fad fa-times-circle text-cancelled fa-sm mr-1"></i>,
-        },
-    ];
+    const handleIdPostClick = (id) => {
+        if (!id) return;
+        const action = updateIdPost(id);
+        dispatch(action);
+    };
 
     const last72hrs = (dataTime) => {
         return dataTime >= moment().subtract(3, 'days').format('X');
@@ -96,8 +107,7 @@ function NotifySideRight(props) {
                 {!loading &&
                     items.map((data) => (
                         <>
-                            <div className="separator separator-dashed my-2" />
-                            <div className="noti-modal cursor-pointer">
+                            <div className="noti-modal cursor-pointer" onClick={() => handleIdPostClick(data.id_post)}>
                                 <div className="py-1" key={`${data.id_post} ${data.status}`}>
                                     {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
                                     {baseOnStatus[data.status].action}{' '}
@@ -109,26 +119,24 @@ function NotifySideRight(props) {
                                     </span>{' '}
                                 </div>
                             </div>
+                            <div className="separator separator-dashed my-2" />
                         </>
                     ))}
                 {!loading && sortStatus.length === 0 && (
                     <>
-                        <div className="separator separator-dashed my-2" />
                         <div className="py-1">Bạn chưa có thông báo nào !</div>
                     </>
                 )}
                 {!loading && items.length !== sortStatus.length && sortStatus.length !== 0 && (
                     <>
-                        <div className="separator separator-dashed mt-2" />
-                        <div className="text-center p-3 cursor-pointer" onClick={handleOnClick}>
+                        <div className="text-center pt-2 pb-3 cursor-pointer" onClick={handleOnClick}>
                             Xem thêm
                         </div>
                     </>
                 )}
                 {!loading && items.length === sortStatus.length && sortStatus.length !== 0 && (
                     <>
-                        <div className="separator separator-dashed mt-2" />
-                        <div className="text-center p-3">Bạn đã xem hết thông báo gần đây</div>
+                        <div className="text-center pt-2 pb-3">Bạn đã xem hết thông báo gần đây</div>
                     </>
                 )}
             </div>

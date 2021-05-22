@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment/locale/vi';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
