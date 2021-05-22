@@ -115,6 +115,8 @@ function FakeData(props) {
                 id_post: dataPostOrder.idPost,
                 id_shop: currentUser.uid,
                 status: '0',
+                picked_time: '',
+                completed_time: '',
                 noi_giao: dataPostOrder.noi_giao,
                 noi_nhan: dataPostOrder.noi_nhan,
                 ghi_chu: dataPostOrder.ghi_chu,

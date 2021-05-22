@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { useAuth } from '../../context/AuthContext';
@@ -71,6 +73,8 @@ function MainHomePage(props) {
 
     const [dataModal, setDataModal] = useState({
         ghi_chu: '',
+        picked_time: '',
+        completed_time: '',
         id_post: '',
         id_shop: '',
         km: '',
@@ -170,21 +174,18 @@ function MainHomePage(props) {
                 setSortStatus([]);
             }
             setCheckLoading(true);
-            console.log(1, checkLoading);
 
             setLoading(false);
         }, 800);
 
         return () => {
             clearTimeout(timer);
-            console.log(2, checkLoading);
         };
     }, [filter, checkLoading, sortByRange]);
 
     // Chạy lần 2 data status thay đổi sẽ không bị dính loading
     useEffect(() => {
         if (checkLoading) {
-            console.log('test');
             if (datas) {
                 const renderStatus = Object.values(datas).filter(
                     (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
@@ -239,6 +240,7 @@ function MainHomePage(props) {
                         .once('value')
                         .then((snapshot) => {
                             setDataModal(snapshotToObject(snapshot));
+                            console.log('ok');
                         });
 
                     setTransactionInfor(snapshot.val());
@@ -332,7 +334,58 @@ function MainHomePage(props) {
         }
     };
 
-    console.log(items.length);
+    let extraTime = 0;
+
+    const estimateTime = (secs) => {
+        const mins = Math.round(secs / 60);
+
+        if (mins <= 1) {
+            extraTime = 20;
+            return '20 phút';
+        }
+
+        const bonusTime = mins + 20;
+
+        extraTime = bonusTime;
+
+        return bonusTime + ' phút';
+    };
+
+    // TODO: Ước tính thời gian hoàn thành
+    const estimateCompletedTime = (pickedTime) => {
+        return moment.unix(pickedTime).add(extraTime, 'minutes').format('HH:mm DD/MM/YYYY');
+    };
+
+    // TODO: Thời gian chính xác hoàn tất đơn
+    const exactCompletedTime = (completedTime) => {
+        return moment.unix(completedTime).format('HH:mm DD/MM/YYYY');
+    };
+
+    // TODO: Tính tổng thời gian giao thực tế
+    const calTotalTime = (start, end) => {
+        const picked = moment.unix(start);
+        const completed = moment.unix(end);
+
+        return picked.to(completed); // 2 phút tới
+    };
+
+    const popover = (
+        <Popover>
+            <Popover.Title as="h3">Đây là gì?</Popover.Title>
+            <Popover.Content>
+                <p>
+                    <span className="text-primary-2">Số km ước tính</span> từ điểm nhận đơn tới điểm giao hàng
+                </p>
+                <p>
+                    <span className="text-chartjs">Số phút ước tính</span> shipper giao hàng trong bao lâu
+                </p>
+                <p>
+                    <span className="text-muted">Thời gian hoàn thành ước tính</span> kể từ lúc shipper nhận hàng
+                </p>
+            </Popover.Content>
+        </Popover>
+    );
+
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />
@@ -584,23 +637,39 @@ function MainHomePage(props) {
                                     </div>
                                 </>
                             )}
+
+                            <div className="separator separator-dashed my-5" />
+                            <p className="font-weight-bold">
+                                Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                <span className="middle-dot text-chartjs">
+                                    {dataModal.completed_time
+                                        ? calTotalTime(dataModal.picked_time, dataModal.completed_time)
+                                        : estimateTime(dataModal.time_estimate)}
+                                </span>
+                                {dataModal.picked_time && (
+                                    <span className="middle-dot text-muted">
+                                        {dataModal.completed_time
+                                            ? exactCompletedTime(dataModal.completed_time)
+                                            : estimateCompletedTime(dataModal.picked_time)}
+                                    </span>
+                                )}
+                                <OverlayTrigger placement="top" overlay={popover}>
+                                    <span className="ml-2 cursor-pointer">
+                                        <i className="fad fa-question-circle fa-1x" />
+                                    </span>
+                                </OverlayTrigger>
+                            </p>
                             {dataModal.status !== '2' && (
-                                <>
-                                    <div className="separator separator-dashed my-5" />
-                                    <p className="font-weight-bold">
-                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
-                                    </p>
-                                    <GoogleMaps
-                                        receiveLat={dataModal.receiveLat}
-                                        receiveLng={dataModal.receiveLng}
-                                        shipLat={dataModal.shipLat}
-                                        shipLng={dataModal.shipLng}
-                                        noiNhan={dataModal.noi_nhan}
-                                        noiGiao={dataModal.noi_giao}
-                                        shipperInfor={shipperInfor}
-                                        status={dataModal.status}
-                                    />
-                                </>
+                                <GoogleMaps
+                                    receiveLat={dataModal.receiveLat}
+                                    receiveLng={dataModal.receiveLng}
+                                    shipLat={dataModal.shipLat}
+                                    shipLng={dataModal.shipLng}
+                                    noiNhan={dataModal.noi_nhan}
+                                    noiGiao={dataModal.noi_giao}
+                                    shipperInfor={shipperInfor}
+                                    status={dataModal.status}
+                                />
                             )}
                         </Modal.Body>
 

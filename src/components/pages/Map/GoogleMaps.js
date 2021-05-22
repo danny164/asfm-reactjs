@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
 import './map.scss';
 import { realtime } from '../../../firebase';
+import { set } from 'react-hook-form';
 
 GoogleMaps.propTypes = {
     noiNhan: PropTypes.string,
@@ -39,7 +40,7 @@ export default function GoogleMaps(props) {
 
     const directionsCallback = (result) => {
         count += 1;
-        if (result !== null && count === 2) {
+        if (result !== null && count === 5) {
             if (result.status === 'OK') {
                 setResponse(result);
             } else {
@@ -58,30 +59,32 @@ export default function GoogleMaps(props) {
         <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
             <GoogleMap
                 mapContainerStyle={mapStyles}
-                zoom={13}
-                center={defaultCenter}
+                zoom={shipperLocation !== null ? 18 : 13}
+                center={shipperLocation !== null ? shipperLocation : defaultCenter}
                 options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
             >
                 {/* hiển thị vị trí shipper */}
                 {shipperLocation !== null && status !== '3' && <Marker position={shipperLocation} />}
 
-                {
-                    <DirectionsService
-                        options={{
-                            origin: noiNhan,
-                            destination: noiGiao,
-                            travelMode: 'DRIVING',
-                        }}
-                        callback={directionsCallback}
-                        onLoad={(directionsService) => {
-                            console.log('DirectionsService onLoad', directionsService);
-                        }}
-                        onUnmount={(directionsService) => {
-                            count = 0;
-                            console.log('DirectionsService onUnmount', directionsService);
-                        }}
-                    />
-                }
+                {status === '0' && (
+                    <>
+                        <DirectionsService
+                            options={{
+                                origin: noiNhan,
+                                destination: noiGiao,
+                                travelMode: 'DRIVING',
+                            }}
+                            callback={directionsCallback}
+                            onLoad={(directionsService) => {
+                                console.log('DirectionsService onLoad', directionsService);
+                            }}
+                            onUnmount={(directionsService) => {
+                                setResponse(null);
+                                console.log('DirectionsService onUnmount', directionsService);
+                            }}
+                        />
+                    </>
+                )}
 
                 {response !== null && (
                     <DirectionsRenderer
@@ -92,6 +95,7 @@ export default function GoogleMaps(props) {
                             console.log('DirectionsRenderer onLoad', directionsRenderer);
                         }}
                         onUnmount={(directionsRenderer) => {
+                            setResponse(null);
                             console.log('DirectionsRenderer onUnmount', directionsRenderer);
                         }}
                     />
