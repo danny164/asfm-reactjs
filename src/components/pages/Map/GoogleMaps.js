@@ -40,7 +40,8 @@ export default function GoogleMaps(props) {
 
     const directionsCallback = (result) => {
         count += 1;
-        if (result !== null && count === 5) {
+        console.log('test');
+        if (result !== null && count < 3) {
             if (result.status === 'OK') {
                 setResponse(result);
             } else {
@@ -95,6 +96,7 @@ export default function GoogleMaps(props) {
                             console.log('DirectionsRenderer onLoad', directionsRenderer);
                         }}
                         onUnmount={(directionsRenderer) => {
+                            count = 0;
                             setResponse(null);
                             console.log('DirectionsRenderer onUnmount', directionsRenderer);
                         }}
