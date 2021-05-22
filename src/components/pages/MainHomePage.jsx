@@ -390,7 +390,7 @@ function MainHomePage(props) {
                                 dataLength={items.length}
                                 next={fetchMoreData}
                                 hasMore={hasMore}
-                                loader={items.length !== 0 && <SkeletonCard />}
+                                loader={items.length !== 0 && sortStatus.length > 5 && <SkeletonCard />}
                                 endMessage={
                                     items.length !== 0 && (
                                         <p style={{ textAlign: 'center' }}>
