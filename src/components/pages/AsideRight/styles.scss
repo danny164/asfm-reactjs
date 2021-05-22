@@ -1,6 +1,13 @@
 .card-body--notify {
     display: flex;
     flex-direction: column;
+
+    .noti-modal:hover {
+        // color: #ffa800;
+        background-color: #fff4de;
+        border-color: transparent;
+        border-radius: 0.25rem;
+    }
 }
 
 .card.card-custom > .card-body.card-body--notify {

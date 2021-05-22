@@ -8,7 +8,7 @@ GoogleMaps.propTypes = {
     noiNhan: PropTypes.string,
     noiGiao: PropTypes.string,
     status: PropTypes.string,
-    shipperLocation: PropTypes.object
+    shipperLocation: PropTypes.object,
 };
 
 GoogleMaps.defaultProps = {
@@ -18,7 +18,7 @@ GoogleMaps.defaultProps = {
     shipperInfor: {
         lat: 16.057723868641794,
         lng: 108.20189873237138,
-    }
+    },
 };
 
 const mapStyles = {
@@ -34,7 +34,7 @@ const defaultCenter = {
 let count = 0;
 export default function GoogleMaps(props) {
     const { status, noiNhan, noiGiao, shipperInfor } = props;
-    const [shipperLocation, setShipperLocation] = useState()
+    const [shipperLocation, setShipperLocation] = useState();
     const [response, setResponse] = useState(null);
 
     const directionsCallback = (result) => {
@@ -52,8 +52,7 @@ export default function GoogleMaps(props) {
         realtime.ref('Location_Shipper/' + shipperInfor.id).on('value', (snapshot) => {
             if (snapshot !== null) setShipperLocation(snapshot.val());
         });
-    }, [shipperInfor])
-
+    }, [shipperInfor]);
 
     return (
         <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
@@ -64,9 +63,7 @@ export default function GoogleMaps(props) {
                 options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
             >
                 {/* hiển thị vị trí shipper */}
-                {shipperLocation !== null && status !== "3" &&
-                    <Marker position={shipperLocation} />
-                }
+                {shipperLocation !== null && status !== '3' && <Marker position={shipperLocation} />}
 
                 {
                     <DirectionsService
@@ -100,6 +97,6 @@ export default function GoogleMaps(props) {
                     />
                 )}
             </GoogleMap>
-        </LoadScript >
+        </LoadScript>
     );
 }

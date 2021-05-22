@@ -97,15 +97,17 @@ function NotifySideRight(props) {
                     items.map((data) => (
                         <>
                             <div className="separator separator-dashed my-2" />
-                            <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
-                                {baseOnStatus[data.status].action}{' '}
-                                <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
-                                <span className="font-size-sm text-time">
-                                    <Moment locale="vi" unix fromNow>
-                                        {data.thoi_gian}
-                                    </Moment>
-                                </span>{' '}
+                            <div className="noti-modal cursor-pointer">
+                                <div className="py-1" key={`${data.id_post} ${data.status}`}>
+                                    {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
+                                    {baseOnStatus[data.status].action}{' '}
+                                    <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
+                                    <span className="font-size-sm text-time">
+                                        <Moment locale="vi" unix fromNow>
+                                            {data.thoi_gian}
+                                        </Moment>
+                                    </span>{' '}
+                                </div>
                             </div>
                         </>
                     ))}
@@ -126,7 +128,7 @@ function NotifySideRight(props) {
                 {!loading && items.length === sortStatus.length && sortStatus.length !== 0 && (
                     <>
                         <div className="separator separator-dashed mt-2" />
-                        <div className="text-center p-3 cursor-pointer">Bạn đã xem hết thông báo gần đây</div>
+                        <div className="text-center p-3">Bạn đã xem hết thông báo gần đây</div>
                     </>
                 )}
             </div>
