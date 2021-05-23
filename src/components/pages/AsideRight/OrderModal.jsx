@@ -1,7 +1,70 @@
 import { dateToFromNowDaily } from 'convert/DateToFromNow';
+import moment from 'moment';
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+import Chat from '../Chat/Chat';
+import GoogleMaps from '../Map/GoogleMaps';
+import CustomRating from '../Rating';
+import SkeletonShipper from '../Skeleton/SkeletonShipper';
+
+OrderModal.propTypes = {};
 
 function OrderModal(props) {
+    let extraTime = 0;
+
+    const estimateTime = (secs) => {
+        const mins = Math.round(secs / 60);
+
+        if (mins <= 1) {
+            extraTime = 20;
+            return '20 phút';
+        }
+
+        const bonusTime = mins + 20;
+
+        extraTime = bonusTime;
+
+        return bonusTime + ' phút';
+    };
+
+    // TODO: Ước tính thời gian hoàn thành
+    const estimateCompletedTime = (pickedTime) => {
+        return moment.unix(pickedTime).add(extraTime, 'minutes').format('HH:mm DD/MM/YYYY');
+    };
+
+    // TODO: Thời gian chính xác hoàn tất đơn
+    const exactCompletedTime = (completedTime) => {
+        return moment.unix(completedTime).format('HH:mm DD/MM/YYYY');
+    };
+
+    // TODO: Tính tổng thời gian giao thực tế
+    const calTotalTime = (start, end) => {
+        const picked = moment.unix(start);
+        const completed = moment.unix(end);
+
+        return picked.to(completed); // 2 phút tới
+    };
+
+    const popover = (
+        <Popover>
+            <Popover.Title as="h3">Đây là gì?</Popover.Title>
+            <Popover.Content>
+                <p>
+                    <span className="text-primary-2">Số km ước tính</span> từ điểm nhận đơn tới điểm giao hàng
+                </p>
+                <p>
+                    <span className="text-chartjs">Số phút ước tính</span> shipper giao hàng trong bao lâu
+                </p>
+                <p>
+                    <span className="text-muted">Thời gian hoàn thành ước tính</span> kể từ lúc shipper nhận hàng
+                </p>
+            </Popover.Content>
+        </Popover>
+    );
+
     return (
         <>
             <Modal size="lg" show={show} onHide={handleClose}>
@@ -191,7 +254,5 @@ function OrderModal(props) {
         </>
     );
 }
-
-OrderModal.propTypes = {};
 
 export default OrderModal;

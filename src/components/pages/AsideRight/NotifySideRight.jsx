@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import SkeletonNotification from '../Skeleton/SkeletonNotification';
 import { updateIdPost } from './idPostSlice';
+import OrderModal from './OrderModal';
 import './styles.scss';
 
 const baseOnStatus = [
@@ -92,55 +93,58 @@ function NotifySideRight(props) {
     };
 
     return (
-        <section
-            className="card card-custom bgi-no-repeat gutter-b"
-            style={{ backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbstractTwo})` }}
-        >
-            <div className="card-header card-notify">
-                <h3 className="card-title align-items-start flex-column">
-                    <span className="title">Thông báo trong ngày gần đây</span>
-                </h3>
-            </div>
-            <div className="card-body card-body--notify pt-2 px-5">
-                {/* Id chỉ làm cảnh =)), dựa vào data.status = [0, 1, 2, 3, 4] tương ứng vs độ dài mảng baseOnStatus */}
-                {loading && <SkeletonNotification />}
-                {!loading &&
-                    items.map((data) => (
-                        <>
-                            <div className="noti-modal cursor-pointer" onClick={() => handleIdPostClick(data.id_post)}>
-                                <div className="py-1" key={`${data.id_post} ${data.status}`}>
-                                    {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
-                                    {baseOnStatus[data.status].action}{' '}
-                                    <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
-                                    <span className="font-size-sm text-time">
-                                        <Moment locale="vi" unix fromNow>
-                                            {data.thoi_gian}
-                                        </Moment>
-                                    </span>{' '}
+        <>
+            <section
+                className="card card-custom bgi-no-repeat gutter-b"
+                style={{ backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbstractTwo})` }}
+            >
+                <div className="card-header card-notify">
+                    <h3 className="card-title align-items-start flex-column">
+                        <span className="title">Thông báo trong ngày gần đây</span>
+                    </h3>
+                </div>
+                <div className="card-body card-body--notify pt-2 px-5">
+                    {/* Id chỉ làm cảnh =)), dựa vào data.status = [0, 1, 2, 3, 4] tương ứng vs độ dài mảng baseOnStatus */}
+                    {loading && <SkeletonNotification />}
+                    {!loading &&
+                        items.map((data) => (
+                            <>
+                                <div className="noti-modal cursor-pointer" onClick={() => handleIdPostClick(data.id_post)}>
+                                    <div className="py-1" key={`${data.id_post} ${data.status}`}>
+                                        {baseOnStatus[data.status].icon}Đơn hàng <span className="text-id">#{data.id_post}</span> của bạn{' '}
+                                        {baseOnStatus[data.status].action}{' '}
+                                        <span className={baseOnStatus[data.status].classname}>{baseOnStatus[data.status].name}</span>.{' '}
+                                        <span className="font-size-sm text-time">
+                                            <Moment locale="vi" unix fromNow>
+                                                {data.thoi_gian}
+                                            </Moment>
+                                        </span>{' '}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="separator separator-dashed my-2" />
+                                <div className="separator separator-dashed my-2" />
+                            </>
+                        ))}
+                    {!loading && sortStatus.length === 0 && (
+                        <>
+                            <div className="py-1">Bạn chưa có thông báo nào !</div>
                         </>
-                    ))}
-                {!loading && sortStatus.length === 0 && (
-                    <>
-                        <div className="py-1">Bạn chưa có thông báo nào !</div>
-                    </>
-                )}
-                {!loading && items.length !== sortStatus.length && sortStatus.length !== 0 && (
-                    <>
-                        <div className="text-center pt-2 pb-3 cursor-pointer" onClick={handleOnClick}>
-                            Xem thêm
-                        </div>
-                    </>
-                )}
-                {!loading && items.length === sortStatus.length && sortStatus.length !== 0 && (
-                    <>
-                        <div className="text-center pt-2 pb-3">Bạn đã xem hết thông báo gần đây</div>
-                    </>
-                )}
-            </div>
-        </section>
+                    )}
+                    {!loading && items.length !== sortStatus.length && sortStatus.length !== 0 && (
+                        <>
+                            <div className="text-center pt-2 pb-3 cursor-pointer" onClick={handleOnClick}>
+                                Xem thêm
+                            </div>
+                        </>
+                    )}
+                    {!loading && items.length === sortStatus.length && sortStatus.length !== 0 && (
+                        <>
+                            <div className="text-center pt-2 pb-3">Bạn đã xem hết thông báo gần đây</div>
+                        </>
+                    )}
+                </div>
+            </section>
+            {/* <OrderModal /> */}
+        </>
     );
 }
 
