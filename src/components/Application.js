@@ -47,13 +47,9 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
-<<<<<<< HEAD:src/conponents/Application.js
                     <BannedRoute path="/banned" component={Banned} />
-=======
                     <PrivateRoute path="/order" component={TotalOrder} />
                     <PrivateRoute path="/fake" component={FakeData} />
-                    <BanRoute path="/banned" component={Banned} />
->>>>>>> 6a8537ffb02ffd18f81c757ab6324b2f6ca8dfc9:src/components/Application.js
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>

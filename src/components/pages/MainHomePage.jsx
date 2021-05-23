@@ -21,11 +21,7 @@ import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
-<<<<<<< HEAD:src/conponents/pages/MainHomePage.jsx
-import GoogleMaps from './Map/GoogleMaps';
-=======
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
->>>>>>> 6a8537ffb02ffd18f81c757ab6324b2f6ca8dfc9:src/components/pages/MainHomePage.jsx
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -96,19 +92,12 @@ function MainHomePage(props) {
         ma_bi_mat: '',
         thoi_gian: '',
         ma_bi_mat: '',
-<<<<<<< HEAD:src/conponents/pages/MainHomePage.jsx
-        receiveLat: 0,
-        receiveLng: 0,
-        shipLat: 0,
-        shipLng: 0,
-=======
         reason: '',
         receiveLng: 0,
         receiveLat: 0,
         shipLng: 0,
         shipLat: 0,
         time_estimate: 0,
->>>>>>> 6a8537ffb02ffd18f81c757ab6324b2f6ca8dfc9:src/components/pages/MainHomePage.jsx
     });
 
     const [show, setShow] = useState(false);
@@ -650,25 +639,6 @@ function MainHomePage(props) {
                                     </div>
                                 </>
                             )}
-<<<<<<< HEAD:src/conponents/pages/MainHomePage.jsx
-                            {dataModal.status !== '2' && (
-                                <>
-                                    <p className="font-weight-bold">
-                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
-                                    </p>
-                                    <GoogleMaps
-                                        shipperLat={transactionInfor.shipperLat}
-                                        shipperLng={transactionInfor.shipperLng}
-                                        receiveLat={dataModal.receiveLat}
-                                        receiveLng={dataModal.receiveLng}
-                                        shipLat={dataModal.shipLat}
-                                        shipLng={dataModal.shipLng}
-                                        noiNhan={dataModal.noi_nhan}
-                                        noiGiao={dataModal.noi_giao}
-                                    />
-                                    {console.log(dataModal.receiveLat, dataModal.receiveLng)}
-                                </>
-=======
 
                             <div className="separator separator-dashed my-5" />
                             <p className="font-weight-bold">
@@ -702,7 +672,6 @@ function MainHomePage(props) {
                                     shipperInfor={shipperInfor}
                                     status={dataModal.status}
                                 />
->>>>>>> 6a8537ffb02ffd18f81c757ab6324b2f6ca8dfc9:src/components/pages/MainHomePage.jsx
                             )}
                         </Modal.Body>
 
