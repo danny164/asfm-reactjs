@@ -4,7 +4,6 @@ import Skeleton from 'react-loading-skeleton';
 function SkeletonNotification() {
     return (
         <>
-            <div className="separator separator-dashed my-2" />
             <div className="py-1">
                 <Skeleton height={18} duration={1} delay={1} width={`88%`} />
             </div>
@@ -44,8 +43,8 @@ function SkeletonNotification() {
             <div className="py-1">
                 <Skeleton height={18} duration={1} delay={1} width={`85%`} />
             </div>
-            <div className="separator separator-dashed mt-2" />
-            <div className="text-center p-3">
+            <div className="separator separator-dashed my-2" />
+            <div className="text-center pt-2 pb-3">
                 <Skeleton height={17} duration={1} delay={1} width={`40%`} />
             </div>
         </>

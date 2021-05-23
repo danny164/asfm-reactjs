@@ -1,35 +1,32 @@
+import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
+import { getDownloadUrl } from 'context/Upload';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Avatar from '../../assets/media/avatar.png';
-import { getDownloadUrl } from '../../context/Upload';
-import Footer from '../common/Footer';
-import Header from '../common/Header';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
+import EditProfile from './Profile/EditProfile';
+import InfoProfile from './Profile/InfoProfile';
 
 MainProfile.propTypes = {
     user: PropTypes.object,
-    onChange: PropTypes.func,
+    edit: PropTypes.func,
 };
 
 MainProfile.defaultProps = {
     user: null,
-    onChange: null,
+    edit: null,
 };
 
 function MainProfile(props) {
-    const { user, onChange } = props;
+    const { user, edit } = props;
+
+    const { url } = useRouteMatch();
 
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
         getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
     }, [user.uid]);
-
-    const handleChangeEdit = () => {
-        if (onChange) {
-            onChange();
-        }
-    };
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -62,108 +59,16 @@ function MainProfile(props) {
                     </div>
                 </div>
                 {/* core content */}
-                <div className="core d-flex flex-column flex-row-fluid container">
-                    <form className="form">
-                        <div className="card card-custom">
-                            <header className="card-header py-3">
-                                <div className="card-title align-items-start flex-column">
-                                    <h3 className="card-label">Thông tin cá nhân</h3>
-                                    <span className="text-muted font-size-sm mt-1">Cập nhật thông tin cá nhân của bạn</span>
-                                </div>
-                                <div className="card-toolbar">
-                                    <button type="submit" className="btn btn-chartjs mr-2" onClick={handleChangeEdit}>
-                                        Chỉnh sửa
-                                    </button>
-                                </div>
-                            </header>
 
-                            <div className="card-body">
-                                {/* avatar */}
-                                <div className="form-group row">
-                                    <label className="col-xl-3 col-lg-4 col-form-label">Ảnh đại diện</label>
-                                    <div className="col-xl-9 col-lg-8">
-                                        <div
-                                            className="image-input image-input-outline"
-                                            id="profile_avatar"
-                                            style={{
-                                                backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
-                                            }}
-                                        >
-                                            <div className="image-input-wrapper" />
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* email */}
-                                <div className="form-group row">
-                                    <label htmlFor="email" className="col-xl-3 col-lg-4 col-form-label">
-                                        Email
-                                    </label>
-                                    <div className="col-xl-9 col-lg-8">
-                                        <input
-                                            className="form-control form-control-lg form-control-solid"
-                                            type="email"
-                                            id="email"
-                                            placeholder="(trống)"
-                                            value={user.email}
-                                            readOnly
-                                        />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
-                                    </div>
-                                </div>
-                                {/* full name */}
-                                <div className="form-group row">
-                                    <label htmlFor="fullname" className="col-xl-3 col-lg-4 col-form-label">
-                                        Họ và tên
-                                    </label>
-                                    <div className="col-xl-9 col-lg-8">
-                                        <input
-                                            className="form-control form-control-lg form-control-solid"
-                                            type="text"
-                                            id="fullname"
-                                            placeholder="(trống)"
-                                            value={user.input.fullname}
-                                            readOnly
-                                        />
-                                    </div>
-                                </div>
-                                <div className="separator separator-dashed my-5" />
-                                {/* phone number */}
-                                <div className="form-group row">
-                                    <label htmlFor="phone" className="col-xl-3 col-lg-4 col-form-label">
-                                        Số điện thoại
-                                    </label>
-                                    <div className="col-xl-9 col-lg-8">
-                                        <input
-                                            className="form-control form-control-lg form-control-solid"
-                                            type="text"
-                                            id="phone"
-                                            placeholder="(trống)"
-                                            value={user.input.phone}
-                                            readOnly
-                                        />
-                                        {/* <span class="form-text text-muted">Some help content goes here</span> */}
-                                    </div>
-                                </div>
-                                {/* address */}
-                                <div className="form-group row">
-                                    <label htmlFor="address" className="col-xl-3 col-lg-4 col-form-label">
-                                        Địa chỉ
-                                    </label>
-                                    <div className="col-xl-9 col-lg-8">
-                                        <input
-                                            className="form-control form-control-lg form-control-solid"
-                                            type="text"
-                                            id="address"
-                                            placeholder="(trống)"
-                                            value={user.input.address}
-                                            readOnly
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <Switch>
+                    <Route exact path={url}>
+                        <InfoProfile user={user} imageUrl={imageUrl} />
+                    </Route>
+
+                    <Route path={`${url}/edit`}>
+                        <EditProfile user={user} imageUrl={imageUrl} edit={edit} />
+                    </Route>
+                </Switch>
             </section>
             <Footer />
         </main>

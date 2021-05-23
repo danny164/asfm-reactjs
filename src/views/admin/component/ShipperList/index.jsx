@@ -1,5 +1,6 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import { convertPhone } from 'convert/Phone';
 import moment from 'moment';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
@@ -100,14 +101,6 @@ const columns = [
         right: true,
     },
 ];
-
-const convertPhone = (phone) => {
-    const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
-    if (match) {
-        return [match[1], match[2], match[3]].join(' ');
-    }
-    return null;
-};
 
 const Phone = ({ row }) => <>{row.phone && convertPhone(row.phone)}</>;
 

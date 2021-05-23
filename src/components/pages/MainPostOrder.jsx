@@ -1,5 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
+import { convertAddress } from 'convert/Address';
+import { convertString } from 'convert/String';
+import { dataList } from 'data/dataList';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
@@ -23,61 +26,6 @@ MainPostOrder.defaultProps = {
     defaultAddressError: '',
 };
 
-const dataList = {
-    'Quận Cẩm Lệ': ['Phường Hòa An', 'Phường Hòa Phát', 'Phường Hòa Thọ Đông', 'Phường Hòa Thọ Tây', 'Phường Hòa Xuân', 'Phường Khuê Trung'],
-    'Quận Hải Châu': [
-        'Phường Bình Hiên',
-        'Phường Bình Thuận',
-        'Phường Hải Châu 1',
-        'Phường Hải Châu 2',
-        'Phường Hòa Cường Bắc',
-        'Phường Hòa Cường Nam',
-        'Phường Hòa Thuận Đông',
-        'Phường Hòa Thuận Tây',
-        'Phường Nam Dương',
-        'Phường Phước Ninh',
-        'Phường Thạch Thang',
-        'Phường Thanh Bình',
-        'Phường Thuận Phước',
-    ],
-    'Quận Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam', 'Phường Hòa Khánh Bắc', 'Phường Hòa Khánh Nam', 'Phường Hòa Minh'],
-    'Quận Ngũ Hành Sơn': ['Phường Hòa Hải', 'Phường Hòa Quý', 'Phường Khuê Mỹ', 'Phường Mỹ An'],
-    'Quận Sơn Trà': [
-        'Phường An Hải Bắc',
-        'Phường An Hải Đông',
-        'Phường An Hải Tây',
-        'Phường Mân Thái',
-        'Phường Nại Hiên Đông',
-        'Phường Phước Mỹ',
-        'Phường Thọ Quang',
-    ],
-    'Quận Thanh Khê': [
-        'Phường An Khê',
-        'Phường Chính Gián',
-        'Phường Hòa Khê',
-        'Phường Tam Thuận',
-        'Phường Tân Chính',
-        'Phường Thạc Gián',
-        'Phường Thanh Khê Đông',
-        'Phường Thanh Khê Tây',
-        'Phường Vĩnh Trung',
-        'Phường Xuân Hà',
-    ],
-    'Huyện Hòa Vang': [
-        'Xã Hòa Bắc',
-        'Xã Hòa Châu',
-        'Xã Hòa Khương',
-        'Xã Hòa Liên',
-        'Xã Hòa Nhơn',
-        'Xã Hòa Ninh',
-        'Xã Hòa Phong',
-        'Xã Hòa Phú',
-        'Xã Hòa Phước',
-        'Xã Hòa Sơn',
-        'Xã Hòa Tiến',
-    ],
-};
-
 //////////////////////////////////////////////////////
 const reverseString = (value) => {
     // 000 20 => 00020 => 20 + ' 000'
@@ -91,56 +39,6 @@ const reverseString = (value) => {
 const convertNewPrice = (value) => {
     const input = value / 1000 + ' 000'; // 20 000
     return input;
-};
-
-const firstUppercase = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-// value: '        nguyen van       quynh      '
-// remove: 'nguyen van quynh'
-// split: ['nguyen', 'van', 'quynh']
-// result: ['Nguyen', 'Van', 'Quynh']
-// join: 'Nguyen Van Quynh'
-
-const convertString = (value) => {
-    const allLowerCase = value.toLowerCase();
-    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
-
-    const removeSpecialChars = removeSpace.replace(
-        /\.|\,|\+|\-|\*|\/|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]|[0-9]/g,
-        ''
-    );
-
-    const splitString = removeSpecialChars.split(' ');
-
-    const result = [];
-
-    splitString.forEach((string) => {
-        return result.push(firstUppercase(string));
-    });
-
-    return result.join(' ');
-};
-
-const convertAddress = (value) => {
-    const allLowerCase = value.toLowerCase();
-    const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
-
-    const removeSpecialChars = removeSpace.replace(
-        /\.|\+|\-|\*|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]/g,
-        ''
-    );
-
-    const splitString = removeSpecialChars.split(' ');
-
-    const result = [];
-
-    splitString.forEach((string) => {
-        return result.push(firstUppercase(string));
-    });
-
-    return result.join(' ');
 };
 
 function MainPostOrder(props) {
