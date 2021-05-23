@@ -1,14 +1,17 @@
+import { changeFilter } from 'components/common/filterSlice';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import 'flatpickr/dist/themes/airbnb.css';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Expand from 'react-expand-animated';
 import Flatpickr from 'react-flatpickr';
-import Footer from '../../conponents/common/Footer';
-import HeaderMobile from '../../conponents/common/HeaderMobile';
-import AsideLeft from '../../conponents/pages/AsideLeft';
+import { useDispatch } from 'react-redux';
+import Footer from '../../components/common/Footer';
+import HeaderMobile from '../../components/common/HeaderMobile';
+import AsideLeft from '../../components/pages/AsideLeft';
 import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
@@ -28,10 +31,15 @@ function AdminPanel(props) {
 
     const [show, setShow] = useState(false);
 
+    const { enqueueSnackbar } = useSnackbar();
+
     const noteRef = useRef();
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         document.body.classList.add('bg');
+        dispatch(changeFilter('all'));
     }, []);
 
     const toShipperList = () => {
@@ -80,7 +88,13 @@ function AdminPanel(props) {
         }
 
         if (selectedData.length === 0) {
-            return alert('Bạn chưa chọn người dùng nào !');
+            return enqueueSnackbar('Bạn chưa chọn người dùng nào !', {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                },
+            });
         }
 
         if (isShopList === true) {
@@ -109,12 +123,24 @@ function AdminPanel(props) {
         setToggledClearRows(false);
         setShow(false);
 
-        return alert('Thao tác thành công !');
+        return enqueueSnackbar('Thao tác thành công', {
+            variant: 'success',
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+            },
+        });
     };
 
     const unLocked = async () => {
         if (selectedData.length === 0) {
-            return alert('Bạn chưa chọn người dùng nào !');
+            return enqueueSnackbar('Bạn chưa chọn người dùng nào !', {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                },
+            });
         }
 
         if (isShopList === true) {
@@ -131,7 +157,13 @@ function AdminPanel(props) {
         setToggledClearRows(false);
         setShow(false);
 
-        return alert('Thao tác thành công !');
+        return enqueueSnackbar('Thao tác thành công', {
+            variant: 'success',
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+            },
+        });
     };
 
     // custom time with datetimepicker

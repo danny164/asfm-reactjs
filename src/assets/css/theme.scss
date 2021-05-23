@@ -5,11 +5,37 @@ a:hover {
 
 body {
     font-family: 'Lexend', sans-serif;
-    font-size: 1rem;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.5;
     color: #3f4254;
     text-align: left;
+}
+
+// override
+.styles_scroll-to-top__2A70v svg {
+    height: 24px;
+    width: 24px;
+
+    overflow: hidden;
+    vertical-align: middle;
+
+    // màu trong svg sẽ chuyển sang trắng
+    g [fill] {
+        transition: fill 0.3s ease;
+        fill: #ffffff;
+    }
+}
+
+[class*=' SnackbarItem-contentRoot-'] {
+    font-size: 13px !important;
+    font-family: 'Lexend', sans-serif !important;
+    line-height: 1.5 !important;
+}
+
+.required::after {
+    content: ' *';
+    color: #f64e60;
 }
 
 .middle-dot:before {
@@ -468,6 +494,17 @@ h3.card-label {
 .label-chartjs {
     color: #f64e60;
     background-color: #ffe2e5;
+}
+
+.label-active {
+    color: #ffa800;
+    background-color: #fff4de;
+    border-color: transparent;
+}
+.label-active:hover {
+    color: #ffa800;
+    background-color: #fff4de;
+    border-color: transparent;
 }
 
 .delivery {
