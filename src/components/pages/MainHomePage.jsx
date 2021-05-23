@@ -1,3 +1,11 @@
+import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
+import Cancelled from 'components/labels/Cancelled';
+import Completed from 'components/labels/Completed';
+import InProcessing from 'components/labels/InProcessing';
+import Picked from 'components/labels/Picked';
+import { useAuth } from 'context/AuthContext';
+import { dateToFromNowDaily } from 'convert/DateToFromNow';
 import moment from 'moment';
 import 'moment/locale/vi';
 import { useSnackbar } from 'notistack';
@@ -9,14 +17,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
-import { useAuth } from '../../context/AuthContext';
 import { db, realtime } from '../../firebase';
-import Footer from '../common/Footer';
-import Header from '../common/Header';
-import Cancelled from '../labels/Cancelled';
-import Completed from '../labels/Completed';
-import InProcessing from '../labels/InProcessing';
-import Picked from '../labels/Picked';
 import Chat from './Chat/Chat';
 import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
@@ -102,21 +103,6 @@ function MainHomePage(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-
-    const dateToFromNowDaily = (date) => {
-        const convertDate = moment.unix(date);
-
-        return moment(convertDate).calendar(null, {
-            lastDay: '[Hôm qua,] HH:mm',
-            sameDay: '[Hôm nay,] HH:mm',
-            nextDay: '[Ngày mai,] HH:mm',
-            lastWeek: 'HH:mm, DD/MM/YYYY',
-            nextWeek: 'HH:mm, DD/MM/YYYY',
-            sameElse: function () {
-                return 'HH:mm, DD/MM/YYYY';
-            },
-        });
-    };
 
     /////////////////////////////////////////////////////////
     // ! Lọc theo sự kiện click trên header

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsideLeft from '../../components/pages/AsideLeft';
 import AsideRight from '../../components/pages/AsideRight';
-import EditProfile from '../../components/pages/EditProfile.jsx';
 import MainProfile from '../../components/pages/MainProfile';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
@@ -9,7 +8,6 @@ import { db } from '../../firebase';
 export default function Profile() {
     const { currentUser } = useAuth();
     const [isShowProfile, setIsShowProfile] = useState(true);
-    const [isShowEdit, setIsShowEdit] = useState(false);
 
     const [userInfor, setUserInfor] = useState({
         email: currentUser.email,
@@ -25,17 +23,11 @@ export default function Profile() {
         },
     });
 
-    function changeToEdit() {
-        setIsShowEdit(true);
-        setIsShowProfile(false);
-    }
-
     function changeToProfile() {
-        setIsShowEdit(false);
         setIsShowProfile(true);
         setUserInfor({
             ...userInfor,
-            error: 'chỉnh sửa thông tin thành công !',
+            error: 'Chỉnh sửa thông tin thành công !',
         });
     }
 
@@ -84,8 +76,7 @@ export default function Profile() {
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft isShowChange={isShowProfile} />
-                    {isShowProfile && <MainProfile onChange={changeToEdit} user={userInfor} />}
-                    {isShowEdit && <EditProfile user={userInfor} edit={editProfile} />}
+                    <MainProfile user={userInfor} edit={editProfile} />
                     <AsideRight name={userInfor.input.fullname} />
                 </div>
             </div>
