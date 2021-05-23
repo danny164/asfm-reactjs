@@ -15,7 +15,7 @@ import Chat from './Chat/Chat';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
-import GoogleMaps from './Map/googleMap';
+import GoogleMaps from './Map/GoogleMaps';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -489,7 +489,6 @@ function MainHomePage(props) {
                                     <p className="font-weight-bold">
                                         Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
                                     </p>
-
                                     <GoogleMaps
                                         shipperLat={transactionInfor.shipperLat}
                                         shipperLng={transactionInfor.shipperLng}
@@ -497,7 +496,10 @@ function MainHomePage(props) {
                                         receiveLng={dataModal.receiveLng}
                                         shipLat={dataModal.shipLat}
                                         shipLng={dataModal.shipLng}
+                                        noiNhan={dataModal.noi_nhan}
+                                        noiGiao={dataModal.noi_giao}
                                     />
+                                    {console.log(dataModal.receiveLat, dataModal.receiveLng)}
                                 </>
                             )}
                         </Modal.Body>
