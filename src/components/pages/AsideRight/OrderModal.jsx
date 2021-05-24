@@ -1,6 +1,10 @@
 import { dateToFromNowDaily } from 'convert/DateToFromNow';
 import moment from 'moment';
-import React from 'react';
+import Cancelled from 'components/labels/Cancelled';
+import Completed from 'components/labels/Completed';
+import InProcessing from 'components/labels/InProcessing';
+import Picked from 'components/labels/Picked';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -9,10 +13,35 @@ import Chat from '../Chat/Chat';
 import GoogleMaps from '../Map/GoogleMaps';
 import CustomRating from '../Rating';
 import SkeletonShipper from '../Skeleton/SkeletonShipper';
+import PropTypes from 'prop-types';
+import { convertPhone } from 'convert/Phone';
+import { useAuth } from 'context/AuthContext';
+import { RePostOrderr } from '../HomepageFunc/RePostOrder';
+import { handleDeleteOrder } from '../HomepageFunc/DeleteOrder';
+import { useSnackbar } from 'notistack';
 
-OrderModal.propTypes = {};
+OrderModal.propTypes = {
+    dataModal: PropTypes.object,
+    shopInfo: PropTypes.object,
+    transactionInfor: PropTypes.object,
+    shipperInfor: PropTypes.object,
+    modalShow: PropTypes.func,
+};
+
+OrderModal.defaultProps = {
+    dataModal: null,
+    shopInfo: null,
+    transactionInfor: null,
+    shipperInfor: null,
+    modalShow: null,
+};
 
 function OrderModal(props) {
+    const { modalShow, dataModal, shopInfo, shipperInfor, transactionInfor } = props;
+    const { currentUser } = useAuth();
+    const [show, setShow] = useState(true);
+    const [showChat, setShowChat] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
     let extraTime = 0;
 
     const estimateTime = (secs) => {
@@ -29,6 +58,34 @@ function OrderModal(props) {
 
         return bonusTime + ' phút';
     };
+
+    //
+    const handleClose = () => {
+        setShow(false);
+        if (modalShow) {
+            modalShow();
+        }
+    };
+    //
+    const handleCloseChat = () => {
+        setShowChat(false);
+    };
+
+    const [fetchLoading, setFetchLoading] = useState(false);
+
+    useEffect(() => {
+        if (shipperInfor === null) return;
+
+        setFetchLoading(true);
+
+        const timer = setTimeout(() => {
+            setFetchLoading(false);
+        }, 1000);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [dataModal, transactionInfor, shipperInfor]);
 
     // TODO: Ước tính thời gian hoàn thành
     const estimateCompletedTime = (pickedTime) => {
@@ -73,8 +130,9 @@ function OrderModal(props) {
                     {dataModal.status === '3' && (
                         <button
                             className="btn btn-sm btn-light flex-shrink-0"
-                            onClick={() => {
-                                rePostOrderr(dataModal);
+                            onClick={async () => {
+                                await RePostOrderr(dataModal, currentUser.uid, enqueueSnackbar);
+                                handleClose();
                             }}
                         >
                             Đặt lại ngay
@@ -173,7 +231,7 @@ function OrderModal(props) {
                                 </div>
 
                                 {dataModal.status === '1' && (
-                                    <span className="cursor-pointer" onClick={handleClickChat}>
+                                    <span className="cursor-pointer" onClick={() => setShowChat(true)}>
                                         <i className="fad fa-comments fa-2x"></i>
                                     </span>
                                 )}
@@ -228,7 +286,18 @@ function OrderModal(props) {
                 <Modal.Footer className="d-flex justify-content-between">
                     <div>
                         {dataModal.status === '0' && (
-                            <Button variant="chartjs" onClick={() => handledeleteOrder(dataModal.id_post)}>
+                            <Button
+                                variant="chartjs"
+                                onClick={async () => {
+                                    await handleDeleteOrder(
+                                        dataModal.id_post,
+                                        'Bạn đã thực hiện thao tác hủy trên hệ thống !',
+                                        currentUser.uid,
+                                        enqueueSnackbar
+                                    );
+                                    handleClose();
+                                }}
+                            >
                                 Hủy đơn
                             </Button>
                         )}
@@ -247,7 +316,7 @@ function OrderModal(props) {
                     shopInfo={shopInfo}
                     idPost={dataModal.id_post}
                     idRoom={transactionInfor.id_roomchat}
-                    idShop={idShop}
+                    idShop={currentUser.uid}
                     shipperInfor={shipperInfor}
                 />
             )}

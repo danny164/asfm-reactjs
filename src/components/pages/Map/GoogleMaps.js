@@ -75,7 +75,6 @@ export default function GoogleMaps(props) {
         [response]
     );
 
-    console.log(response);
 
     return (
         <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE">
@@ -84,7 +83,8 @@ export default function GoogleMaps(props) {
                     return <Marker key={item.name} position={item.location} />;
                 })}
 
-                <Marker key="shipper" position={{ lat: 16.03704735630194, lng: 108.21968661187451 }} />
+                {/* <Marker key="shipper" position={{ lat: 16.03704735630194, lng: 108.21968661187451 }} /> */}
+                
                 {
                     <DirectionsService
                         options={{

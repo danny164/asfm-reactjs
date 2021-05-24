@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { getDay, presentDataLineChart, lastDataLineChart, getLastDay } from '../Function/LineChart';
-
+import { presentDataLineChart, lastDataLineChart } from '../Function/LineChart';
+import { getDay, getLastDay } from '../Function/CommonFunc';
 LineChart.propTypes = {
     datas: PropTypes.array,
 };

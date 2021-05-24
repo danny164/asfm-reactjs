@@ -24,6 +24,8 @@ import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
+import { RePostOrderr } from '../pages/HomepageFunc/RePostOrder';
+import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -192,8 +194,8 @@ function MainHomePage(props) {
     /////////////////////////////////////////////////////////
     // ! Xóa đơn
     const handledeleteOrder = async (id) => {
-        if (deleteOrder) {
-            await deleteOrder(id, 'Bạn đã thực hiện thao tác hủy trên hệ thống !');
+        if (handleDeleteOrder) {
+            await handleDeleteOrder(id, 'Bạn đã thực hiện thao tác hủy trên hệ thống !', currentUser.uid, enqueueSnackbar);
             setShow(false);
         }
     };
@@ -213,9 +215,7 @@ function MainHomePage(props) {
     /////////////////////////////////////////////////////////
     // ! Fetch thông tin của shipper khi nhận đơn
 
-    //
-    const fetchDataShipper = async (idPost, data) => {
-        console.log('idpost: ' + idPost);
+    const fetchDataShipper = async (idPost) => {
         try {
             await realtime.ref('Transaction/' + idPost).on('value', (snapshot) => {
                 /* kiểm tra lần đầu nếu chưa có dataModel thì k chạy setDataModal 
@@ -316,8 +316,12 @@ function MainHomePage(props) {
     }, [sortByRange, datas, filter]);
 
     const rePostOrderr = async (dataPostOrder) => {
-        if (rePostOrder) {
-            await rePostOrder(dataPostOrder);
+        if (RePostOrderr) {
+            let re;
+            re = await RePostOrderr(dataPostOrder, currentUser.uid, enqueueSnackbar);
+            if (re === 0) {
+                return setShow(false);
+            }
             enqueueSnackbar(`Đơn #${dataPostOrder.id_post} đã được đăng lại`, { variant: 'success' });
             setShow(false);
         }

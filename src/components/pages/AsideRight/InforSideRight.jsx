@@ -17,7 +17,7 @@ InforSideRight.defaultProps = {
 function InforSideRight(props) {
     const { isShowChange } = props;
     const { currentUser } = useAuth();
-
+  
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {

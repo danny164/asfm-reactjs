@@ -9,6 +9,13 @@ import SkeletonNotification from '../Skeleton/SkeletonNotification';
 import { updateIdPost } from './idPostSlice';
 import OrderModal from './OrderModal';
 import './styles.scss';
+import PropTypes from 'prop-types';
+import { fetchDataShipper } from 'components/pages/HomepageFunc/fetchDataShipper';
+import { useAuth } from 'context/AuthContext';
+
+NotifySideRight.propTypes = {};
+
+NotifySideRight.defaultProps = {};
 
 const baseOnStatus = [
     {
@@ -42,20 +49,24 @@ const baseOnStatus = [
 ];
 
 function NotifySideRight(props) {
-    const notification = useSelector((state) => state.notification);
+    const { currentUser } = useAuth();
+    const [shipperInfor, setShipperInfor] = useState({});
+    const [transactionInfor, setTransactionInfor] = useState({});
+    const [dataModal, setDataModal] = useState([]);
 
+    const shopInfo = {
+        fullname: localStorage.getItem('fullName'),
+        email: localStorage.getItem('email'),
+        id: currentUser.uid,
+    };
+
+    const notification = useSelector((state) => state.notification);
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const [loading, setLoading] = useState(false);
     const [sortStatus, setSortStatus] = useState([]);
     const [items, setItems] = useState([]);
-
-    const handleIdPostClick = (id) => {
-        if (!id) return;
-        const action = updateIdPost(id);
-        dispatch(action);
-    };
+    const [showModal, setShowModal] = useState(false);
 
     const last72hrs = (dataTime) => {
         return dataTime >= moment().subtract(3, 'days').format('X');
@@ -90,6 +101,16 @@ function NotifySideRight(props) {
         setTimeout(() => {
             setItems(sortStatus.slice(0, index));
         }, 1500);
+    };
+
+    //lấy data để hiển thị modal khi bấm vào thông báo
+    const handleIdPostClick = async (id) => {
+        await fetchDataShipper(id, currentUser.uid, setDataModal, setTransactionInfor, setShipperInfor);
+        setShowModal(true);
+    };
+
+    const handleShowOrder = () => {
+        setShowModal(false);
     };
 
     return (
@@ -144,6 +165,15 @@ function NotifySideRight(props) {
                 </div>
             </section>
             {/* <OrderModal /> */}
+            {showModal === true && (
+                <OrderModal
+                    modalShow={handleShowOrder}
+                    shopInfo={shopInfo}
+                    transactionInfor={transactionInfor}
+                    shipperInfor={shipperInfor}
+                    dataModal={dataModal}
+                />
+            )}
         </>
     );
 }
