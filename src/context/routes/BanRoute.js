@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
-function BannedRoute({ component: Component, ...rest }) {
+function BanRoute({ component: Component, ...rest }) {
     const { currentUser } = useAuth();
 
     return (
@@ -19,4 +19,4 @@ function BannedRoute({ component: Component, ...rest }) {
     );
 }
 
-export default BannedRoute;
+export default BanRoute;

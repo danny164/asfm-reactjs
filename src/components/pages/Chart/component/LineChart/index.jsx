@@ -1,8 +1,7 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { getDay, presentDataLineChart, lastDataLineChart, getLastDay } from '../Function/LineChart';
+import { getDay, getLastDay, lastDataLineChart, presentDataLineChart } from '../Function/LineChart';
 
 LineChart.propTypes = {
     datas: PropTypes.array,
@@ -14,8 +13,7 @@ LineChart.defaultProps = {
 
 function LineChart(props) {
     const { datas } = props;
-    const [label, setLabel] = useState();
-    const [labels, setLabels] = useState();
+
     const [days, setDays] = useState([]);
     const [lastDays, setLastDays] = useState([]);
     const [sortByRange, setSortByRange] = useState(7);
@@ -39,7 +37,6 @@ function LineChart(props) {
         }
     }, [lastDays]);
 
-    console.log(datas);
     //1 tuân 20 đơn.
     const data = {
         labels: days,
