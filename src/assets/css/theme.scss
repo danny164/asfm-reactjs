@@ -33,6 +33,12 @@ body {
     line-height: 1.5 !important;
 }
 
+#notistack-snackbar {
+    font-size: 13px !important;
+    font-family: 'Lexend', sans-serif !important;
+    line-height: 1.5 !important;
+}
+
 .required::after {
     content: ' *';
     color: #f64e60;
