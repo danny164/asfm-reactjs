@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import ScrollToTop from 'react-scroll-to-top';
+import Faqs from 'views/web/Faqs';
 import Feedback from 'views/web/Feedback';
 import Mailbox from 'views/web/Mailbox';
 import AuthProvider from '../context/AuthContext';
@@ -53,6 +54,7 @@ function Application() {
                     <PrivateRoute path="/fake" component={FakeData} />
                     <PrivateRoute path="/feedback" component={Feedback} />
                     <PrivateRoute path="/mailbox" component={Mailbox} />
+                    <PrivateRoute path="/faqs" component={Faqs} />
                     <BanRoute path="/banned" component={Banned} />
                     <Route component={NotFoundPage} />
                 </Switch>

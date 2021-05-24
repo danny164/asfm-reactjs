@@ -72,21 +72,21 @@ function AsideLeft(props) {
                 </ul>
             </nav>
             <footer className="d-flex flex-column align-items-center flex-column-auto py-8">
-                <Link to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless">
-                    <span>
+                <span className="mb-2">
+                    <NavLink strict activeClassName="active" to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless">
                         <i className="fad fa-envelope-open-text"></i>
-                    </span>
-                </Link>
-                <Link to="/feedback" className="nav-link btn btn-icon btn-lg btn-borderless">
-                    <span>
+                    </NavLink>
+                </span>
+                <span className="mb-2">
+                    <NavLink strict activeClassName="active" to="/feedback" className="nav-link btn btn-icon btn-lg btn-borderless">
                         <i className="fad fa-comment-alt-exclamation" />
-                    </span>
-                </Link>
-                <Link to="#" className="nav-link btn btn-icon btn-lg btn-borderless">
-                    <span>
+                    </NavLink>
+                </span>
+                <span className="mb">
+                    <NavLink strict activeClassName="active" to="/faqs" className="nav-link btn btn-icon btn-lg btn-borderless">
                         <i className="fad fa-question-circle" />
-                    </span>
-                </Link>
+                    </NavLink>
+                </span>
             </footer>
         </aside>
     );

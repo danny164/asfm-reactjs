@@ -173,15 +173,21 @@ function MainHomePage(props) {
     // Chạy lần 2 data status thay đổi sẽ không bị dính loading
     useEffect(() => {
         if (checkLoading) {
-            if (datas) {
-                const renderStatus = Object.values(datas).filter(
-                    (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
-                );
-                setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
-                setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
-            } else {
-                setSortStatus([]);
-            }
+            const timer = setTimeout(async () => {
+                if (datas) {
+                    const renderStatus = Object.values(datas).filter(
+                        (data) => (filter === 'all' || filter === data.status) && last24hrs(sortByRange, data.thoi_gian)
+                    );
+                    setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+                    setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 5));
+                } else {
+                    setSortStatus([]);
+                }
+            }, 800);
+
+            return () => {
+                clearTimeout(timer);
+            };
         }
     }, [filter, datas, sortByRange]);
 
@@ -624,39 +630,43 @@ function MainHomePage(props) {
                                     </div>
                                 </>
                             )}
-
-                            <div className="separator separator-dashed my-5" />
-                            <p className="font-weight-bold">
-                                Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
-                                <span className="middle-dot text-chartjs">
-                                    {dataModal.completed_time
-                                        ? calTotalTime(dataModal.picked_time, dataModal.completed_time)
-                                        : estimateTime(dataModal.time_estimate)}
-                                </span>
-                                {dataModal.picked_time && (
-                                    <span className="middle-dot text-muted">
-                                        {dataModal.completed_time
-                                            ? exactCompletedTime(dataModal.completed_time)
-                                            : estimateCompletedTime(dataModal.picked_time)}
-                                    </span>
-                                )}
-                                <OverlayTrigger placement="top" overlay={popover}>
-                                    <span className="ml-2 cursor-pointer">
-                                        <i className="fad fa-question-circle fa-1x" />
-                                    </span>
-                                </OverlayTrigger>
-                            </p>
-                            {dataModal.status !== '2' && (
-                                <GoogleMaps
-                                    receiveLat={dataModal.receiveLat}
-                                    receiveLng={dataModal.receiveLng}
-                                    shipLat={dataModal.shipLat}
-                                    shipLng={dataModal.shipLng}
-                                    noiNhan={dataModal.noi_nhan}
-                                    noiGiao={dataModal.noi_giao}
-                                    shipperInfor={shipperInfor}
-                                    status={dataModal.status}
-                                />
+                            {/* Không hiển Thông tin đơn hàng sau khi hủy */}
+                            {dataModal.status !== '3' && (
+                                <>
+                                    <div className="separator separator-dashed my-5" />
+                                    <p className="font-weight-bold">
+                                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                        <span className="middle-dot text-chartjs">
+                                            {dataModal.completed_time
+                                                ? calTotalTime(dataModal.picked_time, dataModal.completed_time)
+                                                : estimateTime(dataModal.time_estimate)}
+                                        </span>
+                                        {dataModal.picked_time && (
+                                            <span className="middle-dot text-muted">
+                                                {dataModal.completed_time
+                                                    ? exactCompletedTime(dataModal.completed_time)
+                                                    : estimateCompletedTime(dataModal.picked_time)}
+                                            </span>
+                                        )}
+                                        <OverlayTrigger placement="top" overlay={popover}>
+                                            <span className="ml-2 cursor-pointer">
+                                                <i className="fad fa-question-circle fa-1x" />
+                                            </span>
+                                        </OverlayTrigger>
+                                    </p>
+                                    {dataModal.status !== '2' && (
+                                        <GoogleMaps
+                                            receiveLat={dataModal.receiveLat}
+                                            receiveLng={dataModal.receiveLng}
+                                            shipLat={dataModal.shipLat}
+                                            shipLng={dataModal.shipLng}
+                                            noiNhan={dataModal.noi_nhan}
+                                            noiGiao={dataModal.noi_giao}
+                                            shipperInfor={shipperInfor}
+                                            status={dataModal.status}
+                                        />
+                                    )}
+                                </>
                             )}
                         </Modal.Body>
 

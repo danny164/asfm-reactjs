@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import AbstractTwo from '../../../assets/media/abstract-2.svg';
 import SkeletonNotification from '../Skeleton/SkeletonNotification';
 import { updateIdPost } from './idPostSlice';
-import OrderModal from './OrderModal';
+
 import './styles.scss';
 
 const baseOnStatus = [
@@ -48,6 +48,7 @@ function NotifySideRight(props) {
     const history = useHistory();
 
     const [loading, setLoading] = useState(false);
+    const [checkLoading, setCheckLoading] = useState(false);
     const [sortStatus, setSortStatus] = useState([]);
     const [items, setItems] = useState([]);
 
@@ -72,13 +73,32 @@ function NotifySideRight(props) {
             } else {
                 setSortStatus([]);
             }
+            setCheckLoading(true);
 
             setLoading(false);
-        }, 1000);
+        }, 800);
 
         return () => {
             clearTimeout(timer);
         };
+    }, [checkLoading]);
+
+    useEffect(() => {
+        if (checkLoading) {
+            const timer = setTimeout(async () => {
+                if (notification) {
+                    const renderStatus = Object.values(notification).filter((data) => last72hrs(data.thoi_gian));
+                    await setSortStatus(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
+                    await setItems(renderStatus.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)).slice(0, 10));
+                } else {
+                    setSortStatus([]);
+                }
+            }, 800);
+
+            return () => {
+                clearTimeout(timer);
+            };
+        }
     }, [notification]);
 
     const handleOnClick = async () => {
@@ -143,7 +163,6 @@ function NotifySideRight(props) {
                     )}
                 </div>
             </section>
-            {/* <OrderModal /> */}
         </>
     );
 }
