@@ -5,7 +5,7 @@ import Faqs from 'views/web/Faqs';
 import Feedback from 'views/web/Feedback';
 import Mailbox from 'views/web/Mailbox';
 import AuthProvider from '../context/AuthContext';
-import BanRoute from '../context/routes/BanRoute';
+import BannedRoute from '../context/routes/BanRoute';
 import CheckRoute from '../context/routes/CheckRoute';
 import PrivateRoute from '../context/routes/PrivateRoute';
 import AdminPanel from '../views/admin/index';
@@ -50,6 +50,7 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
+                    <BannedRoute path="/banned" component={Banned} />
                     <PrivateRoute path="/order" component={TotalOrder} />
                     <PrivateRoute path="/fake" component={FakeData} />
                     <PrivateRoute path="/feedback" component={Feedback} />

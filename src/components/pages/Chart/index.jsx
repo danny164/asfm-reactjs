@@ -28,7 +28,7 @@ function Chart(props) {
     let percentS2 = 0;
     let percentS3 = 0;
     let percentS4 = 0;
-    let totalOrder = 0;
+    let totalOrder = 1;
 
     const [data, setData] = useState([]);
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ function Chart(props) {
         const fetchOrder = async () => {
             try {
                 await realtime.ref('OrderStatus/' + currentUser.uid).on('value', (snapshot) => {
-                    if (snapshot !== null) {
+                    if (snapshot.val() !== null) {
                         setData(snapshotToArray(snapshot));
                     }
                 });
@@ -88,7 +88,7 @@ function Chart(props) {
         }
     };
 
-    if (data !== []) {
+    if (data.length !== 0) {
         lastStatus = data.filter((data) => last24hrs(sortByRange, data.thoi_gian));
         lastStatus.map((data) => {
             setPercent(data.status);

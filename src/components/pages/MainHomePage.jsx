@@ -71,6 +71,8 @@ function MainHomePage(props) {
         id_shipper: '',
         id_shop: '',
         status: '',
+        shipperLat: 0,
+        shipperLng: 0,
     });
 
     const [dataModal, setDataModal] = useState({

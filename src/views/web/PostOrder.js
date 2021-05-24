@@ -22,8 +22,27 @@ function PostOrder(props) {
         address: '',
         district: '',
         ward: '',
-        detailAddress: '',
-    });
+        detailAddress: ''
+    })
+
+    // async function getLngLatAndDistance(startLocation, endLocation) {
+    //     try {
+    //         const res = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&key=AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE`, {
+    //             headers: {
+    //                 'Access-Control-Allow-Origin': 'http://localhost:3000',
+    //                 'Authorization': "AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE",
+    //                 "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    //                 "Access-Control-Allow-Headers": "Origin, Content/Type",
+    //                 'Accept': 'application/json',
+    //             }
+    //         })
+    //         console.log(res)
+    //         setMapAPI(res)
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
+
 
     let tamung = '0';
     let address = '';
