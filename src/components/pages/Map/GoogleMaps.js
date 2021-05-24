@@ -1,23 +1,25 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
+import './map.scss';
+import { realtime } from '../../../firebase';
+import { set } from 'react-hook-form';
 
 GoogleMaps.propTypes = {
-    receiveLat: PropTypes.number,
-    receiveLng: PropTypes.number,
-    shipLat: PropTypes.number,
-    shipLng: PropTypes.number,
     noiNhan: PropTypes.string,
     noiGiao: PropTypes.string,
+    status: PropTypes.string,
+    shipperLocation: PropTypes.object,
 };
 
 GoogleMaps.defaultProps = {
-    receiveLat: 0,
-    receiveLng: 0,
-    shipLat: 0,
-    shipLng: 0,
+    status: '',
     noiNhan: '',
     noiGiao: '',
+    shipperInfor: {
+        lat: 16.057723868641794,
+        lng: 108.20189873237138,
+    },
 };
 
 const mapStyles = {
@@ -32,75 +34,58 @@ const defaultCenter = {
 
 let count = 0;
 export default function GoogleMaps(props) {
-    const { receiveLat, receiveLng, shipLat, shipLng, noiNhan, noiGiao } = props;
-
+    const { status, noiNhan, noiGiao, shipperInfor } = props;
+    const [shipperLocation, setShipperLocation] = useState();
     const [response, setResponse] = useState(null);
 
-    const locations = [
-        {
-            name: 'Điểm nhận',
-            location: {
-                lat: receiveLat,
-                lng: receiveLng,
-            },
-        },
-        {
-            name: 'Điểm giao',
-            location: {
-                lat: shipLat,
-                lng: shipLng,
-            },
-        },
-
-        // {
-        //     name: 'Shipper',
-        //     location: {
-        //         lat: 16.03704735630194,
-        //         lng: 108.21968661187451,
-        //     },
-        // },
-    ];
-
-    const directionsCallback = useCallback(
-        (result) => {
-            if (result !== null) {
-                if (result.status == 'OK') {
-                    setResponse(result);
-                } else {
-                    console.log('response: ', response);
-                }
+    const directionsCallback = (result) => {
+        count += 1;
+        console.log('test');
+        if (result !== null && count < 3) {
+            if (result.status === 'OK') {
+                setResponse(result);
+            } else {
+                console.log('response: ', response);
             }
-            console.log(count++);
-        },
-        [response]
-    );
+        }
+    };
 
-    console.log(response);
+    useEffect(() => {
+        realtime.ref('Location_Shipper/' + shipperInfor.id).on('value', (snapshot) => {
+            if (snapshot !== null) setShipperLocation(snapshot.val());
+        });
+    }, [shipperInfor]);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE">
-            <GoogleMap mapContainerStyle={mapStyles} zoom={13} center={defaultCenter}>
-                {locations.map((item) => {
-                    return <Marker key={item.name} position={item.location} />;
-                })}
+        <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
+            <GoogleMap
+                mapContainerStyle={mapStyles}
+                zoom={shipperLocation !== null ? 18 : 13}
+                center={shipperLocation !== null ? shipperLocation : defaultCenter}
+                options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
+            >
+                {/* hiển thị vị trí shipper */}
+                {shipperLocation !== null && status !== '3' && <Marker position={shipperLocation} />}
 
-                <Marker key="shipper" position={{ lat: 16.03704735630194, lng: 108.21968661187451 }} />
-                {
-                    <DirectionsService
-                        options={{
-                            origin: noiNhan,
-                            destination: noiGiao,
-                            travelMode: 'DRIVING',
-                        }}
-                        callback={directionsCallback}
-                        onLoad={(directionsService) => {
-                            console.log('DirectionsService onLoad directionsService: ', directionsService);
-                        }}
-                        onUnmount={(directionsService) => {
-                            console.log('DirectionsService onUnmount directionsService: ', directionsService);
-                        }}
-                    />
-                }
+                {status === '0' && (
+                    <>
+                        <DirectionsService
+                            options={{
+                                origin: noiNhan,
+                                destination: noiGiao,
+                                travelMode: 'DRIVING',
+                            }}
+                            callback={directionsCallback}
+                            onLoad={(directionsService) => {
+                                console.log('DirectionsService onLoad', directionsService);
+                            }}
+                            onUnmount={(directionsService) => {
+                                setResponse(null);
+                                console.log('DirectionsService onUnmount', directionsService);
+                            }}
+                        />
+                    </>
+                )}
 
                 {response !== null && (
                     <DirectionsRenderer
@@ -108,10 +93,12 @@ export default function GoogleMaps(props) {
                             directions: response,
                         }}
                         onLoad={(directionsRenderer) => {
-                            console.log('DirectionsRenderer onLoad directionsRenderer: ', directionsRenderer);
+                            console.log('DirectionsRenderer onLoad', directionsRenderer);
                         }}
                         onUnmount={(directionsRenderer) => {
-                            console.log('DirectionsRenderer onUnmount directionsRenderer: ', directionsRenderer);
+                            count = 0;
+                            setResponse(null);
+                            console.log('DirectionsRenderer onUnmount', directionsRenderer);
                         }}
                     />
                 )}
