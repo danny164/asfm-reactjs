@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { db, realtime } from '../../firebase';
@@ -54,6 +55,7 @@ function MainHomePage(props) {
     const { rePostOrder, datas, deleteOrder, shopInfo, idShop } = props;
 
     const [hasMore, setHasMore] = useState(true);
+    const [copied, setCopied] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
     const [sortStatus, setSortStatus] = useState([]);
@@ -105,6 +107,13 @@ function MainHomePage(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
+
+    useEffect(() => {
+        if (copied) {
+            enqueueSnackbar('Đã copy Order ID thành công', { variant: 'success' });
+            setCopied(false);
+        }
+    }, [copied]);
 
     /////////////////////////////////////////////////////////
     // ! Lọc theo sự kiện click trên header
@@ -529,7 +538,14 @@ function MainHomePage(props) {
                                 <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                 <div className="d-flex flex-column flex-grow-1 ml-4">
                                     <header className="card-title content mb-4">
-                                        <span>Order ID: {dataModal.id_post}</span>
+                                        <span>
+                                            Order ID: {dataModal.id_post}{' '}
+                                            <CopyToClipboard text={dataModal.id_post} onCopy={() => setCopied(true)}>
+                                                <span className="ml-1 cursor-pointer">
+                                                    <i className="fad fa-copy"></i>
+                                                </span>
+                                            </CopyToClipboard>
+                                        </span>
                                         <span>
                                             {dateToFromNowDaily(dataModal.thoi_gian)}
                                             {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
