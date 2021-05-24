@@ -1,4 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import Avatar from 'assets/media/avatar.png';
+import { getDownloadUrl, uploadImage } from 'context/Upload';
 import { convertAddress } from 'convert/Address';
 import { convertString } from 'convert/String';
 import { dataList } from 'data/dataList';
@@ -8,12 +10,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-import * as yup from 'yup';
-import Avatar from 'assets/media/avatar.png';
-import { getDownloadUrl, uploadImage } from 'context/Upload';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateProfile } from './profileReducer';
+import * as yup from 'yup';
 
 EditProfile.propTypes = {
     user: PropTypes.object,
@@ -206,15 +205,6 @@ function EditProfile(props) {
             wardRef.current.value,
             convertAddress(addressRef.current.value)
         );
-        const action = updateProfile([
-            convertString(fullNameRef.current.value),
-            phoneRef.current.value,
-            convertAddress(addressRef.current.value) + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
-            districtRef.current.value,
-            wardRef.current.value,
-            convertAddress(addressRef.current.value),
-        ]);
-        dispatch(action);
 
         enqueueSnackbar('Cập nhật thành công', { variant: 'success' });
         history.push('/profile');
