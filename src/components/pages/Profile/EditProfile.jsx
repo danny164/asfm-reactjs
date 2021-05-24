@@ -12,6 +12,8 @@ import * as yup from 'yup';
 import Avatar from 'assets/media/avatar.png';
 import { getDownloadUrl, uploadImage } from 'context/Upload';
 import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProfile } from './profileReducer';
 
 EditProfile.propTypes = {
     user: PropTypes.object,
@@ -23,11 +25,12 @@ EditProfile.defaultProps = {
     edit: null,
 };
 
-let save = '';
+var save = '';
 function EditProfile(props) {
     const { user, edit } = props;
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const fullNameRef = useRef();
     const phoneRef = useRef();
@@ -194,6 +197,7 @@ function EditProfile(props) {
             return setAddressEmpty('Vui lòng cung cấp số nhà, tên đường !');
         }
 
+        console.log(fullNameRef.current.value, phoneRef.current.value, addressRef.current.value, wardRef.current.value, districtRef.current.value);
         await edit(
             convertString(fullNameRef.current.value),
             phoneRef.current.value,
@@ -202,6 +206,15 @@ function EditProfile(props) {
             wardRef.current.value,
             convertAddress(addressRef.current.value)
         );
+        const action = updateProfile([
+            convertString(fullNameRef.current.value),
+            phoneRef.current.value,
+            convertAddress(addressRef.current.value) + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
+            districtRef.current.value,
+            wardRef.current.value,
+            convertAddress(addressRef.current.value),
+        ]);
+        dispatch(action);
 
         enqueueSnackbar('Cập nhật thành công', { variant: 'success' });
         history.push('/profile');

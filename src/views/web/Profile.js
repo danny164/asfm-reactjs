@@ -7,7 +7,6 @@ import { db } from '../../firebase';
 
 export default function Profile() {
     const { currentUser } = useAuth();
-    const [isShowProfile, setIsShowProfile] = useState(true);
 
     const [userInfor, setUserInfor] = useState({
         email: currentUser.email,
@@ -24,7 +23,6 @@ export default function Profile() {
     });
 
     function changeToProfile() {
-        setIsShowProfile(true);
         setUserInfor({
             ...userInfor,
             error: 'Chỉnh sửa thông tin thành công !',
@@ -32,6 +30,7 @@ export default function Profile() {
     }
 
     async function editProfile(fullName, phone, address, district, ward, detailAddress) {
+        console.log(fullName, phone, address, district, ward, detailAddress);
         try {
             await db.collection('ShopProfile').doc(currentUser.uid).update({
                 fullname: fullName,
@@ -69,13 +68,13 @@ export default function Profile() {
             }
         }
         fetchUserInfor();
-    }, [isShowProfile]);
+    }, [userInfor]);
 
     return (
         <>
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
-                    <AsideLeft isShowChange={isShowProfile} />
+                    <AsideLeft />
                     <MainProfile user={userInfor} edit={editProfile} />
                     <AsideRight name={userInfor.input.fullname} />
                 </div>

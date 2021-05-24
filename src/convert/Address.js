@@ -7,7 +7,7 @@ export const convertAddress = (value) => {
     const removeSpace = allLowerCase.replace(/[ ]{2,}/g, ' ').trim();
 
     const removeSpecialChars = removeSpace.replace(
-        /\.|\+|\-|\*|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]/g,
+        /\.|\,|\+|\-|\*|\-|\=|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\{|\}|\||\\|\:|\"|\;|\'|\<|\>|\?|\[|\]/g,
         ''
     );
 

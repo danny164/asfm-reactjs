@@ -4,6 +4,7 @@ import { getDownloadUrl } from 'context/Upload';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
+import FeedbackModal from './FeedbackModal';
 import EditProfile from './Profile/EditProfile';
 import InfoProfile from './Profile/InfoProfile';
 
@@ -31,6 +32,8 @@ function MainProfile(props) {
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />
+
+            <FeedbackModal />
 
             <section className="content d-flex flex-column flex-column-fluid">
                 {/* subheader */}

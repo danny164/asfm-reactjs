@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import filterReducer from '../components/common/filterSlice';
-import totalReducer from '../components/common/totalSlice';
-import idPostReducer from '../components/pages/AsideRight/idPostSlice';
-import notificationReducer from '../views/web/Slice/notificationSlice';
+import filterReducer from 'components/common/filterSlice';
+import totalReducer from 'components/common/totalSlice';
+import idPostReducer from 'components/pages/AsideRight/idPostSlice';
+import profileReducer from 'components/pages/Profile/profileReducer';
+import notificationReducer from 'views/web/Slice/notificationSlice';
 
 // state to use with useSelector
 const rootReducer = {
@@ -10,6 +11,7 @@ const rootReducer = {
     notification: notificationReducer,
     total: totalReducer,
     idPost: idPostReducer,
+    profile: profileReducer,
 };
 
 const store = configureStore({

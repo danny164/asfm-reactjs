@@ -201,11 +201,20 @@ function AdminPanel(props) {
                     <section className="card-body">
                         <div className="card-body__action py-3">
                             <div className="mb-3">
-                                <button type="button" className="btn btn-sm btn-light-primary ml-3" onClick={toShopList}>
+                                <button type="button" className="btn btn-sm btn-light ml-3" onClick={toShopList}>
                                     Quản lý Shop
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light-primary ml-3" onClick={toShipperList}>
+                                <button type="button" className="btn btn-sm btn-light ml-3" onClick={toShipperList}>
                                     Quản lý Shipper
+                                </button>
+                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                    Quản lý Tất cả các đơn
+                                </button>
+                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                    Quản lý Khiếu nại đơn
+                                </button>
+                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                    Quản lý Chất lượng dịch vụ
                                 </button>
                             </div>
                             <div className="mb-3">

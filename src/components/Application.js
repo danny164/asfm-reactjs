@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import ScrollToTop from 'react-scroll-to-top';
+import Feedback from 'views/web/Feedback';
+import Mailbox from 'views/web/Mailbox';
 import AuthProvider from '../context/AuthContext';
 import BanRoute from '../context/routes/BanRoute';
 import CheckRoute from '../context/routes/CheckRoute';
@@ -10,15 +13,14 @@ import PostOrder from '../views/web/PostOrder';
 import Profile from '../views/web/Profile';
 import ChangePw from './ChangePw';
 import ForgotPw from './ForgotPw';
+import ScrollTop from './labels/ScrollTop';
 import Login from './Login';
 import Banned from './pages/Banned';
 import Chart from './pages/Chart';
+import FakeData from './pages/FakeData';
 import NotFoundPage from './pages/NotFound';
 import TotalOrder from './pages/TotalOrder';
 import Register from './SignUp';
-import FakeData from './pages/FakeData';
-import ScrollToTop from 'react-scroll-to-top';
-import ScrollTop from './labels/ScrollTop';
 
 const style = {
     backgroundColor: 'rgba(102, 50, 89, 0.3)',
@@ -49,6 +51,8 @@ function Application() {
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
                     <PrivateRoute path="/order" component={TotalOrder} />
                     <PrivateRoute path="/fake" component={FakeData} />
+                    <PrivateRoute path="/feedback" component={Feedback} />
+                    <PrivateRoute path="/mailbox" component={Mailbox} />
                     <BanRoute path="/banned" component={Banned} />
                     <Route component={NotFoundPage} />
                 </Switch>
