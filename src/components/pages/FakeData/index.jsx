@@ -9,13 +9,6 @@ import { name, noi_giao, noi_nhan, phi_giao, phi_ung, phone } from './data';
 
 FakeData.propTypes = {};
 
-const randomNumber = (number) => {
-    return random.generate({
-        length: 4,
-        charset: 'numeric',
-    });
-};
-
 const randomIdPost = () => {
     return (
         moment().format('YYYYMMDD-HHmmssSSS') +
