@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
-import { getDay, getLastDay } from '../Function/LineChart';
 import { presentDataVerticalChart, lastDataVerticalChart } from '../Function/VerticalChart';
+import { getDay, getLastDay } from '../Function/CommonFunc';
+
 VerticalChart.propTypes = {
     datas: PropTypes.array,
 };
