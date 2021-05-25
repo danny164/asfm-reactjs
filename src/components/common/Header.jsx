@@ -23,33 +23,68 @@ function Header(props) {
     const [unRead1, setUnRead1] = useState(0);
     const [unRead2, setUnRead2] = useState(0);
     const [unRead3, setUnRead3] = useState(0);
+    const [unReadData0, setUnReadData0] = useState([]);
+    const [unReadData1, setUnReadData1] = useState([]);
+    const [unReadData2, setUnReadData2] = useState([]);
+    const [unReadData3, setUnReadData3] = useState([]);
 
     const handleFilterClick = (filter) => {
         const action = changeFilter(filter);
         dispatch(action);
     };
 
-    if (datas) {
-        setUnRead0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0));
-        setUnRead1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0));
-        setUnRead2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0));
-        setUnRead3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0));
-    }
+    useEffect(() => {
+        if (datas) {
+            setUnReadData0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0));
+            setUnReadData1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0));
+            setUnReadData2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0));
+            setUnReadData3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0));
+            setUnRead0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0).length);
+            setUnRead1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0).length);
+            setUnRead2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0).length);
+            setUnRead3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0).length);
+        }
+    }, [datas]);
 
     const updateUnreadOrder = async (status) => {
         await updateRead(status);
     };
 
+    console.log('hahaaaaaaa');
     const updateRead = async (status) => {
         try {
-            await realtime
-                .ref('OrderStatus/' + currentUser.uid)
-                .orderByChild('status')
-                .equalTo(status)
-                .update({
-                    read: 1,
+            if (status === '0') {
+                unReadData0.map((data) => {
+                    realtime.ref('OrderStatus/' + currentUser.uid + '/' + data.id_post).update({
+                        read: 1,
+                    });
                 });
-        } catch(err) {
+            }
+
+            if (status === '1') {
+                unReadData1.map((data) => {
+                    realtime.ref('OrderStatus/' + currentUser.uid + '/' + data.id_post).update({
+                        read: 1,
+                    });
+                });
+            }
+
+            if (status === '2') {
+                unReadData2.map((data) => {
+                    realtime.ref('OrderStatus/' + currentUser.uid + '/' + data.id_post).update({
+                        read: 1,
+                    });
+                });
+            }
+
+            if (status === '3') {
+                unReadData3.map((data) => {
+                    realtime.ref('OrderStatus/' + currentUser.uid + '/' + data.id_post).update({
+                        read: 1,
+                    });
+                });
+            }
+        } catch (err) {
             console.log(err);
         }
     };
@@ -79,7 +114,7 @@ function Header(props) {
                                         <span className={`menu menu-in-progress ${filter === '0' ? 'active' : 'none'}`}>Đang xử lý</span>
                                     </Link>
                                     <span className="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        15
+                                        {unRead0}
                                     </span>
                                 </li>
                                 <li className="menu-item">
@@ -94,7 +129,7 @@ function Header(props) {
                                         <span className={`menu menu-picked ${filter === '1' ? 'active' : 'none'}`}>Đã nhận đơn</span>
                                     </Link>
                                     <span className="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        5
+                                        {unRead1}
                                     </span>
                                 </li>
                                 <li className="menu-item">
@@ -109,7 +144,7 @@ function Header(props) {
                                         <span className={`menu menu-completed ${filter === '2' ? 'active' : 'none'}`}>Hoàn thành</span>
                                     </Link>
                                     <span className="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        9
+                                        {unRead2}
                                     </span>
                                 </li>
                                 <li className="menu-item">
@@ -124,7 +159,7 @@ function Header(props) {
                                         <span className={`menu menu-canceled ${filter === '3' ? 'active' : 'none'}`}>Đơn hủy</span>
                                     </Link>
                                     <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        7
+                                        {unRead3}
                                     </span>
                                 </li>
                             </ul>
