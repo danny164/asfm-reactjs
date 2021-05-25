@@ -6,15 +6,10 @@ import moment from 'moment';
 import random from 'randomstring';
 
 function RePostOrder(props) {
-    return (
-        <div>
-
-        </div>
-    );
+    return <div></div>;
 }
 
 export default RePostOrder;
-
 
 export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
     const idChat =
@@ -81,6 +76,8 @@ export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
             status: '0',
             thoi_gian: moment().format('X'),
         });
+
+        enqueueSnackbar(`Đơn #${dataPostOrder.id_post} đã được đăng lại`, { variant: 'success' });
     } catch (error) {
         console.log(error);
     }

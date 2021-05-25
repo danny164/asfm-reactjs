@@ -1,24 +1,25 @@
-import { dateToFromNowDaily } from 'convert/DateToFromNow';
-import moment from 'moment';
 import Cancelled from 'components/labels/Cancelled';
 import Completed from 'components/labels/Completed';
 import InProcessing from 'components/labels/InProcessing';
 import Picked from 'components/labels/Picked';
+import { useAuth } from 'context/AuthContext';
+import { dateToFromNowDaily } from 'convert/DateToFromNow';
+import { convertPhone } from 'convert/Phone';
+import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Chat from '../Chat/Chat';
+import { handleDeleteOrder } from '../HomepageFunc/DeleteOrder';
+import { RePostOrderr } from '../HomepageFunc/RePostOrder';
 import GoogleMaps from '../Map/GoogleMaps';
 import CustomRating from '../Rating';
 import SkeletonShipper from '../Skeleton/SkeletonShipper';
-import PropTypes from 'prop-types';
-import { convertPhone } from 'convert/Phone';
-import { useAuth } from 'context/AuthContext';
-import { RePostOrderr } from '../HomepageFunc/RePostOrder';
-import { handleDeleteOrder } from '../HomepageFunc/DeleteOrder';
-import { useSnackbar } from 'notistack';
 
 OrderModal.propTypes = {
     dataModal: PropTypes.object,
@@ -39,8 +40,11 @@ OrderModal.defaultProps = {
 function OrderModal(props) {
     const { modalShow, dataModal, shopInfo, shipperInfor, transactionInfor } = props;
     const { currentUser } = useAuth();
+
+    const [copied, setCopied] = useState(false);
     const [show, setShow] = useState(true);
     const [showChat, setShowChat] = useState(false);
+
     const { enqueueSnackbar } = useSnackbar();
     let extraTime = 0;
 
@@ -70,6 +74,14 @@ function OrderModal(props) {
     const handleCloseChat = () => {
         setShowChat(false);
     };
+
+    // Thông báo Copied Id đơn
+    useEffect(() => {
+        if (copied) {
+            enqueueSnackbar('Đã copy Order ID thành công', { variant: 'success' });
+            setCopied(false);
+        }
+    }, [copied]);
 
     const [fetchLoading, setFetchLoading] = useState(false);
 
@@ -144,7 +156,14 @@ function OrderModal(props) {
                         <span className="bullet bullet-bar bg-orange align-self-stretch" />
                         <div className="d-flex flex-column flex-grow-1 ml-4">
                             <header className="card-title content mb-4">
-                                <span>Order ID: {dataModal.id_post}</span>
+                                <span>
+                                    Order ID: {dataModal.id_post}{' '}
+                                    <CopyToClipboard text={dataModal.id_post} onCopy={() => setCopied(true)}>
+                                        <span className="ml-1 cursor-pointer">
+                                            <i className="fad fa-copy"></i>
+                                        </span>
+                                    </CopyToClipboard>
+                                </span>
                                 <span>
                                     {dateToFromNowDaily(dataModal.thoi_gian)}
                                     {/* <Moment format="DD/MM/YYYY">{data.thoi_gian}</Moment> */}
@@ -247,39 +266,43 @@ function OrderModal(props) {
                             </div>
                         </>
                     )}
-
-                    <div className="separator separator-dashed my-5" />
-                    <p className="font-weight-bold">
-                        Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
-                        <span className="middle-dot text-chartjs">
-                            {dataModal.completed_time
-                                ? calTotalTime(dataModal.picked_time, dataModal.completed_time)
-                                : estimateTime(dataModal.time_estimate)}
-                        </span>
-                        {dataModal.picked_time && (
-                            <span className="middle-dot text-muted">
-                                {dataModal.completed_time
-                                    ? exactCompletedTime(dataModal.completed_time)
-                                    : estimateCompletedTime(dataModal.picked_time)}
-                            </span>
-                        )}
-                        <OverlayTrigger placement="top" overlay={popover}>
-                            <span className="ml-2 cursor-pointer">
-                                <i className="fad fa-question-circle fa-1x" />
-                            </span>
-                        </OverlayTrigger>
-                    </p>
-                    {dataModal.status !== '2' && (
-                        <GoogleMaps
-                            receiveLat={dataModal.receiveLat}
-                            receiveLng={dataModal.receiveLng}
-                            shipLat={dataModal.shipLat}
-                            shipLng={dataModal.shipLng}
-                            noiNhan={dataModal.noi_nhan}
-                            noiGiao={dataModal.noi_giao}
-                            shipperInfor={shipperInfor}
-                            status={dataModal.status}
-                        />
+                    {/* Không hiển Thông tin đơn hàng sau khi hủy */}
+                    {dataModal.status !== '3' && (
+                        <>
+                            <div className="separator separator-dashed my-5" />
+                            <p className="font-weight-bold">
+                                Theo dõi đơn hàng:<span className="ml-2 text-primary-2">{dataModal.km}</span>
+                                <span className="middle-dot text-chartjs">
+                                    {dataModal.completed_time
+                                        ? calTotalTime(dataModal.picked_time, dataModal.completed_time)
+                                        : estimateTime(dataModal.time_estimate)}
+                                </span>
+                                {dataModal.picked_time && (
+                                    <span className="middle-dot text-muted">
+                                        {dataModal.completed_time
+                                            ? exactCompletedTime(dataModal.completed_time)
+                                            : estimateCompletedTime(dataModal.picked_time)}
+                                    </span>
+                                )}
+                                <OverlayTrigger placement="top" overlay={popover}>
+                                    <span className="ml-2 cursor-pointer">
+                                        <i className="fad fa-question-circle fa-1x" />
+                                    </span>
+                                </OverlayTrigger>
+                            </p>
+                            {dataModal.status !== '2' && (
+                                <GoogleMaps
+                                    receiveLat={dataModal.receiveLat}
+                                    receiveLng={dataModal.receiveLng}
+                                    shipLat={dataModal.shipLat}
+                                    shipLng={dataModal.shipLng}
+                                    noiNhan={dataModal.noi_nhan}
+                                    noiGiao={dataModal.noi_giao}
+                                    shipperInfor={shipperInfor}
+                                    status={dataModal.status}
+                                />
+                            )}
+                        </>
                     )}
                 </Modal.Body>
 
