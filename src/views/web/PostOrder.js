@@ -22,27 +22,8 @@ function PostOrder(props) {
         address: '',
         district: '',
         ward: '',
-        detailAddress: ''
-    })
-
-    // async function getLngLatAndDistance(startLocation, endLocation) {
-    //     try {
-    //         const res = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&key=AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE`, {
-    //             headers: {
-    //                 'Access-Control-Allow-Origin': 'http://localhost:3000',
-    //                 'Authorization': "AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE",
-    //                 "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-    //                 "Access-Control-Allow-Headers": "Origin, Content/Type",
-    //                 'Accept': 'application/json',
-    //             }
-    //         })
-    //         console.log(res)
-    //         setMapAPI(res)
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
+        detailAddress: '',
+    });
 
     let tamung = '0';
     let address = '';
@@ -148,6 +129,7 @@ function PostOrder(props) {
                     shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
                     shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                     time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
+                    read: 0
                 });
 
                 // hiển thị thông báo

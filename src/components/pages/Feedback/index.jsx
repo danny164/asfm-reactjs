@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
 
+MainFeedback.propTypes = {
+    feedBack: PropTypes.func,
+};
+
+MainFeedback.defaultProps = {
+    feedBack: null,
+};
+
 function MainFeedback(props) {
+    const { feedBack } = props;
+    const [typeReport, setTypeReport] = useState('khiếu nại');
+    const contentRef = useRef();
+
+    const handleSubmit = async () => {
+        console.log(contentRef.current.value);
+        if (feedBack) {
+            await feedBack(typeReport, contentRef.current.value);
+            alert('Góp ý thành công !');
+        }
+    };
+
+    console.log(typeReport);
+
     return (
         <>
             <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -24,17 +46,23 @@ function MainFeedback(props) {
                                             <label>Loại phản hồi</label>
                                             <div className="checkbox-inline">
                                                 <label className="checkbox checkbox-success">
-                                                    <input type="checkbox" defaultChecked="checked" name="checkbox" />
+                                                    <input
+                                                        type="radio"
+                                                        value="khiếu nại"
+                                                        onClick={() => setTypeReport('khiếu nại')}
+                                                        defaultChecked="checked"
+                                                        name="checkbox"
+                                                    />
                                                     <span />
                                                     Khiếu nại
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input type="checkbox" name="checkbox" />
+                                                    <input type="radio" value="góp ý" onClick={() => setTypeReport('góp ý')} name="checkbox" />
                                                     <span />
                                                     Góp ý
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input type="checkbox" name="checkbox" />
+                                                    <input type="radio" value="khác" onClick={() => setTypeReport('khác')} name="checkbox" />
                                                     <span />
                                                     Khác
                                                 </label>
@@ -50,6 +78,7 @@ function MainFeedback(props) {
                                                 id="exampleTextarea"
                                                 rows={3}
                                                 defaultValue={''}
+                                                ref={contentRef}
                                             />
                                             <span className="form-text text-muted">
                                                 Thông tin sẽ được giữ bí mật để nâng cao và cải thiện chất lượng dịch vụ
@@ -63,7 +92,7 @@ function MainFeedback(props) {
                                 <div className="row">
                                     <div className="col-xl-5" />
                                     <div className="col-xl-7">
-                                        <button type="reset" className="btn btn-light-danger font-weight-bold mr-2">
+                                        <button type="button" className="btn btn-light-danger font-weight-bold mr-2" onClick={handleSubmit}>
                                             Gửi ý kiến của bạn
                                         </button>
                                         <button type="reset" className="btn btn-light font-weight-bold">

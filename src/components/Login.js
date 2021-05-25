@@ -122,7 +122,6 @@ function Login1(props) {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);
                                 localStorage.setItem('role', doc.data().role);
-                                localStorage.setItem("userInfor", JSON.stringify(doc.data()));
                                 history.push('/home');
                             }
 

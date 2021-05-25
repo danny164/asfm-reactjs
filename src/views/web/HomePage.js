@@ -118,9 +118,16 @@ function HomePage() {
                     if (snapshot.val() !== null) {
                         const oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
 
-                        oldNoti.map((data) => {
-                            realtime.ref('Notification/' + currentUser.uid).remove(data);
-                        });
+                        // TODO: LỖi
+                        // if (oldNoti.length !== 0) {
+                        //     oldNoti.map((data) => {
+                        //         realtime
+                        //             .ref('Notification/' + currentUser.uid)
+                        //             .orderByChild('id_post')
+                        //             .equalTo(data.id_post)
+                        //             .remove();
+                        //     });
+                        // }
 
                         const action = updateNotification(snapshot.val());
                         dispatch(action);
@@ -232,7 +239,7 @@ function HomePage() {
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
-                    <MainHomePage datas={data} deleteOrder={handleDeleteOrder} shopInfo={input} idShop={currentUser.uid} rePostOrder={rePostOrder} />
+                    <MainHomePage datas={data} shopInfo={input} idShop={currentUser.uid} />
                     <AsideRight name={input.fullname} />
                 </div>
             </div>

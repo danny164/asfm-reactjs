@@ -1,12 +1,11 @@
 import googleMapsApi from 'api/googleMapsApi';
 import { useAuth } from 'context/AuthContext';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import random from 'randomstring';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { realtime } from '../../../firebase';
 import { name, noi_giao, noi_nhan, phi_giao, phi_ung, phone } from './data';
-import { useSnackbar } from 'notistack';
 
 FakeData.propTypes = {};
 
@@ -134,6 +133,7 @@ function FakeData(props) {
                 shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
                 shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                 time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
+                read: 0,
             });
         } catch (error) {
             console.log(error);

@@ -1,13 +1,53 @@
-import React, { useState } from 'react';
+import { useAuth } from 'context/AuthContext';
+import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { realtime } from '../../../firebase';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import random from 'randomstring';
 
+FeedbackModal.propTypes = {
+    id_post: PropTypes.string,
+};
+
+FeedbackModal.defaultProps = {
+    id_post: '',
+};
 function FeedbackModal(props) {
+    const { id_post } = props;
+
     const [show, setShow] = useState(false);
+    const [typeReport, setTypeReport] = useState('khiếu nại');
+    const contentRef = useRef();
+
+    const { currentUser } = useAuth();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const handleSubmit = async () => {
+        const idReport =
+            moment().format('YYYYMMDD-HHmmssSSS') +
+            random.generate({
+                length: 3,
+                charset: 'numeric',
+            });
+        try {
+            await realtime.ref('report/' + currentUser.uid + '/' + idReport).set({
+                type: typeReport,
+                content: contentRef.current.value,
+                fullName: localStorage.getItem('fullname'),
+                email: localStorage.getItem('email'),
+                id_post: id_post,
+                status: '0',
+                time: moment().format('X'),
+            });
+            handleClose();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
@@ -37,17 +77,17 @@ function FeedbackModal(props) {
                                     <label>Loại phản hồi</label>
                                     <div className="checkbox-inline">
                                         <label className="checkbox checkbox-success">
-                                            <input type="checkbox" defaultChecked="checked" name="checkbox" />
+                                            <input type="radio" defaultChecked="checked" name="checkbox" onClick={() => setTypeReport('khiếu nại')} />
                                             <span />
                                             Khiếu nại
                                         </label>
                                         <label className="checkbox checkbox-success">
-                                            <input type="checkbox" name="checkbox" />
+                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('góp ý')} />
                                             <span />
                                             Góp ý
                                         </label>
                                         <label className="checkbox checkbox-success">
-                                            <input type="checkbox" name="checkbox" />
+                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('khác')} />
                                             <span />
                                             Khác
                                         </label>
@@ -62,6 +102,7 @@ function FeedbackModal(props) {
                                         id="exampleTextarea"
                                         rows={3}
                                         defaultValue={''}
+                                        ref={contentRef}
                                     />
                                     <span className="form-text text-muted">
                                         Thông tin sẽ được giữ bí mật để nâng cao và cải thiện chất lượng dịch vụ
@@ -75,7 +116,7 @@ function FeedbackModal(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         Đóng
                     </Button>
-                    <Button variant="chartjs" onClick={handleClose}>
+                    <Button variant="chartjs" onClick={handleSubmit}>
                         Gửi phản hồi
                     </Button>
                 </Modal.Footer>
