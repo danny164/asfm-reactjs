@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { GoogleMap, LoadScript, Marker, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
-import './map.scss';
+import { DirectionsRenderer, DirectionsService, GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { realtime } from '../../../firebase';
-import { set } from 'react-hook-form';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 
 GoogleMaps.propTypes = {
     noiNhan: PropTypes.string,
@@ -57,7 +55,7 @@ export default function GoogleMaps(props) {
     }, [shipperInfor]);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyCPzJaXB1GobQ72Y6-L2QstmnJdlkDPAPE" language="vi">
+        <LoadScript googleMapsApiKey="AIzaSyDvku7pPhp7fQeBAR2pqZOinvIVDrDwXnE" language="vi">
             <GoogleMap
                 mapContainerStyle={mapStyles}
                 zoom={shipperLocation !== null ? 18 : 13}
