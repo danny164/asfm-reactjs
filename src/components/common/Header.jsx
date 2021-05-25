@@ -1,16 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { changeFilter } from './filterSlice';
 import HeaderMobile from './HeaderMobile';
+import { realtime } from '../../firebase';
+import PropTypes from 'prop-types';
+import { useAuth } from 'context/AuthContext';
 
+Header.propTypes = {
+    datas: PropTypes.object,
+};
+
+Header.defaultProps = {
+    datas: null,
+};
 function Header(props) {
+    const { datas } = props;
+    const { currentUser } = useAuth();
     const dispatch = useDispatch();
     const filter = useSelector((state) => state.filter);
+    const [unRead0, setUnRead0] = useState(0);
+    const [unRead1, setUnRead1] = useState(0);
+    const [unRead2, setUnRead2] = useState(0);
+    const [unRead3, setUnRead3] = useState(0);
 
     const handleFilterClick = (filter) => {
         const action = changeFilter(filter);
         dispatch(action);
+    };
+
+    if (datas) {
+        setUnRead0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0));
+        setUnRead1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0));
+        setUnRead2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0));
+        setUnRead3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0));
+    }
+
+    const updateUnreadOrder = async (status) => {
+        await updateRead(status);
+    };
+
+    const updateRead = async (status) => {
+        try {
+            await realtime
+                .ref('OrderStatus/' + currentUser.uid)
+                .orderByChild('status')
+                .equalTo(status)
+                .update({
+                    read: 1,
+                });
+        } catch(err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -27,7 +68,14 @@ function Header(props) {
                                     </Link>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home" className="menu-link" onClick={() => handleFilterClick('0')}>
+                                    <Link
+                                        to="/home"
+                                        className="menu-link"
+                                        onClick={() => {
+                                            handleFilterClick('0');
+                                            updateUnreadOrder('0');
+                                        }}
+                                    >
                                         <span className={`menu menu-in-progress ${filter === '0' ? 'active' : 'none'}`}>Đang xử lý</span>
                                     </Link>
                                     <span className="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
@@ -35,7 +83,14 @@ function Header(props) {
                                     </span>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home" className="menu-link" onClick={() => handleFilterClick('1')}>
+                                    <Link
+                                        to="/home"
+                                        className="menu-link"
+                                        onClick={() => {
+                                            handleFilterClick('1');
+                                            updateUnreadOrder('1');
+                                        }}
+                                    >
                                         <span className={`menu menu-picked ${filter === '1' ? 'active' : 'none'}`}>Đã nhận đơn</span>
                                     </Link>
                                     <span className="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
@@ -43,7 +98,14 @@ function Header(props) {
                                     </span>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home" className="menu-link" onClick={() => handleFilterClick('2')}>
+                                    <Link
+                                        to="/home"
+                                        className="menu-link"
+                                        onClick={() => {
+                                            handleFilterClick('2');
+                                            updateUnreadOrder('2');
+                                        }}
+                                    >
                                         <span className={`menu menu-completed ${filter === '2' ? 'active' : 'none'}`}>Hoàn thành</span>
                                     </Link>
                                     <span className="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
@@ -51,7 +113,14 @@ function Header(props) {
                                     </span>
                                 </li>
                                 <li className="menu-item">
-                                    <Link to="/home" className="menu-link" onClick={() => handleFilterClick('3')}>
+                                    <Link
+                                        to="/home"
+                                        className="menu-link"
+                                        onClick={() => {
+                                            handleFilterClick('3');
+                                            updateUnreadOrder('3');
+                                        }}
+                                    >
                                         <span className={`menu menu-canceled ${filter === '3' ? 'active' : 'none'}`}>Đơn hủy</span>
                                     </Link>
                                     <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
