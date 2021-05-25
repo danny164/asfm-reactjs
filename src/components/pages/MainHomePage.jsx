@@ -19,14 +19,14 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { db, realtime } from '../../firebase';
+import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
+import { RePostOrderr } from '../pages/HomepageFunc/RePostOrder';
 import Chat from './Chat/Chat';
 import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
-import { RePostOrderr } from '../pages/HomepageFunc/RePostOrder';
-import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -396,7 +396,7 @@ function MainHomePage(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            <Header datas={datas} />
+            <Header />
 
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">

@@ -1,21 +1,12 @@
+import { useAuth } from 'context/AuthContext';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { realtime } from '../../firebase';
 import { changeFilter } from './filterSlice';
 import HeaderMobile from './HeaderMobile';
-import { realtime } from '../../firebase';
-import PropTypes from 'prop-types';
-import { useAuth } from 'context/AuthContext';
 
-Header.propTypes = {
-    datas: PropTypes.object,
-};
-
-Header.defaultProps = {
-    datas: null,
-};
 function Header(props) {
-    const { datas } = props;
     const { currentUser } = useAuth();
     const dispatch = useDispatch();
     const filter = useSelector((state) => state.filter);
@@ -34,23 +25,31 @@ function Header(props) {
     };
 
     useEffect(() => {
-        if (datas) {
-            setUnReadData0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0));
-            setUnReadData1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0));
-            setUnReadData2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0));
-            setUnReadData3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0));
-            setUnRead0(Object.values(datas).filter((data) => data.status === '0' && data.read === 0).length);
-            setUnRead1(Object.values(datas).filter((data) => data.status === '1' && data.read === 0).length);
-            setUnRead2(Object.values(datas).filter((data) => data.status === '2' && data.read === 0).length);
-            setUnRead3(Object.values(datas).filter((data) => data.status === '3' && data.read === 0).length);
-        }
-    }, [datas]);
+        const fetchUnread = async () => {
+            try {
+                await realtime.ref('OrderStatus/' + currentUser.uid).on('value', (snapshot) => {
+                    if (snapshot.val() !== null) {
+                        setUnReadData0(Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0));
+                        setUnReadData1(Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0));
+                        setUnReadData2(Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0));
+                        setUnReadData3(Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0));
+                        setUnRead0(Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0).length);
+                        setUnRead1(Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0).length);
+                        setUnRead2(Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0).length);
+                        setUnRead3(Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0).length);
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        fetchUnread();
+    }, []);
 
     const updateUnreadOrder = async (status) => {
         await updateRead(status);
     };
 
-    console.log('hahaaaaaaa');
     const updateRead = async (status) => {
         try {
             if (status === '0') {
