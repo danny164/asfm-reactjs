@@ -396,7 +396,7 @@ function MainHomePage(props) {
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
-            <Header />
+            <Header datas={datas} />
 
             <section className="d-flex flex-column flex-row-fluid container">
                 <div className="card card-custom card-bottom">

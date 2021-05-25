@@ -77,6 +77,7 @@ function FeeRec(props) {
         return output;
     };
 
+    
     return (
         <>
             <Modal show={show} onHide={handleClose}>

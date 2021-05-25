@@ -129,6 +129,7 @@ function PostOrder(props) {
                     shipLng: lngLatList.data.routes[0].legs[0].end_location.lng,
                     shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                     time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
+                    read: 0
                 });
 
                 // hiển thị thông báo
