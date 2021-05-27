@@ -1,9 +1,10 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import NoData from 'components/pages/NoData';
 import moment from 'moment';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState, useReducer } from 'react';
 import DataTable from 'react-data-table-component';
 import Moment from 'react-moment';
 import { useAuth } from '../../../../context/AuthContext';
@@ -58,49 +59,6 @@ const LinearIndeterminate = () => {
     );
 };
 
-const columns = [
-    {
-        name: 'ID',
-        selector: 'id',
-        sortable: true,
-        omit: true,
-    },
-    {
-        name: 'Email',
-        selector: 'email',
-        sortable: true,
-    },
-    {
-        name: 'Trạng thái / Khóa',
-        selector: 'lock_time',
-        sortable: true,
-        cell: (row) => <LockTime row={row} />,
-    },
-    {
-        name: 'Họ tên',
-        selector: 'fullname',
-        sortable: true,
-    },
-    {
-        name: 'Vai trò',
-        selector: 'role',
-        sortable: true,
-        cell: (row) => <Role row={row} />,
-    },
-
-    {
-        name: 'Số điện thoại',
-        selector: 'phone',
-        sortable: true,
-    },
-    {
-        name: 'Địa chỉ',
-        selector: 'address',
-        sortable: true,
-        right: true,
-    },
-];
-
 const now = moment().format('X');
 
 const Role = ({ row }) => (
@@ -139,18 +97,177 @@ const LockTime = ({ row }) => (
     </>
 );
 
+// TODO: Phải để FilterComponent và truyền props ẩn/hiện ra bên ngoài function chính,
+// ? Nếu để trong cùng 1 function không thể thực hiện song song
+// ? 2 hành động search và show/hide được
+
+const FilterComponent = ({
+    filterText,
+    onFilter,
+    onClear,
+    setHideId,
+    setHideEmail,
+    setHideStatus,
+    setHideFullname,
+    setHideRole,
+    setHidePhone,
+    setHideAddress,
+}) => (
+    <>
+        <div className="d-flex align-items-center">
+            <div>
+                <span className="mr-2">Ẩn/hiện:</span>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideId}>
+                    ID
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideEmail}>
+                    Email
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideStatus}>
+                    Trạng thái
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideFullname}>
+                    Họ tên
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideRole}>
+                    Vai trò
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHidePhone}>
+                    Số điện thoại
+                </button>
+                <button type="button" className="btn btn-sm btn-light mr-3" onClick={setHideAddress}>
+                    Địa chỉ
+                </button>
+            </div>
+            <div className="form-group mb-0">
+                <div className="input-group">
+                    <input
+                        id="search"
+                        type="text"
+                        className="form-control"
+                        placeholder="Tìm kiếm..."
+                        value={filterText}
+                        onChange={onFilter}
+                    />
+                    <div className="input-group-append">
+                        <button className="btn btn-secondary" type="button" onClick={onClear}>
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </>
+);
+
 function ShopList(props) {
     const { listShop, getSelected, toggledClearRows } = props;
     const { currentUser } = useAuth();
 
+    const [filterText, setFilterText] = useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+
     const [pending, setPending] = useState(true);
+
+    const [hideId, setHideId] = useReducer((hideId) => !hideId, true);
+    const [hideEmail, setHideEmail] = useReducer((hideEmail) => !hideEmail, false);
+    const [hideStatus, setHideStatus] = useReducer((hideStatus) => !hideStatus, false);
+    const [hideRole, setHideRole] = useReducer((hideRole) => !hideRole, false);
+    const [hideFullname, setHideFullname] = useReducer((hideFullname) => !hideFullname, false);
+    const [hidePhone, setHidePhone] = useReducer((hidePhone) => !hidePhone, false);
+    const [hideAddress, setHideAddress] = useReducer((hideAddress) => !hideAddress, false);
 
     let data = [];
 
+    // data sau filter
     if (listShop) {
-        data = listShop;
+        data = listShop.filter(
+            (item) =>
+                (item.id && item.id.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.fullname && item.fullname.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.email && item.email.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.phone && item.phone.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.address && item.address.toLowerCase().includes(filterText.toLowerCase()))
+        );
     }
+    const columns = useMemo(
+        () => [
+            {
+                name: 'ID',
+                selector: 'id',
+                sortable: true,
+                omit: hideId,
+            },
+            {
+                name: 'Email',
+                selector: 'email',
+                sortable: true,
+                omit: hideEmail,
+            },
+            {
+                name: 'Trạng thái / Khóa',
+                selector: 'lock_time',
+                sortable: true,
+                cell: (row) => <LockTime row={row} />,
+                omit: hideStatus,
+            },
+            {
+                name: 'Họ tên',
+                selector: 'fullname',
+                sortable: true,
+                omit: hideFullname,
+            },
+            {
+                name: 'Vai trò',
+                selector: 'role',
+                sortable: true,
+                cell: (row) => <Role row={row} />,
+                omit: hideRole,
+            },
 
+            {
+                name: 'Số điện thoại',
+                selector: 'phone',
+                sortable: true,
+                omit: hidePhone,
+            },
+            {
+                name: 'Địa chỉ',
+                selector: 'address',
+                sortable: true,
+                right: true,
+                omit: hideAddress,
+            },
+        ],
+        [hideId, hideEmail, hideFullname, hideRole, hidePhone, hideAddress, hideStatus]
+    );
+
+    // Header phụ
+    const subHeaderComponentMemo = useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+            }
+        };
+
+        return (
+            <FilterComponent
+                onFilter={(e) => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+                setHideId={setHideId}
+                setHideEmail={setHideEmail}
+                setHideStatus={setHideStatus}
+                setHideFullname={setHideFullname}
+                setHideRole={setHideRole}
+                setHidePhone={setHidePhone}
+                setHideAddress={setHideAddress}
+            />
+        );
+    }, [filterText, resetPaginationToggle]);
+
+    // Loading time
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPending(false);
@@ -158,6 +275,7 @@ function ShopList(props) {
         return () => clearTimeout(timeout);
     }, []);
 
+    // Show the number of selected rows
     const handleChange = (state) => {
         console.log('Số rows', state.selectedRows);
         if (getSelected) {
@@ -165,14 +283,8 @@ function ShopList(props) {
         }
     };
 
+    // Disable selection when is admin or current user
     const rowSelectCritera = (row) => row.uid === currentUser.uid || row.role === '9';
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setPending(false);
-        }, 1200);
-        return () => clearTimeout(timeout);
-    }, []);
 
     return (
         <>
@@ -181,12 +293,20 @@ function ShopList(props) {
                 expandableRows={true}
                 expandOnRowClicked={true}
                 expandableRowsComponent={<CustomExpander data={data} now={now} />}
-                contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
+                contextMessage={{
+                    singular: 'người dùng',
+                    plural: 'người dùng',
+                    message: 'đã chọn',
+                }}
                 columns={columns}
                 data={data}
                 pagination={true}
+                paginationResetDefaultPage={resetPaginationToggle}
                 paginationRowsPerPageOptions={[10, 15, 30, 50, 75]}
-                paginationComponentOptions={{ rowsPerPageText: 'Số ID người dùng trên 1 trang: ', rangeSeparatorText: 'của' }}
+                paginationComponentOptions={{
+                    rowsPerPageText: 'Số ID người dùng trên 1 trang: ',
+                    rangeSeparatorText: 'của',
+                }}
                 selectableRows // add for checkbox selection
                 selectableRowsVisibleOnly={true}
                 selectableRowsHighlight={true}
@@ -195,6 +315,11 @@ function ShopList(props) {
                 selectableRowDisabled={rowSelectCritera}
                 progressPending={pending}
                 progressComponent={<LinearIndeterminate />}
+                subHeader
+                subHeaderWrap
+                subHeaderComponent={subHeaderComponentMemo}
+                persistTableHead
+                noDataComponent={<NoData />}
             />
         </>
     );

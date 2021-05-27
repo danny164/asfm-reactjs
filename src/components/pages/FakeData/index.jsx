@@ -9,11 +9,10 @@ import { name, noi_giao, noi_nhan, phi_giao, phi_ung, phone } from './data';
 
 FakeData.propTypes = {};
 
-const randomNumber = (number) => {
-    return random.generate({
-        length: 4,
-        charset: 'numeric',
-    });
+const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
 
 const randomIdPost = () => {
