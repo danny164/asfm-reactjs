@@ -166,7 +166,9 @@ function ShopList(props) {
 
     const [filterText, setFilterText] = useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+
     const [pending, setPending] = useState(true);
+
     const [hideId, setHideId] = useReducer((hideId) => !hideId, true);
     const [hideEmail, setHideEmail] = useReducer((hideEmail) => !hideEmail, false);
     const [hideStatus, setHideStatus] = useReducer((hideStatus) => !hideStatus, false);
@@ -174,7 +176,6 @@ function ShopList(props) {
     const [hideFullname, setHideFullname] = useReducer((hideFullname) => !hideFullname, false);
     const [hidePhone, setHidePhone] = useReducer((hidePhone) => !hidePhone, false);
     const [hideAddress, setHideAddress] = useReducer((hideAddress) => !hideAddress, false);
-    console.log(hideId);
 
     let data = [];
 
