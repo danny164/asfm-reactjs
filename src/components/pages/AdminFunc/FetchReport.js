@@ -1,5 +1,4 @@
 import { realtime } from '../../../firebase';
-import React from 'react';
 
 export const fetchReport = async (uid, setReportData) => {
     await realtime.ref('report/' + uid).on('value', (snapshot) => {
@@ -10,9 +9,3 @@ export const fetchReport = async (uid, setReportData) => {
         }
     });
 };
-
-function FetchReport(props) {
-    return <div></div>;
-}
-
-export default FetchReport;

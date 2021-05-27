@@ -251,6 +251,16 @@ function AdminPanel(props) {
         setSelectedData(selected);
     };
 
+    const responseReport = async (data, response) => {
+        try {
+            realtime.ref('report/' + data.id_user + '/' + data.id_report).update({
+                response: response,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
