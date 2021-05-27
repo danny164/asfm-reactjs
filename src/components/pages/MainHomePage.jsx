@@ -22,6 +22,7 @@ import { db, realtime } from '../../firebase';
 import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
 import { RePostOrderr } from '../pages/HomepageFunc/RePostOrder';
 import Chat from './Chat/Chat';
+import FeedbackModal from './FeedbackModal';
 import GoogleMaps from './Map/GoogleMaps';
 import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
@@ -690,6 +691,8 @@ function MainHomePage(props) {
                                     )}
                                 </>
                             )}
+
+                            <FeedbackModal id_post={dataModal.id_post} />
                         </Modal.Body>
 
                         <Modal.Footer className="d-flex justify-content-between">

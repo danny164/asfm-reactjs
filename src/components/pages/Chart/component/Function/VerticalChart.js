@@ -26,7 +26,7 @@ export const presentDataVerticalChart = (datas, days, setPresentData) => {
 export const lastDataVerticalChart = (datas, days, setLastData) => {
     let array = []
 
-    if (days.length === 14) {
+    if (days.length === 7) {
         array = [0, 0, 0, 0, 0, 0, 0]
     } else {
         array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -48,7 +48,7 @@ export const lastDataVerticalChart = (datas, days, setLastData) => {
 function VerticalChart(props) {
     return (
         <div>
-            
+
         </div>
     );
 }

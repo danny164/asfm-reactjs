@@ -27,7 +27,7 @@ function FeedbackModal(props) {
     const handleShow = () => setShow(true);
 
     const handleSubmit = async () => {
-        const idReport =
+        let idReport =
             moment().format('YYYYMMDD-HHmmssSSS') +
             random.generate({
                 length: 3,
@@ -35,6 +35,7 @@ function FeedbackModal(props) {
             });
         try {
             await realtime.ref('report/' + currentUser.uid + '/' + idReport).set({
+                id_report: idReport,
                 type: typeReport,
                 content: contentRef.current.value,
                 fullName: localStorage.getItem('fullname'),
@@ -66,7 +67,7 @@ function FeedbackModal(props) {
                                     <label>ID đơn hàng</label>
                                     <input
                                         type="text"
-                                        value="#123456"
+                                        value={id_post}
                                         className="form-control form-control-solid form-control-lg"
                                         placeholder="Id đơn hàng"
                                         disabled

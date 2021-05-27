@@ -26,7 +26,7 @@ export const presentDataLineChart = (datas, days, setPresentData) => {
 export const lastDataLineChart = (datas, days, setLastData) => {
     let array = []
 
-    if (days.length === 14) {
+    if (days.length === 7) {
         array = [0, 0, 0, 0, 0, 0, 0]
     } else {
         array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

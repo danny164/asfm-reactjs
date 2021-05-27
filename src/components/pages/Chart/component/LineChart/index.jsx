@@ -37,6 +37,7 @@ function LineChart(props) {
         }
     }, [lastDays]);
 
+    console.log(lastDays)
     //1 tuân 20 đơn.
     const data = {
         labels: days,

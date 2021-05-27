@@ -8,8 +8,36 @@ import Unseen from 'components/labels/Unseen';
 import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import './styles.scss';
+import PropTypes from 'prop-types';
+
+MainMailbox.propTypes = {
+    datas: PropTypes.object,
+    deleteAll: PropTypes.func,
+    deleteResponse: PropTypes.func,
+    deleteUnResponse: PropTypes.func,
+};
+
+MainMailbox.defaultProps = {
+    datas: null,
+    deleteAll: null,
+    deleteResponse: null,
+    deleteUnResponse: null,
+};
 
 function MainMailbox(props) {
+    const { datas, deleteAll, deleteResponse, deleteUnResponse } = props;
+
+    const deleteAllReport = async () => {
+        if (deleteAll) deleteAll();
+    };
+
+    const deleteResponseReport = async () => {
+        if (deleteResponse) deleteResponse();
+    };
+
+    const deleteUnResponseReport = async () => {
+        if (deleteUnResponse) deleteUnResponse();
+    };
     return (
         <>
             <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -34,9 +62,9 @@ function MainMailbox(props) {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        <Dropdown.Item>Xóa tất cả</Dropdown.Item>
-                                        <Dropdown.Item>Xóa tất cả đơn chưa phản hồi</Dropdown.Item>
-                                        <Dropdown.Item>Xóa tất cả đơn đã phản hồi</Dropdown.Item>
+                                        <Dropdown.Item onClick={deleteAllReport}>Xóa tất cả</Dropdown.Item>
+                                        <Dropdown.Item onClick={deleteUnResponseReport}>Xóa tất cả đơn chưa phản hồi</Dropdown.Item>
+                                        <Dropdown.Item onClick={deleteResponseReport}>Xóa tất cả đơn đã phản hồi</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
@@ -139,7 +167,5 @@ function MainMailbox(props) {
         </>
     );
 }
-
-MainMailbox.propTypes = {};
 
 export default MainMailbox;

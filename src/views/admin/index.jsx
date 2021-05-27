@@ -1,4 +1,5 @@
 import { changeFilter } from 'components/common/filterSlice';
+import { useAuth } from 'context/AuthContext';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import 'flatpickr/dist/themes/airbnb.css';
 import moment from 'moment';
@@ -16,16 +17,21 @@ import { db } from '../../firebase';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
 import './styles.scss';
+import { fetchReport } from '../../components/pages/AdminFunc/FetchReport';
+import { realtime } from '../../firebase';
 
 function AdminPanel(props) {
+    const { currentUser } = useAuth();
     const [isShopList, setIsShopList] = useState(true);
     const [isShipperList, setIsShipperList] = useState(false);
     const [listShipper, setListShipper] = useState();
     const [listShop, setListShop] = useState();
-
+    const [reportData, setReportData] = useState();
     const [flexible, setFlexible] = useState(false);
     const [date, setDate] = useState(moment().add(1, 'days').format('X'));
     const [selectedData, setSelectedData] = useState([]);
+    const [serviceData, setServiceData] = useState();
+    const [orderData, setOrderData] = useState();
 
     const [toggledClearRows, setToggledClearRows] = useState(false);
 
@@ -75,6 +81,24 @@ function AdminPanel(props) {
                 }
             });
         }
+        async function fetchService() {
+            await realtime.ref('service/').on('value', (snapshot) => {
+                if (snapshot.val() !== null) {
+                    setServiceData(snapshot.val());
+                }
+            });
+        }
+        async function fetchAllOrder() {
+            await realtime.ref('service/').on('value', (snapshot) => {
+                if (snapshot.val() !== null) {
+                    setOrderData(snapshot.val());
+                }
+            });
+        }
+
+        fetchAllOrder();
+        fetchService();
+        fetchReport(currentUser.uid, setReportData);
         fetchShipperList();
         fetchShopList();
     }, []);
@@ -337,7 +361,7 @@ function AdminPanel(props) {
                         {isShopList ? (
                             <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />
                         ) : (
-                            <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />
+                            isShipperList && <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />
                         )}
                     </section>
                     <Footer />
