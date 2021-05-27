@@ -18,7 +18,7 @@ function FeedbackModal(props) {
     const { id_post } = props;
 
     const [show, setShow] = useState(false);
-    const [typeReport, setTypeReport] = useState('khiếu nại');
+    const [typeReport, setTypeReport] = useState('0');
     const contentRef = useRef();
 
     const { currentUser } = useAuth();
@@ -38,10 +38,12 @@ function FeedbackModal(props) {
                 id_report: idReport,
                 type: typeReport,
                 content: contentRef.current.value,
-                fullName: localStorage.getItem('fullname'),
+                fullname: localStorage.getItem('fullname'),
                 email: localStorage.getItem('email'),
                 id_post: id_post,
                 status: '0',
+                by: '0',
+                admin: '',
                 time: moment().format('X'),
             });
             handleClose();
@@ -78,17 +80,22 @@ function FeedbackModal(props) {
                                     <label>Loại phản hồi</label>
                                     <div className="checkbox-inline">
                                         <label className="checkbox checkbox-success">
-                                            <input type="radio" defaultChecked="checked" name="checkbox" onClick={() => setTypeReport('khiếu nại')} />
+                                            <input
+                                                type="radio"
+                                                defaultChecked="checked"
+                                                name="checkbox"
+                                                onClick={() => setTypeReport('0')}
+                                            />
                                             <span />
                                             Khiếu nại
                                         </label>
                                         <label className="checkbox checkbox-success">
-                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('góp ý')} />
+                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('1')} />
                                             <span />
                                             Góp ý
                                         </label>
                                         <label className="checkbox checkbox-success">
-                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('khác')} />
+                                            <input type="radio" name="checkbox" onClick={() => setTypeReport('2')} />
                                             <span />
                                             Khác
                                         </label>

@@ -12,18 +12,24 @@ import Flatpickr from 'react-flatpickr';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/common/Footer';
 import HeaderMobile from '../../components/common/HeaderMobile';
+import { fetchReport } from '../../components/pages/AdminFunc/FetchReport';
 import AsideLeft from '../../components/pages/AsideLeft';
-import { db } from '../../firebase';
+import { db, realtime } from '../../firebase';
+import Service from './component/QualityService';
+import Report from './component/ReportService';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
+import TotalOrder from './component/TotalOrder';
 import './styles.scss';
-import { fetchReport } from '../../components/pages/AdminFunc/FetchReport';
-import { realtime } from '../../firebase';
 
 function AdminPanel(props) {
     const { currentUser } = useAuth();
     const [isShopList, setIsShopList] = useState(true);
     const [isShipperList, setIsShipperList] = useState(false);
+    const [isTotalOrder, setIsTotalOrder] = useState(false);
+    const [isReport, setIsReport] = useState(false);
+    const [isService, setIsService] = useState(false);
+
     const [listShipper, setListShipper] = useState();
     const [listShop, setListShop] = useState();
     const [reportData, setReportData] = useState();
@@ -48,14 +54,43 @@ function AdminPanel(props) {
         dispatch(changeFilter('all'));
     }, []);
 
-    const toShipperList = () => {
-        setIsShipperList(true);
-        setIsShopList(false);
-    };
-
     const toShopList = () => {
         setIsShopList(true);
         setIsShipperList(false);
+        setIsTotalOrder(false);
+        setIsReport(false);
+        setIsService(false);
+    };
+
+    const toShipperList = () => {
+        setIsShipperList(true);
+        setIsShopList(false);
+        setIsTotalOrder(false);
+        setIsReport(false);
+        setIsService(false);
+    };
+
+    const toTotalOrder = () => {
+        setIsTotalOrder(true);
+        setIsShipperList(false);
+        setIsShopList(false);
+        setIsReport(false);
+        setIsService(false);
+    };
+
+    const toReport = () => {
+        setIsReport(true);
+        setIsTotalOrder(false);
+        setIsShipperList(false);
+        setIsShopList(false);
+        setIsService(false);
+    };
+    const toService = () => {
+        setIsService(true);
+        setIsReport(false);
+        setIsTotalOrder(false);
+        setIsShipperList(false);
+        setIsShopList(false);
     };
 
     useEffect(() => {
@@ -231,30 +266,53 @@ function AdminPanel(props) {
                                 <button type="button" className="btn btn-sm btn-light ml-3" onClick={toShipperList}>
                                     Quản lý Shipper
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                <button type="button" className="btn btn-sm btn-light ml-3" onClick={toTotalOrder}>
                                     Quản lý Tất cả các đơn
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                <button type="button" className="btn btn-sm btn-light ml-3" onClick={toReport}>
                                     Quản lý Khiếu nại đơn
                                 </button>
-                                <button type="button" className="btn btn-sm btn-light ml-3">
+                                <button type="button" className="btn btn-sm btn-light ml-3" onClick={toService}>
                                     Quản lý Chất lượng dịch vụ
                                 </button>
                             </div>
                             <div className="mb-3">
-                                <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={unLocked}>
-                                    Mở khóa
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-sm btn-light-danger ml-3"
-                                    onClick={() => {
-                                        setShow(true);
-                                        setDate(moment().add(1, 'days').format('X'));
-                                    }}
-                                >
-                                    Khóa tài khoản
-                                </button>
+                                {(isShopList || isShipperList) && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-light-success ml-3"
+                                            onClick={unLocked}
+                                        >
+                                            Mở khóa
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-light-danger ml-3"
+                                            onClick={() => {
+                                                setShow(true);
+                                                setDate(moment().add(1, 'days').format('X'));
+                                            }}
+                                        >
+                                            Khóa tài khoản
+                                        </button>
+                                    </>
+                                )}
+                                {isTotalOrder && (
+                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                        Hủy đơn
+                                    </button>
+                                )}
+                                {isReport && (
+                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                        Phản hồi
+                                    </button>
+                                )}
+                                {isService && (
+                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                        Đánh dấu
+                                    </button>
+                                )}
                             </div>
                         </div>
 
@@ -275,16 +333,32 @@ function AdminPanel(props) {
                                         <div className="col-9 col-form-label">
                                             <div className="radio-inline">
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" defaultChecked="checked" value="1" onClick={timeFixed} />
+                                                    <input
+                                                        type="radio"
+                                                        name="lock-time"
+                                                        defaultChecked="checked"
+                                                        value="1"
+                                                        onClick={timeFixed}
+                                                    />
                                                     <span />
                                                     24 giờ
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" value="3" onClick={timeFixed} />
+                                                    <input
+                                                        type="radio"
+                                                        name="lock-time"
+                                                        value="3"
+                                                        onClick={timeFixed}
+                                                    />
                                                     <span />3 ngày
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input type="radio" name="lock-time" value="7" onClick={timeFixed} />
+                                                    <input
+                                                        type="radio"
+                                                        name="lock-time"
+                                                        value="7"
+                                                        onClick={timeFixed}
+                                                    />
                                                     <span />1 tuần
                                                 </label>
                                                 <label className="radio radio-danger">
@@ -304,19 +378,28 @@ function AdminPanel(props) {
                                                                 minDate: 'today',
                                                                 locale: Vietnamese,
                                                             }}
-                                                            defaultValue={moment().add(14, 'days').format('YYYY-MM-DD HH:mm')}
+                                                            defaultValue={moment()
+                                                                .add(14, 'days')
+                                                                .format('YYYY-MM-DD HH:mm')}
                                                             placeholder="Chọn ngày và giờ"
                                                             onChange={(date) => {
                                                                 setDate(moment(date[0]).format('X'));
                                                             }}
                                                         />
-                                                        <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
+                                                        <span className="form-text text-muted">
+                                                            * Tùy chọn thời gian bạn muốn khóa{' '}
+                                                        </span>
                                                     </>
                                                 </Expand>
                                             }
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
-                                                    <input type="radio" name="lock-time" value="0" onClick={timeFixed} />
+                                                    <input
+                                                        type="radio"
+                                                        name="lock-time"
+                                                        value="0"
+                                                        onClick={timeFixed}
+                                                    />
                                                     <span />
                                                     Khóa vĩnh viễn
                                                 </label>
@@ -338,7 +421,9 @@ function AdminPanel(props) {
                                                     ref={noteRef}
                                                 />
                                             </div>
-                                            <span className="form-text text-muted">* Có thể để trống nội dung, nội dung khóa sẽ là mặc định</span>
+                                            <span className="form-text text-muted">
+                                                * Có thể để trống nội dung, nội dung khóa sẽ là mặc định
+                                            </span>
                                         </div>
                                     </div>
                                 </form>
@@ -358,11 +443,23 @@ function AdminPanel(props) {
                                 </Button>
                             </Modal.Footer>
                         </Modal>
-                        {isShopList ? (
-                            <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />
-                        ) : (
-                            isShipperList && <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />
+                        {isShopList && (
+                            <ShopList
+                                listShop={listShop}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
                         )}
+                        {isShipperList && (
+                            <ShipperList
+                                listShipper={listShipper}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
+                        )}
+                        {isTotalOrder && <TotalOrder />}
+                        {isReport && <Report />}
+                        {isService && <Service />}
                     </section>
                     <Footer />
                 </main>

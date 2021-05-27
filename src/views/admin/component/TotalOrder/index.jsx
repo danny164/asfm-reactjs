@@ -1,5 +1,6 @@
+import { realtime } from '../../../../firebase';
 import React, { useEffect, useState } from 'react';
-import { realtime } from '../../../firebase';
+import DataTable from 'react-data-table-component';
 
 TotalOrder.propTypes = {};
 
@@ -16,16 +17,18 @@ function TotalOrder(props) {
             console.log(err);
         }
     }, []);
+
     return (
-        <div>
-            <h1>Hello !</h1>
+        <>
             {data &&
                 Object.values(data).map((datas) => {
                     Object.values(datas).map((datass) => {
                         console.log(datass);
                     });
                 })}
-        </div>
+
+            <DataTable title="Danh sách quản lý Tất cả các đơn" />
+        </>
     );
 }
 

@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
+import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router';
 
 MainFeedback.propTypes = {
     feedBack: PropTypes.func,
@@ -13,14 +15,19 @@ MainFeedback.defaultProps = {
 
 function MainFeedback(props) {
     const { feedBack } = props;
-    const [typeReport, setTypeReport] = useState('khiếu nại');
+    const [typeReport, setTypeReport] = useState('0');
     const contentRef = useRef();
+
+    const history = useHistory();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleSubmit = async () => {
         console.log(contentRef.current.value);
         if (feedBack) {
             await feedBack(typeReport, contentRef.current.value);
-            alert('Góp ý thành công !');
+            enqueueSnackbar('Đã ghi nhận góp ý / khiếu nại của bạn', { variant: 'success' });
+            history.push('/home');
         }
     };
 
@@ -49,7 +56,7 @@ function MainFeedback(props) {
                                                     <input
                                                         type="radio"
                                                         value="khiếu nại"
-                                                        onClick={() => setTypeReport('khiếu nại')}
+                                                        onClick={() => setTypeReport('0')}
                                                         defaultChecked="checked"
                                                         name="checkbox"
                                                     />
@@ -57,17 +64,26 @@ function MainFeedback(props) {
                                                     Khiếu nại
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input type="radio" value="góp ý" onClick={() => setTypeReport('góp ý')} name="checkbox" />
+                                                    <input
+                                                        type="radio"
+                                                        value="góp ý"
+                                                        onClick={() => setTypeReport('1')}
+                                                        name="checkbox"
+                                                    />
                                                     <span />
                                                     Góp ý
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input type="radio" value="khác" onClick={() => setTypeReport('khác')} name="checkbox" />
+                                                    <input
+                                                        type="radio"
+                                                        value="khác"
+                                                        onClick={() => setTypeReport('2')}
+                                                        name="checkbox"
+                                                    />
                                                     <span />
                                                     Khác
                                                 </label>
                                             </div>
-                                            <span className="form-text text-muted">Có thể chọn được nhiều mục</span>
                                         </div>
                                     </div>
                                     <div className="col-xl-7">
@@ -92,7 +108,11 @@ function MainFeedback(props) {
                                 <div className="row">
                                     <div className="col-xl-5" />
                                     <div className="col-xl-7">
-                                        <button type="button" className="btn btn-light-danger font-weight-bold mr-2" onClick={handleSubmit}>
+                                        <button
+                                            type="button"
+                                            className="btn btn-light-danger font-weight-bold mr-2"
+                                            onClick={handleSubmit}
+                                        >
                                             Gửi ý kiến của bạn
                                         </button>
                                         <button type="reset" className="btn btn-light font-weight-bold">

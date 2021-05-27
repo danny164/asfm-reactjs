@@ -1,6 +1,7 @@
 import Footer from 'components/common/Footer';
 import HeaderMobile from 'components/common/HeaderMobile';
 import React from 'react';
+import DataTable from 'react-data-table-component';
 import AsideLeft from '../AsideLeft';
 
 function TotalOrder(props) {
@@ -19,14 +20,13 @@ function TotalOrder(props) {
                                     </button>
                                 </div>
                                 <div className="mb-3">
-                                    <button type="button" className="btn btn-sm btn-light-success ml-3">
-                                        Hủy đơn
-                                    </button>
                                     <button type="button" className="btn btn-sm btn-light-danger ml-3">
-                                        Xóa đơn
+                                        Hủy đơn
                                     </button>
                                 </div>
                             </div>
+
+                            <DataTable title="Danh sách Tất cả các đơn" />
                         </section>
                         <Footer />
                     </main>

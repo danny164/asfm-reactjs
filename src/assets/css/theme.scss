@@ -62,6 +62,14 @@ body {
     right: -7px !important;
 }
 
+.opacity-0 {
+    opacity: 0 !important;
+}
+
+.trans-slower {
+    transition-duration: 0.5s;
+}
+
 .sticky-version {
     width: fit-content;
     position: fixed;
