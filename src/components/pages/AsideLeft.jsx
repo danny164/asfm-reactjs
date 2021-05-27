@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import TheNightOwl from '../../assets/media/the-night-owl.png';
 import FakeData from './FakeData';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 function AsideLeft(props) {
     const { onHandleMenu } = props;
@@ -73,8 +75,11 @@ function AsideLeft(props) {
             </nav>
             <footer className="d-flex flex-column align-items-center flex-column-auto py-8">
                 <span className="mb-2">
-                    <NavLink strict activeClassName="active" to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless">
+                    <NavLink strict activeClassName="active" to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless position-relative">
                         <i className="fad fa-envelope-open-text"></i>
+                        <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--7 right--7 mt-1 mr-1">
+                            3
+                        </span>
                     </NavLink>
                 </span>
                 <span className="mb-2">
