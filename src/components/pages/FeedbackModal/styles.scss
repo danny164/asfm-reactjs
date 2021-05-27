@@ -1,0 +1,9 @@
+.modal-backdrop {
+    &__feedback {
+        z-index: 1051 !important;
+    }
+}
+
+.modal-feedback {
+    z-index: 1051 !important;
+}

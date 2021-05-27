@@ -6,6 +6,7 @@ import { realtime } from '../../../firebase';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import random from 'randomstring';
+import './styles.scss';
 
 FeedbackModal.propTypes = {
     id_post: PropTypes.string,
@@ -48,9 +49,9 @@ function FeedbackModal(props) {
             });
 
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
-                statusReport: 1
-            })
-            
+                statusReport: 1,
+            });
+
             handleClose();
         } catch (err) {
             console.log(err);
@@ -58,13 +59,18 @@ function FeedbackModal(props) {
     };
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
+            <Button variant="sm btn-light flex-shrink-0" onClick={handleShow}>
+                Báo cáo đơn
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdropClassName="modal-backdrop__feedback"
+                className="modal-feedback"
+            >
                 <Modal.Header>
-                    <Modal.Title>Gửi khiếu nại / phản hồi</Modal.Title>
+                    <Modal.Title>Báo cáo đơn</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form className="form">
@@ -82,7 +88,7 @@ function FeedbackModal(props) {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Loại phản hồi</label>
+                                    <label>Loại báo cáo</label>
                                     <div className="checkbox-inline">
                                         <label className="checkbox checkbox-success">
                                             <input
@@ -105,13 +111,12 @@ function FeedbackModal(props) {
                                             Khác
                                         </label>
                                     </div>
-                                    <span className="form-text text-muted">Có thể chọn được nhiều mục</span>
                                 </div>
 
                                 <div className="form-group">
                                     <label htmlFor="exampleTextarea">Ý kiến của bạn</label>
                                     <textarea
-                                        className="form-control form-control-solid form-control-lg"
+                                        className="form-control form-control-lg"
                                         id="exampleTextarea"
                                         rows={3}
                                         defaultValue={''}

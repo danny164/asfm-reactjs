@@ -27,7 +27,7 @@ function TotalOrder(props) {
                     });
                 })}
 
-            <DataTable title="Danh sách quản lý Tất cả các đơn" />
+            <DataTable title="Danh sách tất cả các đơn" />
         </>
     );
 }

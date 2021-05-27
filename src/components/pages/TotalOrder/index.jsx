@@ -26,7 +26,7 @@ function TotalOrder(props) {
                                 </div>
                             </div>
 
-                            <DataTable title="Danh sách Tất cả các đơn" />
+                            <DataTable title="Danh sách tất cả các đơn" />
                         </section>
                         <Footer />
                     </main>
