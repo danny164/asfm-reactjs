@@ -28,15 +28,21 @@ function MainMailbox(props) {
     const { datas, deleteAll, deleteResponse, deleteUnResponse } = props;
 
     const deleteAllReport = async () => {
-        if (deleteAll) deleteAll();
+        if (deleteAll) {
+            deleteAll();
+        }
     };
 
     const deleteResponseReport = async () => {
-        if (deleteResponse) deleteResponse();
+        if (deleteResponse) {
+            deleteResponse();
+        }
     };
 
     const deleteUnResponseReport = async () => {
-        if (deleteUnResponse) deleteUnResponse();
+        if (deleteUnResponse) {
+            deleteUnResponse();
+        }
     };
     return (
         <>

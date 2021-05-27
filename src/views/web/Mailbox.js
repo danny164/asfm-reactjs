@@ -3,11 +3,11 @@ import AsideRight from 'components/pages/AsideRight';
 import MainMailbox from 'components/pages/Mailbox';
 import { useAuth } from 'context/AuthContext';
 import React, { useEffect, useState } from 'react';
-import fetchReport from '../../components/pages/AdminFunc/FetchReport'
+import { fetchReport } from '../../components/pages/AdminFunc/FetchReport'
 import { realtime } from '../../firebase'
 function Mailbox(props) {
     const { currentUser } = useAuth()
-    const { reportData, setReportData } = useState()
+    const [reportData, setReportData] = useState()
 
     useEffect(() => {
         fetchReport(currentUser.uid, setReportData);
@@ -18,14 +18,15 @@ function Mailbox(props) {
     }
 
     const deleteResponse = async () => {
-        let responseData = await Object.values(reportData).filter(() => reportData.status === "1")
+        let responseData = await Object.values(reportData).filter((data) => data.status === "1")
+        console.log(responseData)
         responseData.map((data) => {
             realtime.ref("report/" + currentUser.uid + '/' + data.id_report).remove()
         })
     }
 
     const deleteUnResponse = async () => {
-        let responseData = await Object.values(reportData).filter(() => reportData.status === "0")
+        let responseData = await Object.values(reportData).filter((data) => data.status === "0")
         responseData.map((data) => {
             realtime.ref("report/" + currentUser.uid + '/' + data.id_report).remove()
         })
@@ -35,7 +36,7 @@ function Mailbox(props) {
         <div className="header-fixed sidebar-enabled bg">
             <div className="d-flex flex-row flex-column-fluid page">
                 <AsideLeft />
-                <MainMailbox datas={reportData} deleteAllReport={deleteAll} deleteUnResponseReport={deleteUnResponse} deleteResponseReport={deleteResponse} />
+                <MainMailbox datas={reportData} deleteAll={deleteAll} deleteUnResponse={deleteUnResponse} deleteResponse={deleteResponse} />
                 <AsideRight />
             </div>
         </div>

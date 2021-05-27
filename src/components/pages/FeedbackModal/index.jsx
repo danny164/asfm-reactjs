@@ -44,6 +44,11 @@ function FeedbackModal(props) {
                 status: '0',
                 time: moment().format('X'),
             });
+
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
+                statusReport: 1
+            })
+            
             handleClose();
         } catch (err) {
             console.log(err);

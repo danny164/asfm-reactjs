@@ -116,18 +116,18 @@ function HomePage() {
             try {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot.val() !== null) {
-                        const oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
+                        let oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
 
                         // TODO: LỖi
-                        // if (oldNoti.length !== 0) {
-                        //     oldNoti.map((data) => {
-                        //         realtime
-                        //             .ref('Notification/' + currentUser.uid)
-                        //             .orderByChild('id_post')
-                        //             .equalTo(data.id_post)
-                        //             .remove();
-                        //     });
-                        // }
+                        if (oldNoti.length !== 0) {
+                            oldNoti.map((data) => {
+                                realtime
+                                    .ref('Notification/' + currentUser.uid)
+                                    .orderByChild('id_post')
+                                    .equalTo(data.id_post)
+                                    .remove();
+                            });
+                        }
 
                         const action = updateNotification(snapshot.val());
                         dispatch(action);
