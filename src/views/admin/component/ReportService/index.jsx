@@ -83,11 +83,6 @@ function Report(props) {
                 sortable: true,
             },
             {
-                name: 'Số điện thoại',
-                selector: 'phone',
-                sortable: true,
-            },
-            {
                 name: 'Thời gian',
                 selector: 'time',
                 sortable: true,

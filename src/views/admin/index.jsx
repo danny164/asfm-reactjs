@@ -468,10 +468,53 @@ function AdminPanel(props) {
                                 setShowRespone(false);
                             }}
                         >
-                            <Modal.Header closeButton>
+                            <Modal.Header>
                                 <Modal.Title>Phản hồi báo cáo</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>abc</Modal.Body>
+                            <Modal.Body>
+                                <div className="d-flex align-items-start">
+                                    <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                    <div className="d-flex flex-column flex-grow-1 ml-4">
+                                        <header className="card-title content">
+                                            <span>#123</span>
+                                            <span className="flex-shrink-0">10:00</span>
+                                        </header>
+                                        <section className="card-info content">
+                                            <div className="mb-3">
+                                                <p>
+                                                    <span className="font-weight-bold text-chartjs mr-1">Loại:</span>
+                                                    <span className="font-weight-bold">{`Góp ý`}</span>
+                                                </p>
+                                                <p>
+                                                    <span className="font-weight-bold text-primary-2 mr-1">
+                                                        Mã đơn hàng:
+                                                    </span>
+                                                    <span className="font-weight-bold text-brown">{`#123`}</span>
+                                                </p>
+                                            </div>
+                                            <span className="delivery">Nội dung:</span>
+                                            <div className="d-flex align-items-center justify-content-between">
+                                                <p className="mb-0 pl-0">Shipper khó tính</p>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div className="separator separator-dashed my-2" />
+                                <div className="form-group">
+                                    <label htmlFor="reply" className="font-weight-bold text-brown">
+                                        Phản hồi
+                                    </label>
+                                    <textarea
+                                        className="form-control form-control-lg"
+                                        id="reply"
+                                        rows={3}
+                                        placeholder="Đã xử lý !"
+                                    />
+                                    <span className="form-text text-muted">
+                                        Có thể để trống nội dung sẽ là mặc định
+                                    </span>
+                                </div>
+                            </Modal.Body>
                             <Modal.Footer>
                                 <Button
                                     variant="secondary btn-sm"
