@@ -3,10 +3,9 @@ import AsideRight from 'components/pages/AsideRight';
 import MainFeedback from 'components/pages/Feedback';
 import moment from 'moment';
 import React from 'react';
-import { realtime } from '../../firebase'
-import random from 'randomstring'
+import { realtime } from '../../firebase';
+import random from 'randomstring';
 function Feedback(props) {
-
     const feedBack = async (type, content) => {
         const idFeedBack =
             moment().format('YYYYMMDD-HHmmssSSS') +
@@ -19,14 +18,14 @@ function Feedback(props) {
                 type: type,
                 content: content,
                 status: '0',
-                userName: localStorage.getItem('fullname'),
+                fullname: localStorage.getItem('fullname'),
                 email: localStorage.getItem('email'),
-                time: moment().format("X")
-            })
+                time: moment().format('X'),
+            });
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
     return (
         <>

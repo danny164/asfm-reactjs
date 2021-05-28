@@ -57,7 +57,7 @@ function MainMailbox(props) {
                                     <span className="d-block title">
                                         Hộp thư phản hồi
                                         <span className="label label-sm label-light label-rounded font-weight-bolder ml-2">
-                                            12
+                                            {Object.values(datas).length}
                                         </span>
                                     </span>
 

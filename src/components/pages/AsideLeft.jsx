@@ -24,15 +24,9 @@ function AsideLeft(props) {
             className: 'nav-link btn btn-icon btn-lg btn-borderless',
             icon: 'fad fa-chart-pie',
         },
+
         {
             id: 3,
-            name: 'order',
-            to: '/order',
-            className: 'nav-link btn btn-icon btn-lg btn-borderless',
-            icon: 'fad fa-clipboard-list-check',
-        },
-        {
-            id: 4,
             name: 'admin',
             to: '/admin',
             className: 'nav-link btn btn-icon btn-lg btn-borderless',
@@ -53,7 +47,7 @@ function AsideLeft(props) {
                 <ul className="nav flex-column">
                     {links.map((link) => (
                         <>
-                            {link.id !== 4 && (
+                            {link.id !== 3 && (
                                 <li className="nav-item mb-2" key={link.id}>
                                     <NavLink strict activeClassName="active" to={link.to} className={link.className}>
                                         <i className={link.icon} />
@@ -61,7 +55,7 @@ function AsideLeft(props) {
                                 </li>
                             )}
 
-                            {localStorage.getItem('role') === '9' && link.id === 4 && (
+                            {localStorage.getItem('role') === '9' && link.id === 3 && (
                                 <li className="nav-item mb-2" key={link.id}>
                                     <NavLink strict activeClassName="active" to={link.to} className={link.className}>
                                         <i className={link.icon} />
@@ -75,7 +69,12 @@ function AsideLeft(props) {
             </nav>
             <footer className="d-flex flex-column align-items-center flex-column-auto py-8">
                 <span className="mb-2">
-                    <NavLink strict activeClassName="active" to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless position-relative">
+                    <NavLink
+                        strict
+                        activeClassName="active"
+                        to="/mailbox"
+                        className="nav-link btn btn-icon btn-lg btn-borderless position-relative"
+                    >
                         <i className="fad fa-envelope-open-text"></i>
                         <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--7 right--7 mt-1 mr-1">
                             3
@@ -83,12 +82,22 @@ function AsideLeft(props) {
                     </NavLink>
                 </span>
                 <span className="mb-2">
-                    <NavLink strict activeClassName="active" to="/feedback" className="nav-link btn btn-icon btn-lg btn-borderless">
+                    <NavLink
+                        strict
+                        activeClassName="active"
+                        to="/feedback"
+                        className="nav-link btn btn-icon btn-lg btn-borderless"
+                    >
                         <i className="fad fa-comment-alt-exclamation" />
                     </NavLink>
                 </span>
                 <span className="mb">
-                    <NavLink strict activeClassName="active" to="/faqs" className="nav-link btn btn-icon btn-lg btn-borderless">
+                    <NavLink
+                        strict
+                        activeClassName="active"
+                        to="/faqs"
+                        className="nav-link btn btn-icon btn-lg btn-borderless"
+                    >
                         <i className="fad fa-question-circle" />
                     </NavLink>
                 </span>

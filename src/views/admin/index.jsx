@@ -42,6 +42,7 @@ function AdminPanel(props) {
     const [toggledClearRows, setToggledClearRows] = useState(false);
 
     const [show, setShow] = useState(false);
+    const [showRespone, setShowRespone] = useState(false);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -124,9 +125,17 @@ function AdminPanel(props) {
             });
         }
         async function fetchAllOrder() {
-            await realtime.ref('service/').on('value', (snapshot) => {
+            await realtime.ref('OrderStatus/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
-                    setOrderData(snapshot.val());
+                    const a = [];
+
+                    Object.values(snapshot.val()).map((data) => {
+                        Object.values(data).map((datas) => {
+                            a.push(datas);
+                        });
+                    });
+
+                    setOrderData(a.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
                 }
             });
         }
@@ -314,13 +323,12 @@ function AdminPanel(props) {
                                     </button>
                                 )}
                                 {isReport && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-light-danger ml-3"
+                                        onClick={() => setShowRespone(true)}
+                                    >
                                         Phản hồi
-                                    </button>
-                                )}
-                                {isService && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
-                                        Đánh dấu
                                     </button>
                                 )}
                             </div>
@@ -453,6 +461,30 @@ function AdminPanel(props) {
                                 </Button>
                             </Modal.Footer>
                         </Modal>
+
+                        <Modal
+                            show={showRespone}
+                            onHide={() => {
+                                setShowRespone(false);
+                            }}
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>Phản hồi báo cáo</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>abc</Modal.Body>
+                            <Modal.Footer>
+                                <Button
+                                    variant="secondary btn-sm"
+                                    onClick={() => {
+                                        setShowRespone(false);
+                                    }}
+                                >
+                                    Đóng
+                                </Button>
+                                <Button variant="chartjs btn-sm">Gửi phản hồi</Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         {isShopList && (
                             <ShopList
                                 listShop={listShop}
@@ -467,9 +499,15 @@ function AdminPanel(props) {
                                 toggledClearRows={toggledClearRows}
                             />
                         )}
-                        {isTotalOrder && <TotalOrder />}
-                        {isReport && <Report />}
-                        {isService && <Service />}
+                        {isTotalOrder && (
+                            <TotalOrder
+                                orderData={orderData}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
+                        )}
+                        {isReport && <Report getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isService && <Service getSelected={getSelected} toggledClearRows={toggledClearRows} />}
                     </section>
                     <Footer />
                 </main>
