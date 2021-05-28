@@ -15,6 +15,7 @@ function Feedback(props) {
             });
         try {
             await realtime.ref('service/' + idFeedBack).set({
+                id_feedback: idFeedBack,
                 type: type,
                 content: content,
                 status: '0',

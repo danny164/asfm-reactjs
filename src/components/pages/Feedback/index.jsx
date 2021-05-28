@@ -64,22 +64,12 @@ function MainFeedback(props) {
                                                     Khiếu nại
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input
-                                                        type="radio"
-                                                        value="góp ý"
-                                                        onClick={() => setTypeReport('1')}
-                                                        name="checkbox"
-                                                    />
+                                                    <input type="radio" value="góp ý" onClick={() => setTypeReport('1')} name="checkbox" />
                                                     <span />
                                                     Góp ý
                                                 </label>
                                                 <label className="checkbox checkbox-success">
-                                                    <input
-                                                        type="radio"
-                                                        value="khác"
-                                                        onClick={() => setTypeReport('2')}
-                                                        name="checkbox"
-                                                    />
+                                                    <input type="radio" value="khác" onClick={() => setTypeReport('2')} name="checkbox" />
                                                     <span />
                                                     Khác
                                                 </label>
@@ -108,11 +98,7 @@ function MainFeedback(props) {
                                 <div className="row">
                                     <div className="col-xl-5" />
                                     <div className="col-xl-7">
-                                        <button
-                                            type="button"
-                                            className="btn btn-light-danger font-weight-bold mr-2"
-                                            onClick={handleSubmit}
-                                        >
+                                        <button type="button" className="btn btn-light-danger font-weight-bold mr-2" onClick={handleSubmit}>
                                             Gửi ý kiến của bạn
                                         </button>
                                         <button type="reset" className="btn btn-light font-weight-bold">

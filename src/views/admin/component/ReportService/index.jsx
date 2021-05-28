@@ -9,10 +9,12 @@ import DataTable from 'react-data-table-component';
 Report.propTypes = {
     getSelected: PropTypes.func,
     toggledClearRows: PropTypes.bool,
+    reportData: PropTypes.array
 };
 Report.defaultProps = {
     getSelected: null,
     toggledClearRows: false,
+    reportData: []
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +37,7 @@ const LinearIndeterminate = () => {
 };
 
 function Report(props) {
-    const { getSelected, toggledClearRows } = props;
+    const { getSelected, toggledClearRows, reportData } = props;
     const [pending, setPending] = useState(true);
 
     const columns = useMemo(

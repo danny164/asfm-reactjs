@@ -49,6 +49,7 @@ function FeedbackModal(props) {
                 by: '0',
                 admin: '',
                 time: moment().format('X'),
+                user_id: currentUser.uid,
             });
 
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
@@ -68,12 +69,7 @@ function FeedbackModal(props) {
                 Báo cáo đơn
             </Button>
 
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdropClassName="modal-backdrop__feedback"
-                className="modal-feedback"
-            >
+            <Modal show={show} onHide={handleClose} backdropClassName="modal-backdrop__feedback" className="modal-feedback">
                 <Modal.Header>
                     <Modal.Title>Báo cáo đơn</Modal.Title>
                 </Modal.Header>
@@ -96,12 +92,7 @@ function FeedbackModal(props) {
                                     <label>Loại báo cáo</label>
                                     <div className="checkbox-inline">
                                         <label className="checkbox checkbox-success">
-                                            <input
-                                                type="radio"
-                                                defaultChecked="checked"
-                                                name="checkbox"
-                                                onClick={() => setTypeReport('0')}
-                                            />
+                                            <input type="radio" defaultChecked="checked" name="checkbox" onClick={() => setTypeReport('0')} />
                                             <span />
                                             Khiếu nại
                                         </label>

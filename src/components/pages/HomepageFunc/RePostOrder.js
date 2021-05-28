@@ -74,6 +74,7 @@ export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
         //tạo bảng orderstatus
         await realtime.ref('OrderStatus/' + uid + '/' + dataPostOrder.id_post).update({
             status: '0',
+            read: 0,
             thoi_gian: moment().format('X'),
         });
 

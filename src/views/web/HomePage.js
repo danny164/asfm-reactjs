@@ -204,6 +204,7 @@ function HomePage() {
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.id_post).update({
                 status: '0',
                 thoi_gian: moment().format('X'),
+                read: 0
             });
         } catch (error) {
             console.log(error);
@@ -227,7 +228,7 @@ function HomePage() {
             realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: '3', reason: reason });
+            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: '3', reason: reason, read: 0 });
             enqueueSnackbar(`Đơn #${id} đã bị hủy`, { variant: 'success' });
         } catch (e) {
             enqueueSnackbar(`Có lỗi xảy ra !`, { variant: 'error' });

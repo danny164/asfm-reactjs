@@ -9,11 +9,13 @@ import DataTable from 'react-data-table-component';
 Service.propTypes = {
     getSelected: PropTypes.func,
     toggledClearRows: PropTypes.bool,
+    serviceData: PropTypes.array,
 };
 
 Service.defaultProps = {
     getSelected: null,
     toggledClearRows: false,
+    serviceData: [],
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -36,14 +38,14 @@ const LinearIndeterminate = () => {
 };
 
 function Service(props) {
-    const { getSelected, toggledClearRows } = props;
+    const { getSelected, toggledClearRows, serviceData } = props;
     const [pending, setPending] = useState(true);
 
     const columns = useMemo(
         () => [
             {
                 name: 'ID',
-                selector: 'id_report',
+                selector: 'id_feedback',
                 sortable: true,
             },
             {
@@ -69,11 +71,6 @@ function Service(props) {
             {
                 name: 'Thời gian',
                 selector: 'time',
-                sortable: true,
-            },
-            {
-                name: 'Admin phản hồi',
-                selector: 'admin',
                 sortable: true,
             },
         ],
@@ -108,7 +105,7 @@ function Service(props) {
                     plural: 'đơn',
                     message: 'đã chọn',
                 }}
-                // data={data}
+                data={serviceData}
                 columns={columns}
                 pagination={true}
                 // paginationResetDefaultPage={resetPaginationToggle}
