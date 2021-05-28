@@ -14,13 +14,13 @@ VerticalChart.defaultProps = {
 
 function VerticalChart(props) {
     const { datas } = props;
-    const [label, setLabel] = useState();
-    const [labels, setLabels] = useState();
+
     const [days, setDays] = useState([]);
     const [lastDays, setLastDays] = useState([]);
     const [sortByRange, setSortByRange] = useState(7);
     const [presentData, setPresentData] = useState([]);
     const [lastData, setLastData] = useState([]);
+    const [note, setNote] = useState('Tuần');
 
     useEffect(() => {
         getDay(sortByRange, setDays);
@@ -43,14 +43,14 @@ function VerticalChart(props) {
         labels: days,
         datasets: [
             {
-                label: 'Tuần trước',
+                label: `${note} trước`,
                 data: lastData,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
             },
             {
-                label: 'Tuần này',
+                label: `${note} này`,
                 data: presentData,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
@@ -73,6 +73,8 @@ function VerticalChart(props) {
 
     const handleSortByRange = (range) => {
         setSortByRange(range);
+        if (range === 30) setNote('Tháng');
+        else setNote('Tuần');
     };
 
     return (
@@ -80,15 +82,17 @@ function VerticalChart(props) {
             <div className="card-header h-auto border-0">
                 <div className="card-title py-5">
                     <h3 className="card-label">
-                        <span className="d-block title">Chi phí giao hàng ngày, tuần, Tháng</span>
-                        <span className="d-block text-chartjs mt-2 font-size-sm">Mô tả Vertical Chart !</span>
+                        <span className="d-block title">Tổng thu nhập dựa trên số tiền tạm ứng</span>
+                        <span className="d-block text-chartjs mt-2 font-size-sm">{`${days[0]} - ${days[6]}`}</span>
                     </h3>
                 </div>
                 <div className="card-toolbar">
                     <ul className="nav nav-pills">
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${sortByRange === 30 ? 'active' : 'btn-outline-secondary'}`}
+                                className={`nav-link btn py-2 px-4 ${
+                                    sortByRange === 30 ? 'active' : 'btn-outline-secondary'
+                                }`}
                                 onClick={() => handleSortByRange(30)}
                             >
                                 <span className="nav-text">Tháng</span>
@@ -96,7 +100,9 @@ function VerticalChart(props) {
                         </li>
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${sortByRange === 7 ? 'active' : 'btn-outline-secondary'}`}
+                                className={`nav-link btn py-2 px-4 ${
+                                    sortByRange === 7 ? 'active' : 'btn-outline-secondary'
+                                }`}
                                 onClick={() => handleSortByRange(7)}
                             >
                                 <span className="nav-text">Tuần</span>

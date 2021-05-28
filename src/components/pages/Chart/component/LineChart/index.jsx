@@ -19,6 +19,7 @@ function LineChart(props) {
     const [sortByRange, setSortByRange] = useState(7);
     const [presentData, setPresentData] = useState([]);
     const [lastData, setLastData] = useState([]);
+    const [note, setNote] = useState('Tuần');
 
     useEffect(() => {
         getDay(sortByRange, setDays);
@@ -37,13 +38,13 @@ function LineChart(props) {
         }
     }, [lastDays]);
 
-    console.log(lastDays)
+    console.log(lastDays);
     //1 tuân 20 đơn.
     const data = {
         labels: days,
         datasets: [
             {
-                label: 'Tuần trước',
+                label: `${note} trước`,
                 data: lastData,
                 fill: false,
                 lineTension: 0.2,
@@ -51,7 +52,7 @@ function LineChart(props) {
                 borderColor: 'rgba(255, 99, 132, 0.2)',
             },
             {
-                label: 'Tuần này',
+                label: `${note} này`,
                 data: presentData,
                 fill: false,
                 lineTension: 0.2,
@@ -75,6 +76,8 @@ function LineChart(props) {
 
     const handleSortByRange = (range) => {
         setSortByRange(range);
+        if (range === 30) setNote('Tháng');
+        else setNote('Tuần');
     };
 
     return (
@@ -82,15 +85,17 @@ function LineChart(props) {
             <div className="card-header h-auto border-0">
                 <div className="card-title py-5">
                     <h3 className="card-label">
-                        <span className="d-block title">Số lượng đơn của ngày, tuần, tháng</span>
-                        <span className="d-block text-primary-2 mt-2 font-size-sm">Mô tả Line Chart !</span>
+                        <span className="d-block title">Tổng số đơn đã đăng</span>
+                        <span className="d-block text-primary-2 mt-2 font-size-sm">{`${days[0]} - ${days[6]}`}</span>
                     </h3>
                 </div>
                 <div className="card-toolbar">
                     <ul className="nav nav-pills">
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${sortByRange === 30 ? 'active' : 'btn-outline-secondary'}`}
+                                className={`nav-link btn py-2 px-4 ${
+                                    sortByRange === 30 ? 'active' : 'btn-outline-secondary'
+                                }`}
                                 onClick={() => handleSortByRange(30)}
                             >
                                 <span className="nav-text">Tháng</span>
@@ -98,7 +103,9 @@ function LineChart(props) {
                         </li>
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${sortByRange === 7 ? 'active' : 'btn-outline-secondary'}`}
+                                className={`nav-link btn py-2 px-4 ${
+                                    sortByRange === 7 ? 'active' : 'btn-outline-secondary'
+                                }`}
                                 onClick={() => handleSortByRange(7)}
                             >
                                 <span className="nav-text">Tuần</span>
