@@ -12,7 +12,6 @@ import Flatpickr from 'react-flatpickr';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/common/Footer';
 import HeaderMobile from '../../components/common/HeaderMobile';
-import { fetchReport } from '../../components/pages/AdminFunc/FetchReport';
 import AsideLeft from '../../components/pages/AsideLeft';
 import { db, realtime } from '../../firebase';
 import Service from './component/QualityService';
@@ -130,10 +129,16 @@ function AdminPanel(props) {
                 }
             });
         }
-
+        async function fetchReport() {
+            await realtime.ref('report/').on('value', (snapshot) => {
+                if (snapshot.val() !== null) {
+                    setReportData(snapshot.val());
+                }
+            });
+        }
         fetchAllOrder();
         fetchService();
-        fetchReport(currentUser.uid, setReportData);
+        fetchReport();
         fetchShipperList();
         fetchShopList();
     }, []);
@@ -289,11 +294,7 @@ function AdminPanel(props) {
                             <div className="mb-3">
                                 {(isShopList || isShipperList) && (
                                     <>
-                                        <button
-                                            type="button"
-                                            className="btn btn-sm btn-light-success ml-3"
-                                            onClick={unLocked}
-                                        >
+                                        <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={unLocked}>
                                             Mở khóa
                                         </button>
                                         <button
@@ -343,32 +344,16 @@ function AdminPanel(props) {
                                         <div className="col-9 col-form-label">
                                             <div className="radio-inline">
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        defaultChecked="checked"
-                                                        value="1"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" defaultChecked="checked" value="1" onClick={timeFixed} />
                                                     <span />
                                                     24 giờ
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="3"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="3" onClick={timeFixed} />
                                                     <span />3 ngày
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="7"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="7" onClick={timeFixed} />
                                                     <span />1 tuần
                                                 </label>
                                                 <label className="radio radio-danger">
@@ -388,28 +373,19 @@ function AdminPanel(props) {
                                                                 minDate: 'today',
                                                                 locale: Vietnamese,
                                                             }}
-                                                            defaultValue={moment()
-                                                                .add(14, 'days')
-                                                                .format('YYYY-MM-DD HH:mm')}
+                                                            defaultValue={moment().add(14, 'days').format('YYYY-MM-DD HH:mm')}
                                                             placeholder="Chọn ngày và giờ"
                                                             onChange={(date) => {
                                                                 setDate(moment(date[0]).format('X'));
                                                             }}
                                                         />
-                                                        <span className="form-text text-muted">
-                                                            * Tùy chọn thời gian bạn muốn khóa{' '}
-                                                        </span>
+                                                        <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
                                                     </>
                                                 </Expand>
                                             }
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="0"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="0" onClick={timeFixed} />
                                                     <span />
                                                     Khóa vĩnh viễn
                                                 </label>
@@ -431,9 +407,7 @@ function AdminPanel(props) {
                                                     ref={noteRef}
                                                 />
                                             </div>
-                                            <span className="form-text text-muted">
-                                                * Có thể để trống nội dung, nội dung khóa sẽ là mặc định
-                                            </span>
+                                            <span className="form-text text-muted">* Có thể để trống nội dung, nội dung khóa sẽ là mặc định</span>
                                         </div>
                                     </div>
                                 </form>
@@ -453,20 +427,8 @@ function AdminPanel(props) {
                                 </Button>
                             </Modal.Footer>
                         </Modal>
-                        {isShopList && (
-                            <ShopList
-                                listShop={listShop}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
-                        {isShipperList && (
-                            <ShipperList
-                                listShipper={listShipper}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
+                        {isShopList && <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isShipperList && <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
                         {isTotalOrder && <TotalOrder />}
                         {isReport && <Report />}
                         {isService && <Service />}
