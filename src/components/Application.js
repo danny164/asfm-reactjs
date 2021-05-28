@@ -20,13 +20,13 @@ import Banned from './pages/Banned';
 import Chart from './pages/Chart';
 import FakeData from './pages/FakeData';
 import NotFoundPage from './pages/NotFound';
-import TotalOrder from './pages/TotalOrder';
 import Register from './SignUp';
 
 const style = {
     backgroundColor: 'rgba(102, 50, 89, 0.3)',
     animation: 'animation-scrolltop .4s ease-out 1',
-    transition: 'color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, -webkit-box-shadow 0.15s ease',
+    transition:
+        'color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, -webkit-box-shadow 0.15s ease',
     borderRadius: '0.675rem !important',
     width: '36px',
     height: '36px',
@@ -50,7 +50,6 @@ function Application() {
                     <PrivateRoute path="/post-order" component={PostOrder} />
                     <PrivateRoute path="/chart" component={Chart} />
                     <PrivateRoute strict path="/admin" component={AdminPanel} />
-                    <PrivateRoute path="/order" component={TotalOrder} />
                     <PrivateRoute path="/fake" component={FakeData} />
                     <PrivateRoute path="/feedback" component={Feedback} />
                     <PrivateRoute path="/mailbox" component={Mailbox} />

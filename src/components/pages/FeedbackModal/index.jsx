@@ -1,11 +1,12 @@
 import { useAuth } from 'context/AuthContext';
+import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
+import random from 'randomstring';
 import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { realtime } from '../../../firebase';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import random from 'randomstring';
 import './styles.scss';
 
 FeedbackModal.propTypes = {
@@ -21,6 +22,8 @@ function FeedbackModal(props) {
     const [show, setShow] = useState(false);
     const [typeReport, setTypeReport] = useState('0');
     const contentRef = useRef();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const { currentUser } = useAuth();
 
@@ -51,6 +54,8 @@ function FeedbackModal(props) {
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
                 statusReport: 1,
             });
+
+            enqueueSnackbar('Bạn đã báo cáo thành công', { variant: 'success' });
 
             handleClose();
         } catch (err) {

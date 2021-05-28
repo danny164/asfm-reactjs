@@ -41,6 +41,7 @@ function AdminPanel(props) {
     const [toggledClearRows, setToggledClearRows] = useState(false);
 
     const [show, setShow] = useState(false);
+    const [showRespone, setShowRespone] = useState(false);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -123,9 +124,17 @@ function AdminPanel(props) {
             });
         }
         async function fetchAllOrder() {
-            await realtime.ref('service/').on('value', (snapshot) => {
+            await realtime.ref('OrderStatus/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
-                    setOrderData(snapshot.val());
+                    const a = [];
+
+                    Object.values(snapshot.val()).map((data) => {
+                        Object.values(data).map((datas) => {
+                            a.push(datas);
+                        });
+                    });
+
+                    setOrderData(a.sort((a, b) => (a.thoi_gian < b.thoi_gian ? 1 : -1)));
                 }
             });
         }
@@ -315,13 +324,12 @@ function AdminPanel(props) {
                                     </button>
                                 )}
                                 {isReport && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-light-danger ml-3"
+                                        onClick={() => setShowRespone(true)}
+                                    >
                                         Phản hồi
-                                    </button>
-                                )}
-                                {isService && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
-                                        Đánh dấu
                                     </button>
                                 )}
                             </div>
@@ -427,11 +435,96 @@ function AdminPanel(props) {
                                 </Button>
                             </Modal.Footer>
                         </Modal>
-                        {isShopList && <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
-                        {isShipperList && <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
-                        {isTotalOrder && <TotalOrder />}
-                        {isReport && <Report />}
-                        {isService && <Service />}
+
+                        <Modal
+                            show={showRespone}
+                            onHide={() => {
+                                setShowRespone(false);
+                            }}
+                        >
+                            <Modal.Header>
+                                <Modal.Title>Phản hồi báo cáo</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="d-flex align-items-start">
+                                    <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                    <div className="d-flex flex-column flex-grow-1 ml-4">
+                                        <header className="card-title content">
+                                            <span>#123</span>
+                                            <span className="flex-shrink-0">10:00</span>
+                                        </header>
+                                        <section className="card-info content">
+                                            <div className="mb-3">
+                                                <p>
+                                                    <span className="font-weight-bold text-chartjs mr-1">Loại:</span>
+                                                    <span className="font-weight-bold">{`Góp ý`}</span>
+                                                </p>
+                                                <p>
+                                                    <span className="font-weight-bold text-primary-2 mr-1">
+                                                        Mã đơn hàng:
+                                                    </span>
+                                                    <span className="font-weight-bold text-brown">{`#123`}</span>
+                                                </p>
+                                            </div>
+                                            <span className="delivery">Nội dung:</span>
+                                            <div className="d-flex align-items-center justify-content-between">
+                                                <p className="mb-0 pl-0">Shipper khó tính</p>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div className="separator separator-dashed my-2" />
+                                <div className="form-group">
+                                    <label htmlFor="reply" className="font-weight-bold text-brown">
+                                        Phản hồi
+                                    </label>
+                                    <textarea
+                                        className="form-control form-control-lg"
+                                        id="reply"
+                                        rows={3}
+                                        placeholder="Đã xử lý !"
+                                    />
+                                    <span className="form-text text-muted">
+                                        Có thể để trống nội dung sẽ là mặc định
+                                    </span>
+                                </div>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button
+                                    variant="secondary btn-sm"
+                                    onClick={() => {
+                                        setShowRespone(false);
+                                    }}
+                                >
+                                    Đóng
+                                </Button>
+                                <Button variant="chartjs btn-sm">Gửi phản hồi</Button>
+                            </Modal.Footer>
+                        </Modal>
+
+                        {isShopList && (
+                            <ShopList
+                                listShop={listShop}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
+                        )}
+                        {isShipperList && (
+                            <ShipperList
+                                listShipper={listShipper}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
+                        )}
+                        {isTotalOrder && (
+                            <TotalOrder
+                                orderData={orderData}
+                                getSelected={getSelected}
+                                toggledClearRows={toggledClearRows}
+                            />
+                        )}
+                        {isReport && <Report getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isService && <Service getSelected={getSelected} toggledClearRows={toggledClearRows} />}
                     </section>
                     <Footer />
                 </main>
