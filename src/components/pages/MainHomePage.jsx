@@ -20,7 +20,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { db, realtime } from '../../firebase';
 import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
-import { RePostOrderr } from '../pages/HomepageFunc/RePostOrder';
+import RePostOrder from '../pages/HomepageFunc/RePostOrder';
 import Chat from './Chat/Chat';
 import FeedbackModal from './FeedbackModal';
 import GoogleMaps from './Map/GoogleMaps';
@@ -36,7 +36,6 @@ MainHomePage.propTypes = {
     datas: PropTypes.object,
     ChangeOrderStatus: PropTypes.func,
     deleteOrder: PropTypes.func,
-    rePostOrder: PropTypes.func,
 };
 
 MainHomePage.defaultProps = {
@@ -45,7 +44,6 @@ MainHomePage.defaultProps = {
     ChangeOrderStatus: null,
     deleteOrder: null,
     idShop: '',
-    rePostOrder: null,
 };
 const convertPhone = (phone) => {
     const match = phone.match(/^(\d{4})(\d{3})(\d{3})$/);
@@ -56,7 +54,7 @@ const convertPhone = (phone) => {
 };
 
 function MainHomePage(props) {
-    const { rePostOrder, datas, deleteOrder, shopInfo, idShop } = props;
+    const { datas, shopInfo, idShop } = props;
 
     const [hasMore, setHasMore] = useState(true);
     const [copied, setCopied] = useState(false);
@@ -337,10 +335,10 @@ function MainHomePage(props) {
         setHasMore(true);
     }, [sortByRange, datas, filter]);
 
-    const rePostOrderr = async (dataPostOrder) => {
-        if (RePostOrderr) {
+    const rePostOrder = async (dataPostOrder) => {
+        if (RePostOrder) {
             let re;
-            re = await RePostOrderr(dataPostOrder, currentUser.uid, enqueueSnackbar);
+            re = await RePostOrder(dataPostOrder, currentUser.uid, enqueueSnackbar);
             if (re === 0) {
                 return setShow(false);
             }
@@ -557,7 +555,7 @@ function MainHomePage(props) {
                                 <button
                                     className="btn btn-sm btn-light flex-shrink-0"
                                     onClick={() => {
-                                        rePostOrderr(dataModal);
+                                        rePostOrder(dataModal);
                                     }}
                                 >
                                     Đặt lại ngay

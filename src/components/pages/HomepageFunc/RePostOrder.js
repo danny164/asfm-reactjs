@@ -1,17 +1,8 @@
-import { useAuth } from 'context/AuthContext';
-import React from 'react';
-import { useSnackbar } from 'notistack';
-import { realtime } from '../../../firebase';
 import moment from 'moment';
 import random from 'randomstring';
+import { realtime } from '../../../firebase';
 
-function RePostOrder(props) {
-    return <div></div>;
-}
-
-export default RePostOrder;
-
-export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
+async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
     const idChat =
         moment().format('YYYYMMDD-HHmmssSSS') +
         random.generate({
@@ -26,13 +17,13 @@ export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
 
     try {
         //tao bảng newsfeed
-        realtime.ref('newsfeed/' + dataPostOrder.id_post).set({
+        realtime.ref('newsfeed/' + dataPostOrder.id_post).update({
             id_post: dataPostOrder.id_post,
             noi_giao: dataPostOrder.noi_giao,
             noi_nhan: dataPostOrder.noi_nhan,
             ghi_chu: dataPostOrder.ghi_chu,
             km: dataPostOrder.km,
-            thoi_gian: dataPostOrder.thoi_gian,
+            thoi_gian: moment().format('X'),
             sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
             ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
             sdt_nguoi_gui: dataPostOrder.sdt_nguoi_gui,
@@ -44,7 +35,7 @@ export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
         });
 
         //tạo bảng transaction
-        realtime.ref('Transaction/' + dataPostOrder.id_post).set({
+        realtime.ref('Transaction/' + dataPostOrder.id_post).update({
             id_post: dataPostOrder.id_post,
             id_shop: uid,
             id_shipper: '',
@@ -82,4 +73,6 @@ export const RePostOrderr = async (dataPostOrder, uid, enqueueSnackbar) => {
     } catch (error) {
         console.log(error);
     }
-};
+}
+
+export default RePostOrder;

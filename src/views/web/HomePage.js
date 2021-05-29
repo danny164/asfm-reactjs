@@ -86,10 +86,15 @@ function HomePage() {
                 //Lọc những đơn đã đăng nhưng quá 1 ngày chưa ai chọn thì update lại thành hủy
                 await realtime.ref('OrderStatus/' + id).once('value', (snapshot) => {
                     if (snapshot.val() !== null) {
-                        const renderOldStatus = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 1));
+                        const renderOldStatus = Object.values(snapshot.val()).filter(
+                            (data) => data.status === '0' && last24hrs(data.thoi_gian, 1)
+                        );
 
                         renderOldStatus.map((data) => {
-                            handleDeleteOrder(data.id_post, 'Đơn hàng trong 24 giờ tự động hủy vì không có shipper nhận !');
+                            handleDeleteOrder(
+                                data.id_post,
+                                'Đơn hàng trong 24 giờ tự động hủy vì không có shipper nhận !'
+                            );
                         });
 
                         const renderStatus = Object.values(snapshot.val()).filter(
@@ -116,18 +121,20 @@ function HomePage() {
             try {
                 await realtime.ref('Notification/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot.val() !== null) {
-                        let oldNoti = Object.values(snapshot.val()).filter((data) => data.status === '0' && last24hrs(data.thoi_gian, 3));
+                        let oldNoti = Object.values(snapshot.val()).filter(
+                            (data) => data.status === '0' && last24hrs(data.thoi_gian, 3)
+                        );
 
                         // TODO: LỖi
-                        if (oldNoti.length !== 0) {
-                            oldNoti.map((data) => {
-                                realtime
-                                    .ref('Notification/' + currentUser.uid)
-                                    .orderByChild('id_post')
-                                    .equalTo(data.id_post)
-                                    .remove();
-                            });
-                        }
+                        // if (oldNoti.length !== 0) {
+                        //     oldNoti.map((data) => {
+                        //         realtime
+                        //             .ref('Notification/' + currentUser.uid)
+                        //             .orderByChild('id_post')
+                        //             .equalTo(data.id_post)
+                        //             .remove();
+                        //     });
+                        // }
 
                         const action = updateNotification(snapshot.val());
                         dispatch(action);
@@ -147,70 +154,6 @@ function HomePage() {
             charset: 'numeric',
         });
 
-    const rePostOrder = async (dataPostOrder) => {
-        if (localStorage.getItem('role') === '2') {
-            enqueueSnackbar('Tài khoản của bạn tạm thời không được phép đăng đơn !', { variant: 'warning' });
-            return;
-        }
-
-        try {
-            //tao bảng newsfeed
-            realtime.ref('newsfeed/' + dataPostOrder.id_post).set({
-                id_post: dataPostOrder.id_post,
-                noi_giao: dataPostOrder.noi_giao,
-                noi_nhan: dataPostOrder.noi_nhan,
-                ghi_chu: dataPostOrder.ghi_chu,
-                km: dataPostOrder.km,
-                thoi_gian: dataPostOrder.thoi_gian,
-                sdt_nguoi_nhan: dataPostOrder.sdt_nguoi_nhan,
-                ten_nguoi_nhan: dataPostOrder.ten_nguoi_nhan,
-                sdt_nguoi_gui: dataPostOrder.sdt_nguoi_gui,
-                ten_nguoi_gui: dataPostOrder.ten_nguoi_gui,
-                phi_giao: dataPostOrder.phi_giao,
-                phi_ung: dataPostOrder.phi_ung,
-                id_shop: currentUser.uid,
-                status: '',
-            });
-
-            //tạo bảng transaction
-            realtime.ref('Transaction/' + dataPostOrder.id_post).set({
-                id_post: dataPostOrder.id_post,
-                id_shop: currentUser.uid,
-                id_shipper: '',
-                id_roomchat: idChat,
-                status: '0',
-                ma_bi_mat: dataPostOrder.ma_bi_mat,
-                thoi_gian: moment().format('X'),
-                receiveLng: dataPostOrder.receiveLng,
-                receiveLat: dataPostOrder.receiveLat,
-                shipLng: dataPostOrder.shipLng,
-                shipLat: dataPostOrder.shipLat,
-                time_estimate: dataPostOrder.time_estimate,
-            });
-
-            //tạo bảng thông báo
-            realtime
-                .ref('Notification/' + currentUser.uid)
-                .push()
-                .set({
-                    id_post: dataPostOrder.id_post,
-                    id_shop: currentUser.uid,
-                    id_shipper: '',
-                    status: '0',
-                    thoi_gian: moment().format('X'),
-                });
-
-            //tạo bảng orderstatus
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + dataPostOrder.id_post).update({
-                status: '0',
-                thoi_gian: moment().format('X'),
-                read: 0
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     // Hủy đơn
     async function handleDeleteOrder(id, reason) {
         try {
@@ -228,7 +171,9 @@ function HomePage() {
             realtime.ref('newsfeed/' + id).remove();
             await realtime.ref('Transaction/' + id).remove();
             // await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).remove();
-            await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id).update({ status: '3', reason: reason, read: 0 });
+            await realtime
+                .ref('OrderStatus/' + currentUser.uid + '/' + id)
+                .update({ status: '3', reason: reason, read: 0 });
             enqueueSnackbar(`Đơn #${id} đã bị hủy`, { variant: 'success' });
         } catch (e) {
             enqueueSnackbar(`Có lỗi xảy ra !`, { variant: 'error' });
