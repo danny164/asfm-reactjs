@@ -1,6 +1,7 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import NoData from 'components/pages/NoData';
+import { dateToFromNowDaily } from 'convert/DateToFromNow';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -37,6 +38,8 @@ const LinearIndeterminate = () => {
     );
 };
 
+const ConvertPostTime = ({ row }) => <>{row.time && dateToFromNowDaily(row.time)}</>;
+
 function Service(props) {
     const { getSelected, toggledClearRows, serviceData } = props;
     const [pending, setPending] = useState(true);
@@ -72,6 +75,7 @@ function Service(props) {
                 name: 'Thời gian',
                 selector: 'time',
                 sortable: true,
+                cell: (row) => <ConvertPostTime row={row} />,
             },
         ],
         []

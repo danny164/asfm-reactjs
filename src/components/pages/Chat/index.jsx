@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './styles.scss';
+import Avatar from 'assets/media/avatar.png';
 
 ChatModal.propTypes = {
     showChat: PropTypes.bool,
@@ -81,7 +82,13 @@ function ChatModal(props) {
     }, [chats, showChat]);
 
     return (
-        <Modal size="lg" show={showChat} onHide={handleCloseChat} backdropClassName="modal-backdrop__chat" className="modal-chat">
+        <Modal
+            size="lg"
+            show={showChat}
+            onHide={handleCloseChat}
+            backdropClassName="modal-backdrop__chat"
+            className="modal-chat"
+        >
             <Modal.Header>
                 <Modal.Title>Chat với {shipperInfor.fullname}</Modal.Title>
                 <Button variant="secondary" onClick={handleCloseChat}>
@@ -92,7 +99,7 @@ function ChatModal(props) {
                 <section className="chat-module">
                     <div className="chat-intro">
                         <div className="avatar-shipper">
-                            <img src={shipperInfor.avatar} alt="Avatar Shipper" />
+                            <img src={shipperInfor.avatar || Avatar} alt="Avatar Shipper" />
                         </div>
 
                         <span className="shipper-name">{shipperInfor.fullname}</span>
@@ -103,7 +110,13 @@ function ChatModal(props) {
                             chats.map((item, idx) => (
                                 <div key={idx} className={checkingID(item.id)}>
                                     <div className="chat-content">
-                                        {item.id !== idShop && <img class="shipper-info" src={shipperInfor.avatar} alt="The Night Owl" />}
+                                        {item.id !== idShop && (
+                                            <img
+                                                class="shipper-info"
+                                                src={shipperInfor.avatar || Avatar}
+                                                alt="The Night Owl"
+                                            />
+                                        )}
                                         {item.imgmessage !== '' ? (
                                             <div className="message-image">
                                                 <img src={item.imgmessage} alt="" />

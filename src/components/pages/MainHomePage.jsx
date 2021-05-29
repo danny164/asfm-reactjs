@@ -28,6 +28,7 @@ import CustomRating from './Rating';
 import SkeletonCard from './Skeleton/SkeletonCard';
 import SkeletonShipper from './Skeleton/SkeletonShipper';
 import SkeletonSortLength from './Skeleton/SkeletonSortLength';
+import Avatar from 'assets/media/avatar.png';
 
 MainHomePage.propTypes = {
     shopInfo: PropTypes.object,
@@ -211,7 +212,12 @@ function MainHomePage(props) {
     // ! Xóa đơn
     const handledeleteOrder = async (id) => {
         if (handleDeleteOrder) {
-            await handleDeleteOrder(id, 'Bạn đã thực hiện thao tác hủy trên hệ thống !', currentUser.uid, enqueueSnackbar);
+            await handleDeleteOrder(
+                id,
+                'Bạn đã thực hiện thao tác hủy trên hệ thống !',
+                currentUser.uid,
+                enqueueSnackbar
+            );
             setShow(false);
         }
     };
@@ -408,7 +414,9 @@ function MainHomePage(props) {
                                     Danh sách đơn {titleStatus}
                                     {loading && <SkeletonSortLength />}
                                     {!loading && (
-                                        <span className="label label-sm label-light label-rounded font-weight-bolder ml-2">{sortStatus.length}</span>
+                                        <span className="label label-sm label-light label-rounded font-weight-bolder ml-2">
+                                            {sortStatus.length}
+                                        </span>
                                     )}
                                 </span>
 
@@ -419,7 +427,9 @@ function MainHomePage(props) {
                             <ul className="nav nav-pills">
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '30' ? 'active' : 'btn-outline-secondary'}`}
+                                        className={`nav-link btn py-2 px-4 ${
+                                            sortByRange === '30' ? 'active' : 'btn-outline-secondary'
+                                        }`}
                                         onClick={() => handleSortByRange('30')}
                                     >
                                         <span className="nav-text">Tháng</span>
@@ -427,7 +437,9 @@ function MainHomePage(props) {
                                 </li>
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '7' ? 'active' : 'btn-outline-secondary'}`}
+                                        className={`nav-link btn py-2 px-4 ${
+                                            sortByRange === '7' ? 'active' : 'btn-outline-secondary'
+                                        }`}
                                         onClick={() => handleSortByRange('7')}
                                     >
                                         <span className="nav-text">Tuần</span>
@@ -435,7 +447,9 @@ function MainHomePage(props) {
                                 </li>
                                 <li className="nav-item">
                                     <div
-                                        className={`nav-link btn py-2 px-4 ${sortByRange === '1' ? 'active' : 'btn-outline-secondary'}`}
+                                        className={`nav-link btn py-2 px-4 ${
+                                            sortByRange === '1' ? 'active' : 'btn-outline-secondary'
+                                        }`}
                                         onClick={() => handleSortByRange('1')}
                                     >
                                         <span className="nav-text">Ngày</span>
@@ -456,7 +470,9 @@ function MainHomePage(props) {
                                 endMessage={
                                     items.length !== 0 && (
                                         <p style={{ textAlign: 'center' }}>
-                                            <span className="font-weight-bold">Yay! Hết cái để xem {subTitleStatus} rồi !</span>
+                                            <span className="font-weight-bold">
+                                                Yay! Hết cái để xem {subTitleStatus} rồi !
+                                            </span>
                                         </p>
                                     )
                                 }
@@ -485,15 +501,25 @@ function MainHomePage(props) {
                                                     <section className="card-info content">
                                                         <div className="mb-3">
                                                             <div className="mb-3">
-                                                                <span className="font-weight-bold">{data.ten_nguoi_nhan}</span> -{' '}
-                                                                <span className="font-weight-bold">{data.sdt_nguoi_nhan}</span>
+                                                                <span className="font-weight-bold">
+                                                                    {data.ten_nguoi_nhan}
+                                                                </span>{' '}
+                                                                -{' '}
+                                                                <span className="font-weight-bold">
+                                                                    {data.sdt_nguoi_nhan}
+                                                                </span>
                                                             </div>
                                                             <div className="mb-1">
                                                                 Chi phí giao hàng:{' '}
-                                                                <span className="font-weight-bold text-primary-2">{data.phi_giao}</span>
+                                                                <span className="font-weight-bold text-primary-2">
+                                                                    {data.phi_giao}
+                                                                </span>
                                                             </div>
                                                             <div className="mb-1">
-                                                                Tạm ứng: <span className="font-weight-bold text-chartjs">{data.phi_ung}</span>
+                                                                Tạm ứng:{' '}
+                                                                <span className="font-weight-bold text-chartjs">
+                                                                    {data.phi_ung}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                         <span className="delivery">Giao hàng tới</span>
@@ -537,7 +563,9 @@ function MainHomePage(props) {
                                     Đặt lại ngay
                                 </button>
                             )}
-                            {dataModal.status === '2' && dataModal.status_report === 0 && <FeedbackModal id_post={dataModal.id_post} />}
+                            {dataModal.status === '2' && dataModal.status_report === 0 && (
+                                <FeedbackModal id_post={dataModal.id_post} />
+                            )}
                         </Modal.Header>
                         <Modal.Body>
                             <div className="d-flex align-items-start">
@@ -561,23 +589,33 @@ function MainHomePage(props) {
                                         <div className="mb-5">
                                             <p>
                                                 Tên khách hàng:
-                                                <span className="font-weight-bold ml-2">{dataModal.ten_nguoi_nhan}</span>
+                                                <span className="font-weight-bold ml-2">
+                                                    {dataModal.ten_nguoi_nhan}
+                                                </span>
                                             </p>
                                             <p>
                                                 Số điện thoại:
-                                                <span className="font-weight-bold ml-2">{dataModal.sdt_nguoi_nhan}</span>
+                                                <span className="font-weight-bold ml-2">
+                                                    {dataModal.sdt_nguoi_nhan}
+                                                </span>
                                             </p>
                                             <p>
                                                 Chi phí giao hàng:
-                                                <span className="font-weight-bold text-primary-2 ml-2">{dataModal.phi_giao}</span>
+                                                <span className="font-weight-bold text-primary-2 ml-2">
+                                                    {dataModal.phi_giao}
+                                                </span>
                                             </p>
                                             <p>
                                                 Tạm ứng:
-                                                <span className="font-weight-bold text-chartjs ml-2">{dataModal.phi_ung}</span>
+                                                <span className="font-weight-bold text-chartjs ml-2">
+                                                    {dataModal.phi_ung}
+                                                </span>
                                             </p>
                                             <p>
                                                 Mã nhận hàng:
-                                                <span className="font-weight-bold menu-in-progress ml-2">{dataModal.ma_bi_mat}</span>
+                                                <span className="font-weight-bold menu-in-progress ml-2">
+                                                    {dataModal.ma_bi_mat}
+                                                </span>
                                             </p>
                                         </div>
 
@@ -602,7 +640,9 @@ function MainHomePage(props) {
                                 <>
                                     <div className="separator separator-dashed my-5" />
                                     <p>
-                                        <span className="label label-xl label-inline label-inprogress label-rounded mr-2">Ghi chú:</span>
+                                        <span className="label label-xl label-inline label-inprogress label-rounded mr-2">
+                                            Ghi chú:
+                                        </span>
                                         {dataModal.ghi_chu}
                                     </p>
                                 </>
@@ -615,7 +655,9 @@ function MainHomePage(props) {
                                 </>
                             )}
 
-                            {(dataModal.status === '0' || fetchLoading) && dataModal.status !== '3' && <SkeletonShipper status={dataModal.status} />}
+                            {(dataModal.status === '0' || fetchLoading) && dataModal.status !== '3' && (
+                                <SkeletonShipper status={dataModal.status} />
+                            )}
 
                             {!fetchLoading && dataModal.status !== '0' && dataModal.status !== '3' && (
                                 <>
@@ -625,9 +667,11 @@ function MainHomePage(props) {
                                     <div className="d-flex justify-content-between align-items-center">
                                         <div className="shipper-info">
                                             <div className="avatar-shipper-sm">
-                                                {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
+                                                <img src={shipperInfor.avatar || Avatar} alt="Avatar Shipper" />
                                             </div>
-                                            <div className="mr-5 font-weight-bold text-brown">{shipperInfor.fullname}</div>
+                                            <div className="mr-5 font-weight-bold text-brown">
+                                                {shipperInfor.fullname}
+                                            </div>
                                             <div>
                                                 {shipperInfor.phone && convertPhone(shipperInfor.phone)}
                                                 <span className="font-weight-bold middle-dot text-brown">

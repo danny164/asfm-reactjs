@@ -10,6 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import './styles.scss';
 import PropTypes from 'prop-types';
 import { dateToFromNowDaily } from 'convert/DateToFromNow';
+import SkeletonMailBox from '../Skeleton/SkeletonMailBox';
 
 MainMailbox.propTypes = {
     datas: PropTypes.object,
@@ -145,6 +146,8 @@ function MainMailbox(props) {
                                     <span className="text menu-in-progress">Bạn chưa có phản hồi nào !</span>
                                 </article>
                             )}
+
+                            <SkeletonMailBox />
                         </section>
                     </div>
                 </section>
