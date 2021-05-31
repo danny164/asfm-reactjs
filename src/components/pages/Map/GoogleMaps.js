@@ -8,6 +8,10 @@ GoogleMaps.propTypes = {
     noiGiao: PropTypes.string,
     status: PropTypes.string,
     shipperLocation: PropTypes.object,
+    receiveLat: PropTypes.number,
+    receiveLng: PropTypes.number,
+    shipLat: PropTypes.number,
+    shipLng: PropTypes.number,
 };
 
 GoogleMaps.defaultProps = {
@@ -18,6 +22,10 @@ GoogleMaps.defaultProps = {
         lat: 16.057723868641794,
         lng: 108.20189873237138,
     },
+    receiveLat: 16.057723868641794,
+    receiveLng: 108.20189873237138,
+    shipLat: 16.057723868641794,
+    shipLng: 108.20189873237138,
 };
 
 const mapStyles = {
@@ -32,13 +40,12 @@ const defaultCenter = {
 
 let count = 0;
 export default function GoogleMaps(props) {
-    const { status, noiNhan, noiGiao, shipperInfor } = props;
+    const { status, noiNhan, noiGiao, shipperInfor, receiveLat, receiveLng, shipLat, shipLng } = props;
     const [shipperLocation, setShipperLocation] = useState();
     const [response, setResponse] = useState(null);
 
     const directionsCallback = (result) => {
         count += 1;
-        console.log('test');
         if (result !== null && count < 3) {
             if (result.status === 'OK') {
                 setResponse(result);
@@ -48,14 +55,27 @@ export default function GoogleMaps(props) {
         }
     };
 
+    console.log(shipLat, shipLng, receiveLat, receiveLng);
+
     useEffect(() => {
-        realtime.ref('Location_Shipper/' + shipperInfor.id).on('value', (snapshot) => {
-            if (snapshot !== null) setShipperLocation(snapshot.val());
-        });
-    }, [shipperInfor]);
+        console.log(count);
+        const shipperLatLng = async () => {
+            try {
+                await realtime.ref('Location_Shipper/' + shipperInfor.id).on('value', (snapshot) => {
+                    if (snapshot !== null) {
+                        setShipperLocation(snapshot.val());
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        shipperLatLng();
+    }, [shipperInfor, status]);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyCHKl-eLm-qj7yzNFMNX1z0R8eLZM1_hjw" language="vi">
+        <LoadScript googleMapsApiKey="AIzaSyBx-Vn56Cm1znXyC4d-SNbQidogpazq3cI" language="vi">
             <GoogleMap
                 mapContainerStyle={mapStyles}
                 zoom={shipperLocation !== null ? 18 : 12}
@@ -63,7 +83,15 @@ export default function GoogleMaps(props) {
                 options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
             >
                 {/* hiển thị vị trí shipper */}
-                {shipperLocation !== null && status !== '3' && <Marker position={shipperLocation} />}
+                <Marker position={shipperLocation} visible={shipperLocation !== null && status !== '3'} />
+                <Marker
+                    position={{ lat: shipLat, lng: shipLng }}
+                    visible={shipperLocation !== null && status !== '3'}
+                />
+                <Marker
+                    position={{ lat: receiveLat, lng: receiveLng }}
+                    visible={shipperLocation !== null && status !== '3'}
+                />
 
                 {status === '0' && (
                     <>
@@ -75,6 +103,9 @@ export default function GoogleMaps(props) {
                             }}
                             callback={directionsCallback}
                             onLoad={(directionsService) => {
+                                if (status === '0') {
+                                    count = 0;
+                                }
                                 console.log('DirectionsService onLoad', directionsService);
                             }}
                             onUnmount={(directionsService) => {
@@ -85,7 +116,7 @@ export default function GoogleMaps(props) {
                     </>
                 )}
 
-                {response !== null && (
+                {response !== null && status === '0' && (
                     <DirectionsRenderer
                         options={{
                             directions: response,
