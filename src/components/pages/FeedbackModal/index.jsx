@@ -39,6 +39,7 @@ function FeedbackModal(props) {
             });
         try {
             await realtime.ref('report/' + currentUser.uid + '/' + idReport).set({
+                id_user: currentUser.uid,
                 id_report: idReport,
                 type: typeReport,
                 content: contentRef.current.value,
@@ -50,6 +51,7 @@ function FeedbackModal(props) {
                 admin: '',
                 time: moment().format('X'),
                 user_id: currentUser.uid,
+                read: '0',
             });
 
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
