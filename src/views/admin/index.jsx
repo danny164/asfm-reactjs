@@ -46,6 +46,7 @@ function AdminPanel(props) {
     const { enqueueSnackbar } = useSnackbar();
 
     const noteRef = useRef();
+    const reportRef = useRef();
 
     const dispatch = useDispatch();
 
@@ -147,13 +148,14 @@ function AdminPanel(props) {
         async function fetchReport() {
             await realtime.ref('report/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
-                    const a = [];
+                    let a = [];
 
                     Object.values(snapshot.val()).map((data) => {
                         Object.values(data).map((datas) => {
                             a.push(datas);
                         });
                     });
+                    a = a.filter((data) => data.status === '0');
                     setReportData(a.sort((a, b) => (a.time < b.time ? 1 : -1)));
                 }
             });
@@ -286,6 +288,20 @@ function AdminPanel(props) {
         } catch (err) {
             console.log(err);
         }
+    };
+
+    const ReportResponse = async () => {
+        let response = '';
+
+        if (reportRef.current.value === '') {
+            response = 'Đã xử lý !';
+        } else {
+            response = reportRef.current.value;
+        }
+        await realtime
+            .ref('report/' + selectedData[0].id_user + '/' + selectedData[0].id_report)
+            .update({ admin: response, status: '1', response_time: moment().format('X'), read: 1 });
+        setShowRespone(false);
     };
 
     return (
@@ -455,39 +471,53 @@ function AdminPanel(props) {
                                 <Modal.Title>Phản hồi báo cáo</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <div className="d-flex align-items-start">
-                                    <span className="bullet bullet-bar bg-orange align-self-stretch" />
-                                    <div className="d-flex flex-column flex-grow-1 ml-4">
-                                        <header className="card-title content">
-                                            <span>#123</span>
-                                            <span className="flex-shrink-0">10:00</span>
-                                        </header>
-                                        <section className="card-info content">
-                                            <div className="mb-3">
-                                                <p>
-                                                    <span className="font-weight-bold text-chartjs mr-1">Loại:</span>
-                                                    <span className="font-weight-bold">{`Góp ý`}</span>
-                                                </p>
-                                                <p>
-                                                    <span className="font-weight-bold text-primary-2 mr-1">Mã đơn hàng:</span>
-                                                    <span className="font-weight-bold text-brown">{`#123`}</span>
-                                                </p>
+                                {selectedData[0] && (
+                                    <>
+                                        <div className="d-flex align-items-start">
+                                            <span className="bullet bullet-bar bg-orange align-self-stretch" />
+                                            <div className="d-flex flex-column flex-grow-1 ml-4">
+                                                <header className="card-title content">
+                                                    <span>{selectedData[0].id_report}</span>
+                                                    <span className="flex-shrink-0">{selectedData[0].time}</span>
+                                                </header>
+                                                <section className="card-info content">
+                                                    <div className="mb-3">
+                                                        <p>
+                                                            <span className="font-weight-bold text-chartjs mr-1">Loại:</span>
+                                                            <span className="font-weight-bold">
+                                                                {selectedData[0].type === '0'
+                                                                    ? 'Khiếu nại'
+                                                                    : 'Góp ý' && selectedData[0].type === '2' && 'Khác'}
+                                                            </span>
+                                                        </p>
+                                                        <p>
+                                                            <span className="font-weight-bold text-primary-2 mr-1">Mã đơn hàng:</span>
+                                                            <span className="font-weight-bold text-brown">{selectedData[0].id_post}</span>
+                                                        </p>
+                                                    </div>
+                                                    <span className="delivery">Nội dung:</span>
+                                                    <div className="d-flex align-items-center justify-content-between">
+                                                        <p className="mb-0 pl-0">{selectedData[0].content}</p>
+                                                    </div>
+                                                </section>
                                             </div>
-                                            <span className="delivery">Nội dung:</span>
-                                            <div className="d-flex align-items-center justify-content-between">
-                                                <p className="mb-0 pl-0">Shipper khó tính</p>
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                                <div className="separator separator-dashed my-2" />
-                                <div className="form-group">
-                                    <label htmlFor="reply" className="font-weight-bold text-brown">
-                                        Phản hồi
-                                    </label>
-                                    <textarea className="form-control form-control-lg" id="reply" rows={3} placeholder="Đã xử lý !" />
-                                    <span className="form-text text-muted">Có thể để trống nội dung sẽ là mặc định</span>
-                                </div>
+                                        </div>
+                                        <div className="separator separator-dashed my-2" />
+                                        <div className="form-group">
+                                            <label htmlFor="reply" className="font-weight-bold text-brown">
+                                                Phản hồi
+                                            </label>
+                                            <textarea
+                                                className="form-control form-control-lg"
+                                                id="reply"
+                                                rows={3}
+                                                placeholder="Đã xử lý !"
+                                                ref={reportRef}
+                                            />
+                                            <span className="form-text text-muted">Có thể để trống nội dung sẽ là mặc định</span>
+                                        </div>
+                                    </>
+                                )}
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button
@@ -498,7 +528,9 @@ function AdminPanel(props) {
                                 >
                                     Đóng
                                 </Button>
-                                <Button variant="chartjs btn-sm">Gửi phản hồi</Button>
+                                <Button variant="chartjs btn-sm" onClick={ReportResponse}>
+                                    Gửi phản hồi
+                                </Button>
                             </Modal.Footer>
                         </Modal>
 

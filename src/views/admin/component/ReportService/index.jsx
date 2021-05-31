@@ -127,7 +127,7 @@ function Report(props) {
                     plural: 'đơn',
                     message: 'đã chọn',
                 }}
-                // data={data}
+                data={reportData}
                 columns={columns}
                 pagination={true}
                 // paginationResetDefaultPage={resetPaginationToggle}
