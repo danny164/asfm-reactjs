@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -13,15 +13,7 @@ function Footer(props) {
                     </Link>
                 </div>
                 <div className="text-nav">
-                    <Link to="#" className="pr-3 pl-0" target="_blank">
-                        About
-                    </Link>
-                    <Link to="#" className="px-3" target="_blank">
-                        Team
-                    </Link>
-                    <Link to="#" className="pl-3 pr-0" target="_blank">
-                        Contact
-                    </Link>
+                    Made with ❤️ from <span>The Night Owl</span>
                 </div>
             </div>
         </footer>

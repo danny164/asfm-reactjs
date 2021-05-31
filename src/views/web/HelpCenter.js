@@ -1,15 +1,15 @@
 import AsideLeft from 'components/pages/AsideLeft';
 import AsideRight from 'components/pages/AsideRight';
-import MainFaqs from 'components/pages/FAQs';
+import MainHelpCenter from 'components/pages/HelpCenter';
 import React from 'react';
 
-function Faqs(props) {
+function HelpCenter(props) {
     return (
         <>
             <div className="header-fixed sidebar-enabled bg">
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
-                    <MainFaqs />
+                    <MainHelpCenter />
                     <AsideRight />
                 </div>
             </div>
@@ -17,6 +17,6 @@ function Faqs(props) {
     );
 }
 
-Faqs.propTypes = {};
+HelpCenter.propTypes = {};
 
-export default Faqs;
+export default HelpCenter;

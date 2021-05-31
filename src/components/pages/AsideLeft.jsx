@@ -95,7 +95,7 @@ function AsideLeft(props) {
                     <NavLink
                         strict
                         activeClassName="active"
-                        to="/faqs"
+                        to="/help"
                         className="nav-link btn btn-icon btn-lg btn-borderless"
                     >
                         <i className="fad fa-question-circle" />
