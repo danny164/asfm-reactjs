@@ -38,8 +38,6 @@ function CustomRating(props) {
     const [valueGet, setValueGet] = useState(0);
     const [hover, setHover] = useState(-1);
 
-    console.log('post: ' + post_id + ' ship: ' + shipper_id);
-
     useEffect(() => {
         async function getRating() {
             await realtime.ref('Transaction/' + post_id).on('value', (snapshot) => {
@@ -63,7 +61,6 @@ function CustomRating(props) {
 
     return (
         <>
-            {console.log(valueGet)}
             <div className="d-flex flex-column align-items-center">
                 {valueGet === 0 ? (
                     <div className="title text-chartjs mb-3">Đánh giá cho tài xế bạn nhé !</div>
