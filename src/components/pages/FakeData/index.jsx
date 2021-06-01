@@ -133,6 +133,7 @@ function FakeData(props) {
                 shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                 time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
                 read: 0,
+                status_report: 0,
             });
         } catch (error) {
             console.log(error);

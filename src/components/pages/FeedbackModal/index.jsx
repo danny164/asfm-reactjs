@@ -55,7 +55,7 @@ function FeedbackModal(props) {
             });
 
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({
-                statusReport: 1,
+                status_report: 1,
             });
 
             enqueueSnackbar('Bạn đã báo cáo thành công', { variant: 'success' });

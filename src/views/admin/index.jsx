@@ -19,6 +19,7 @@ import Report from './component/ReportService';
 import ShipperList from './component/ShipperList';
 import ShopList from './component/ShopList';
 import TotalOrder from './component/TotalOrder';
+import { handleDeleteOrder } from '../../components/pages/HomepageFunc/DeleteOrder';
 import './styles.scss';
 
 function AdminPanel(props) {
@@ -47,6 +48,7 @@ function AdminPanel(props) {
 
     const noteRef = useRef();
     const reportRef = useRef();
+    const reasonRef = useRef();
 
     const dispatch = useDispatch();
 
@@ -280,28 +282,44 @@ function AdminPanel(props) {
         setSelectedData(selected);
     };
 
-    const responseReport = async (data, response) => {
-        try {
-            realtime.ref('report/' + data.id_user + '/' + data.id_report).update({
-                response: response,
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     const ReportResponse = async () => {
         let response = '';
+
+        if (selectedData.length === 0) {
+            return enqueueSnackbar('Bạn chưa chọn report để phản hồi !', { variant: 'info' });
+        }
 
         if (reportRef.current.value === '') {
             response = 'Đã xử lý !';
         } else {
             response = reportRef.current.value;
         }
-        await realtime
-            .ref('report/' + selectedData[0].id_user + '/' + selectedData[0].id_report)
-            .update({ admin: response, status: '1', response_time: moment().format('X'), read: 1 });
-        setShowRespone(false);
+
+        try {
+            await realtime
+                .ref('report/' + selectedData[0].id_user + '/' + selectedData[0].id_report)
+                .update({ admin: response, status: '1', response_time: moment().format('X'), read: 1 });
+            setShowRespone(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    //cancel order function
+    const CancelOrder = () => {
+        if (selectedData.length === 0) {
+            return enqueueSnackbar('Bạn chưa chọn đơn nào để hủy !', { variant: 'info' });
+        }
+        let reason = ''; //lý do mặc định hoặc được nhập
+        //có modal rồi thì bỏ ref vào modal rồi mở 3 dòng code bên dưới ra
+        // if(reasonRef.current.value !== '') {
+        //     reason = reasonRef.current.value
+        // } else
+        reason = 'Đơn hàng bị hủy bởi quản trị hệ thống !';
+
+        selectedData.map((data) => {
+            handleDeleteOrder(data.id_post, reason, data.id_shop, enqueueSnackbar);
+        });
     };
 
     return (
@@ -348,7 +366,7 @@ function AdminPanel(props) {
                                     </>
                                 )}
                                 {isTotalOrder && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3">
+                                    <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={CancelOrder}>
                                         Hủy đơn
                                     </button>
                                 )}
