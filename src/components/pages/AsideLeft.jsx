@@ -1,14 +1,23 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import TheNightOwl from '../../assets/media/the-night-owl.png';
 import FakeData from './FakeData';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { useAuth } from 'context/AuthContext';
+import { fetchReport } from '../pages/AdminFunc/FetchReport';
 
 function AsideLeft(props) {
     const { onHandleMenu } = props;
+    const [mailBoxNum, setMailBoxNum] = useState();
+    const { currentUser } = useAuth();
 
+    useEffect(() => {
+        try {
+            fetchReport(currentUser.uid, setMailBoxNum);
+        } catch (err) {}
+    });
     const links = [
         {
             id: 1,
@@ -69,35 +78,20 @@ function AsideLeft(props) {
             </nav>
             <footer className="d-flex flex-column align-items-center flex-column-auto py-8">
                 <span className="mb-2">
-                    <NavLink
-                        strict
-                        activeClassName="active"
-                        to="/mailbox"
-                        className="nav-link btn btn-icon btn-lg btn-borderless position-relative"
-                    >
+                    <NavLink strict activeClassName="active" to="/mailbox" className="nav-link btn btn-icon btn-lg btn-borderless position-relative">
                         <i className="fad fa-envelope-open-text"></i>
                         <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--7 right--7 mt-1 mr-1">
-                            3
+                            {mailBoxNum ? Object.values(mailBoxNum).filter((data) => data.read === 0).length : 0}
                         </span>
                     </NavLink>
                 </span>
                 <span className="mb-2">
-                    <NavLink
-                        strict
-                        activeClassName="active"
-                        to="/feedback"
-                        className="nav-link btn btn-icon btn-lg btn-borderless"
-                    >
+                    <NavLink strict activeClassName="active" to="/feedback" className="nav-link btn btn-icon btn-lg btn-borderless">
                         <i className="fad fa-comment-alt-exclamation" />
                     </NavLink>
                 </span>
                 <span className="mb">
-                    <NavLink
-                        strict
-                        activeClassName="active"
-                        to="/help"
-                        className="nav-link btn btn-icon btn-lg btn-borderless"
-                    >
+                    <NavLink strict activeClassName="active" to="/help" className="nav-link btn btn-icon btn-lg btn-borderless">
                         <i className="fad fa-question-circle" />
                     </NavLink>
                 </span>
