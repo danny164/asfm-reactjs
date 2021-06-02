@@ -51,7 +51,7 @@ function FeedbackModal(props) {
                 admin: '',
                 time: moment().format('X'),
                 user_id: currentUser.uid,
-                read: '0',
+                read: 0,
             });
 
             await realtime.ref('OrderStatus/' + currentUser.uid + '/' + id_post).update({

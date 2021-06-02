@@ -85,7 +85,7 @@ function MainMailbox(props) {
                                 </Dropdown>
                             </div>
                         </header>
-                        {console.log(datas)}
+                 
 
                         <section className="card-body pt-1 newsfeed">
                             {datas !== null &&

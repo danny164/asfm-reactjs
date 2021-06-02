@@ -285,10 +285,6 @@ function AdminPanel(props) {
     const ReportResponse = async () => {
         let response = '';
 
-        if (selectedData.length === 0) {
-            return enqueueSnackbar('Bạn chưa chọn report để phản hồi !', { variant: 'info' });
-        }
-
         if (reportRef.current.value === '') {
             response = 'Đã xử lý !';
         } else {
@@ -298,7 +294,7 @@ function AdminPanel(props) {
         try {
             await realtime
                 .ref('report/' + selectedData[0].id_user + '/' + selectedData[0].id_report)
-                .update({ admin: response, status: '1', response_time: moment().format('X'), read: 1 });
+                .update({ admin: response, status: '1', response_time: moment().format('X'), read: 0 });
             setShowRespone(false);
         } catch (err) {
             console.log(err);
@@ -371,7 +367,16 @@ function AdminPanel(props) {
                                     </button>
                                 )}
                                 {isReport && (
-                                    <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={() => setShowRespone(true)}>
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-light-danger ml-3"
+                                        onClick={() => {
+                                            if (selectedData.length === 0) {
+                                                return enqueueSnackbar('Bạn chưa chọn report để phản hồi !', { variant: 'info' });
+                                            }
+                                            setShowRespone(true);
+                                        }}
+                                    >
                                         Phản hồi
                                     </button>
                                 )}
