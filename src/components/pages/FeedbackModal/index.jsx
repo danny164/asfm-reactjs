@@ -11,13 +11,15 @@ import './styles.scss';
 
 FeedbackModal.propTypes = {
     id_post: PropTypes.string,
+    handleUpdateSubmitReport: PropTypes.func,
 };
 
 FeedbackModal.defaultProps = {
     id_post: '',
+    handleUpdateSubmitReport: null,
 };
 function FeedbackModal(props) {
-    const { id_post } = props;
+    const { id_post, handleUpdateSubmitReport } = props;
 
     const [show, setShow] = useState(false);
     const [typeReport, setTypeReport] = useState('0');
@@ -31,6 +33,13 @@ function FeedbackModal(props) {
     const handleShow = () => setShow(true);
 
     const handleSubmit = async () => {
+        
+        if (handleUpdateSubmitReport) {
+            handleUpdateSubmitReport();
+        }
+
+        handleClose();
+
         let idReport =
             moment().format('YYYYMMDD-HHmmssSSS') +
             random.generate({
@@ -59,12 +68,11 @@ function FeedbackModal(props) {
             });
 
             enqueueSnackbar('Bạn đã báo cáo thành công', { variant: 'success' });
-
-            handleClose();
         } catch (err) {
             console.log(err);
         }
     };
+
     return (
         <>
             <Button variant="sm btn-light flex-shrink-0" onClick={handleShow}>
