@@ -2,6 +2,9 @@ import { DirectionsRenderer, DirectionsService, GoogleMap, LoadScript, Marker } 
 import { realtime } from '../../../firebase';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import Start from 'assets/media/start.png';
+import End from 'assets/media/end.png';
+import Shipper from 'assets/media/shipper.png';
 
 GoogleMaps.propTypes = {
     noiNhan: PropTypes.string,
@@ -75,7 +78,7 @@ export default function GoogleMaps(props) {
     }, [shipperInfor, status]);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyBx-Vn56Cm1znXyC4d-SNbQidogpazq3cI" language="vi">
+        <LoadScript googleMapsApiKey="AIzaSyC2RtdqIgIoymEhykJUECpI48J2nMl2Sn4" language="vi">
             <GoogleMap
                 mapContainerStyle={mapStyles}
                 zoom={shipperLocation !== null ? 18 : 12}
@@ -83,14 +86,24 @@ export default function GoogleMaps(props) {
                 options={{ disableDefaultUI: true, fullscreenControl: true, zoomControl: true, scaleControl: true }}
             >
                 {/* hiển thị vị trí shipper */}
-                <Marker position={shipperLocation} visible={shipperLocation !== null && status !== '3'} />
                 <Marker
-                    position={{ lat: shipLat, lng: shipLng }}
+                    position={shipperLocation}
                     visible={shipperLocation !== null && status !== '3'}
+                    icon={Shipper}
                 />
+
                 <Marker
                     position={{ lat: receiveLat, lng: receiveLng }}
                     visible={shipperLocation !== null && status !== '3'}
+                    icon={Start}
+                    title={noiNhan}
+                />
+
+                <Marker
+                    position={{ lat: shipLat, lng: shipLng }}
+                    visible={shipperLocation !== null && status !== '3'}
+                    icon={End}
+                    title={noiGiao}
                 />
 
                 {status === '0' && (
