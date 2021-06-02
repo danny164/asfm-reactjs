@@ -1,6 +1,7 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import NoData from 'components/pages/NoData';
+import { dateToFromNowDaily } from 'convert/DateToFromNow';
 import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -9,12 +10,12 @@ import DataTable from 'react-data-table-component';
 Report.propTypes = {
     getSelected: PropTypes.func,
     toggledClearRows: PropTypes.bool,
-    reportData: PropTypes.array
+    reportData: PropTypes.array,
 };
 Report.defaultProps = {
     getSelected: null,
     toggledClearRows: false,
-    reportData: []
+    reportData: [],
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +36,37 @@ const LinearIndeterminate = () => {
         </div>
     );
 };
+
+const ConvertPostTime = ({ row }) => <>{row.time && dateToFromNowDaily(row.time)}</>;
+const By = ({ row }) => (
+    <>
+        {row.by === '0' && (
+            <>
+                <span className="text-muted">Shop Owner</span>
+                <i className="fad fa-star-shooting text-muted rate-star ml-1"></i>
+            </>
+        )}
+        {row.by === '1' && (
+            <>
+                <span className="text-muted">Shipper</span>
+                <i className="fad fa-star-shooting text-muted rate-star ml-1"></i>
+            </>
+        )}
+    </>
+);
+const Type = ({ row }) => (
+    <>
+        {row.type === '0' && (
+            <span className="label label-sm label-light-danger label-inline py-4 flex-shrink-0">Khiếu nại</span>
+        )}
+        {row.type === '1' && (
+            <span className="label label-sm label-light-success label-inline py-4 flex-shrink-0">Góp ý</span>
+        )}
+        {row.type === '2' && (
+            <span className="label label-sm label-light-warning label-inline py-4 flex-shrink-0">Khác</span>
+        )}
+    </>
+);
 
 function Report(props) {
     const { getSelected, toggledClearRows, reportData } = props;
@@ -57,16 +89,13 @@ function Report(props) {
                 name: 'Bởi',
                 selector: 'by',
                 sortable: true,
-            },
-            {
-                name: 'Trạng thái',
-                selector: 'status',
-                sortable: true,
+                cell: (row) => <By row={row} />,
             },
             {
                 name: 'Loại',
                 selector: 'type',
                 sortable: true,
+                cell: (row) => <Type row={row} />,
             },
             {
                 name: 'Nội dung',
@@ -88,6 +117,7 @@ function Report(props) {
                 name: 'Thời gian',
                 selector: 'time',
                 sortable: true,
+                cell: (row) => <ConvertPostTime row={row} />,
             },
             {
                 name: 'Admin phản hồi',
@@ -108,6 +138,7 @@ function Report(props) {
     }, []);
 
     // Show the number of selected rows
+    // console.log(state) // {allSelected: false, selectedCount: 1, selectedRows: Array(1)}
     const handleChange = (state) => {
         console.log('Số rows', state.selectedRows);
         if (getSelected) {
@@ -139,6 +170,7 @@ function Report(props) {
                 selectableRows // add for checkbox selection
                 selectableRowsVisibleOnly={true}
                 selectableRowsHighlight={true}
+                selectableRowsNoSelectAll={true}
                 onSelectedRowsChange={handleChange}
                 clearSelectedRows={toggledClearRows}
                 // selectableRowDisabled={rowSelectCritera}

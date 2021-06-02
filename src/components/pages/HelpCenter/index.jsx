@@ -1,12 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
 import DragonBridge from 'assets/media/dragonbridge.jpg';
-import Introduction from '../Introduction';
+import Footer from 'components/common/Footer';
+import Header from 'components/common/Header';
+import React, { useState } from 'react';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import FAQs from '../FAQs';
+import Introduction from '../Introduction';
+import classnames from 'classnames';
+import Policy from '../Policy';
 
 function MainHelpCenter(props) {
+    const { url } = useRouteMatch();
+    const [active, setActive] = useState(0);
+
     return (
         <>
             <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -36,38 +41,64 @@ function MainHelpCenter(props) {
                                                 role="tablist"
                                             >
                                                 <li className="navi-item mb-2">
-                                                    <a className="navi-link active" href="#">
+                                                    <Link
+                                                        className={classnames({
+                                                            'navi-link': true,
+                                                            active: active === 0,
+                                                        })}
+                                                        to="/help"
+                                                        onClick={() => setActive(0)}
+                                                    >
                                                         <span className="navi-text text-dark-50 font-size-h5 font-weight-bold">
                                                             Giới thiệu
                                                         </span>
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li className="navi-item mb-2">
-                                                    <a className="navi-link" href="#">
+                                                    <Link
+                                                        className={classnames({
+                                                            'navi-link': true,
+                                                            active: active === 1,
+                                                        })}
+                                                        to="/help/faqs"
+                                                        onClick={() => setActive(1)}
+                                                    >
                                                         <span className="navi-text text-dark-50 font-size-h5 font-weight-bold">
                                                             Các câu hỏi thường gặp
                                                         </span>
-                                                    </a>
+                                                    </Link>
                                                 </li>
+
                                                 <li className="navi-item mb-2">
-                                                    <a className="navi-link" href="#">
-                                                        <span className="navi-text text-dark font-size-h5 font-weight-bold">
-                                                            Hướng dẫn
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                <li className="navi-item mb-2">
-                                                    <a className="navi-link" href="#">
+                                                    <Link
+                                                        className={classnames({
+                                                            'navi-link': true,
+                                                            active: active === 2,
+                                                        })}
+                                                        to="/help/policy"
+                                                        onClick={() => setActive(2)}
+                                                    >
                                                         <span className="navi-text text-dark-50 font-size-h5 font-weight-bold">
                                                             Chính sách và bảo mật
                                                         </span>
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div className="col-lg-9">
-                                            <Introduction />
-                                            <FAQs />
+                                            <Switch>
+                                                <Route exact path={url}>
+                                                    <Introduction />
+                                                </Route>
+
+                                                <Route path={`${url}/faqs`}>
+                                                    <FAQs />
+                                                </Route>
+
+                                                <Route path={`${url}/Policy`}>
+                                                    <Policy />
+                                                </Route>
+                                            </Switch>
                                         </div>
                                     </div>
                                 </div>

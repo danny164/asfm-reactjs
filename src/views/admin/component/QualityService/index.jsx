@@ -86,6 +86,7 @@ function Service(props) {
         const timeout = setTimeout(() => {
             setPending(false);
         }, 1200);
+
         return () => clearTimeout(timeout);
     }, []);
 
@@ -118,11 +119,11 @@ function Service(props) {
                     rowsPerPageText: 'Số đơn trên 1 trang: ',
                     rangeSeparatorText: 'của',
                 }}
-                selectableRows // add for checkbox selection
-                selectableRowsVisibleOnly={true}
-                selectableRowsHighlight={true}
-                onSelectedRowsChange={handleChange}
-                clearSelectedRows={toggledClearRows}
+                // selectableRows // add for checkbox selection
+                // selectableRowsVisibleOnly={true}
+                // selectableRowsHighlight={true}
+                // onSelectedRowsChange={handleChange}
+                // clearSelectedRows={toggledClearRows}
                 // selectableRowDisabled={rowSelectCritera}
                 progressPending={pending}
                 progressComponent={<LinearIndeterminate />}

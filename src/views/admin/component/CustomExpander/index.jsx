@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 
 CustomExpander.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.array,
     now: PropTypes.string,
     shipper: PropTypes.bool,
 };
 CustomExpander.defaultProps = {
-    data: null,
+    data: [],
     now: '',
     shipper: false,
 };
@@ -87,7 +87,9 @@ function CustomExpander(props) {
                             )}
                             <p>
                                 Số điện thoại:
-                                <span className="font-weight-bold text-chartjs ml-2">{shipper ? convertPhone(data.phone) : data.phone}</span>
+                                <span className="font-weight-bold text-chartjs ml-2">
+                                    {shipper ? convertPhone(data.phone) : data.phone}
+                                </span>
                             </p>
                             <p className="mb-0">
                                 Địa chỉ:
