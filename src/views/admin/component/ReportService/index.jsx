@@ -6,6 +6,7 @@ import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import ContentExpander from '../ContentExpander';
 
 Report.propTypes = {
     getSelected: PropTypes.func,
@@ -68,9 +69,51 @@ const Type = ({ row }) => (
     </>
 );
 
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+    <>
+        <div className="d-flex align-items-center">
+            <div className="form-group mb-0">
+                <div className="input-group">
+                    <input
+                        id="search"
+                        type="text"
+                        className="form-control"
+                        placeholder="Tìm kiếm..."
+                        value={filterText}
+                        onChange={onFilter}
+                    />
+                    <div className="input-group-append">
+                        <button className="btn btn-secondary" type="button" onClick={onClear}>
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </>
+);
+
 function Report(props) {
     const { getSelected, toggledClearRows, reportData } = props;
     const [pending, setPending] = useState(true);
+
+    const [filterText, setFilterText] = useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+
+    let data = [];
+
+    if (reportData) {
+        data = reportData.filter(
+            (item) =>
+                (item.id_report && item.id_report.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.id_post && item.id_post.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.content && item.content.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.fullname && item.fullname.toLowerCase().includes(filterText.toLowerCase())) ||
+                (item.email && item.email.toLowerCase().includes(filterText.toLowerCase()))
+        );
+
+        console.log(reportData);
+    }
 
     const columns = useMemo(
         () => [
@@ -86,7 +129,7 @@ function Report(props) {
                 sortable: true,
             },
             {
-                name: 'Bởi',
+                name: 'Vai trò',
                 selector: 'by',
                 sortable: true,
                 cell: (row) => <By row={row} />,
@@ -119,16 +162,27 @@ function Report(props) {
                 sortable: true,
                 cell: (row) => <ConvertPostTime row={row} />,
             },
-            {
-                name: 'Admin phản hồi',
-                selector: 'admin',
-                sortable: true,
-                omit: true,
-            },
         ],
         []
     );
 
+    // Header phụ
+    const subHeaderComponentMemo = useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+            }
+        };
+
+        return (
+            <FilterComponent
+                onFilter={(e) => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+            />
+        );
+    }, [filterText, resetPaginationToggle]);
     // Loading time
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -151,17 +205,17 @@ function Report(props) {
             <DataTable
                 title="Danh sách quản lý Khiếu nại đơn"
                 expandableRows={true}
-                // expandOnRowClicked={true}
-                // expandableRowsComponent={<CustomExpander data={data} now={now} />}
+                expandOnRowClicked={true}
+                expandableRowsComponent={<ContentExpander data={data} />}
                 contextMessage={{
                     singular: 'đơn',
                     plural: 'đơn',
                     message: 'đã chọn',
                 }}
-                data={reportData}
+                data={data}
                 columns={columns}
                 pagination={true}
-                // paginationResetDefaultPage={resetPaginationToggle}
+                paginationResetDefaultPage={resetPaginationToggle}
                 paginationRowsPerPageOptions={[10, 15, 30, 50, 75]}
                 paginationComponentOptions={{
                     rowsPerPageText: 'Số đơn trên 1 trang: ',
@@ -176,9 +230,9 @@ function Report(props) {
                 // selectableRowDisabled={rowSelectCritera}
                 progressPending={pending}
                 progressComponent={<LinearIndeterminate />}
-                // subHeader
-                // subHeaderWrap
-                // subHeaderComponent={subHeaderComponentMemo}
+                subHeader
+                subHeaderWrap
+                subHeaderComponent={subHeaderComponentMemo}
                 persistTableHead
                 noDataComponent={<NoData />}
             />
