@@ -48,7 +48,6 @@ function AdminPanel(props) {
 
     const noteRef = useRef();
     const reportRef = useRef();
-    const reasonRef = useRef();
 
     const dispatch = useDispatch();
 
@@ -119,6 +118,7 @@ function AdminPanel(props) {
                 }
             });
         }
+
         async function fetchService() {
             await realtime.ref('service/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
@@ -132,6 +132,7 @@ function AdminPanel(props) {
                 }
             });
         }
+
         async function fetchAllOrder() {
             await realtime.ref('OrderStatus/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
@@ -147,6 +148,7 @@ function AdminPanel(props) {
                 }
             });
         }
+
         async function fetchReport() {
             await realtime.ref('report/').on('value', (snapshot) => {
                 if (snapshot.val() !== null) {
@@ -296,13 +298,16 @@ function AdminPanel(props) {
                 .ref('report/' + selectedData[0].id_user + '/' + selectedData[0].id_report)
                 .update({ admin: response, status: '1', response_time: moment().format('X'), read: 0 });
             setShowRespone(false);
+            setToggledClearRows(true);
+            setToggledClearRows(false);
         } catch (err) {
             console.log(err);
         }
     };
+    console.log(selectedData);
 
     //cancel order function
-    const CancelOrder = () => {
+    const CancelOrder = async () => {
         if (selectedData.length === 0) {
             return enqueueSnackbar('Bạn chưa chọn đơn nào để hủy !', { variant: 'info' });
         }
@@ -313,9 +318,11 @@ function AdminPanel(props) {
         // } else
         reason = 'Đơn hàng bị hủy bởi quản trị hệ thống !';
 
-        selectedData.map((data) => {
+        await selectedData.map((data) => {
             handleDeleteOrder(data.id_post, reason, data.id_shop, enqueueSnackbar);
         });
+        setToggledClearRows(true);
+        setToggledClearRows(false);
     };
 
     return (
@@ -346,11 +353,7 @@ function AdminPanel(props) {
                             <div className="mb-3">
                                 {(isShopList || isShipperList) && (
                                     <>
-                                        <button
-                                            type="button"
-                                            className="btn btn-sm btn-light-success ml-3"
-                                            onClick={unLocked}
-                                        >
+                                        <button type="button" className="btn btn-sm btn-light-success ml-3" onClick={unLocked}>
                                             Mở khóa
                                         </button>
                                         <button
@@ -366,11 +369,7 @@ function AdminPanel(props) {
                                     </>
                                 )}
                                 {isTotalOrder && (
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm btn-light-danger ml-3"
-                                        onClick={CancelOrder}
-                                    >
+                                    <button type="button" className="btn btn-sm btn-light-danger ml-3" onClick={CancelOrder}>
                                         Hủy đơn
                                     </button>
                                 )}
@@ -410,32 +409,16 @@ function AdminPanel(props) {
                                         <div className="col-9 col-form-label">
                                             <div className="radio-inline">
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        defaultChecked="checked"
-                                                        value="1"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" defaultChecked="checked" value="1" onClick={timeFixed} />
                                                     <span />
                                                     24 giờ
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="3"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="3" onClick={timeFixed} />
                                                     <span />3 ngày
                                                 </label>
                                                 <label className="radio radio-danger">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="7"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="7" onClick={timeFixed} />
                                                     <span />1 tuần
                                                 </label>
                                                 <label className="radio radio-danger">
@@ -455,28 +438,19 @@ function AdminPanel(props) {
                                                                 minDate: 'today',
                                                                 locale: Vietnamese,
                                                             }}
-                                                            defaultValue={moment()
-                                                                .add(14, 'days')
-                                                                .format('YYYY-MM-DD HH:mm')}
+                                                            defaultValue={moment().add(14, 'days').format('YYYY-MM-DD HH:mm')}
                                                             placeholder="Chọn ngày và giờ"
                                                             onChange={(date) => {
                                                                 setDate(moment(date[0]).format('X'));
                                                             }}
                                                         />
-                                                        <span className="form-text text-muted">
-                                                            * Tùy chọn thời gian bạn muốn khóa{' '}
-                                                        </span>
+                                                        <span className="form-text text-muted">* Tùy chọn thời gian bạn muốn khóa </span>
                                                     </>
                                                 </Expand>
                                             }
                                             <div className="radio-inline mt-3">
                                                 <label className="radio radio-danger text-chartjs">
-                                                    <input
-                                                        type="radio"
-                                                        name="lock-time"
-                                                        value="0"
-                                                        onClick={timeFixed}
-                                                    />
+                                                    <input type="radio" name="lock-time" value="0" onClick={timeFixed} />
                                                     <span />
                                                     Khóa vĩnh viễn
                                                 </label>
@@ -498,9 +472,7 @@ function AdminPanel(props) {
                                                     ref={noteRef}
                                                 />
                                             </div>
-                                            <span className="form-text text-muted">
-                                                * Có thể để trống nội dung, nội dung khóa sẽ là mặc định
-                                            </span>
+                                            <span className="form-text text-muted">* Có thể để trống nội dung, nội dung khóa sẽ là mặc định</span>
                                         </div>
                                     </div>
                                 </form>
@@ -543,9 +515,7 @@ function AdminPanel(props) {
                                                 <section className="card-info content">
                                                     <div className="mb-3">
                                                         <p>
-                                                            <span className="font-weight-bold text-chartjs mr-1">
-                                                                Loại:
-                                                            </span>
+                                                            <span className="font-weight-bold text-chartjs mr-1">Loại:</span>
                                                             <span className="font-weight-bold">
                                                                 {selectedData[0].type === '0'
                                                                     ? 'Khiếu nại'
@@ -553,12 +523,8 @@ function AdminPanel(props) {
                                                             </span>
                                                         </p>
                                                         <p>
-                                                            <span className="font-weight-bold text-primary-2 mr-1">
-                                                                Mã đơn hàng:
-                                                            </span>
-                                                            <span className="font-weight-bold text-brown">
-                                                                {selectedData[0].id_post}
-                                                            </span>
+                                                            <span className="font-weight-bold text-primary-2 mr-1">Mã đơn hàng:</span>
+                                                            <span className="font-weight-bold text-brown">{selectedData[0].id_post}</span>
                                                         </p>
                                                     </div>
                                                     <span className="delivery">Nội dung:</span>
@@ -580,9 +546,7 @@ function AdminPanel(props) {
                                                 placeholder="Đã xử lý !"
                                                 ref={reportRef}
                                             />
-                                            <span className="form-text text-muted">
-                                                Có thể để trống nội dung sẽ là mặc định
-                                            </span>
+                                            <span className="form-text text-muted">Có thể để trống nội dung sẽ là mặc định</span>
                                         </div>
                                     </>
                                 )}
@@ -602,41 +566,11 @@ function AdminPanel(props) {
                             </Modal.Footer>
                         </Modal>
 
-                        {isShopList && (
-                            <ShopList
-                                listShop={listShop}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
-                        {isShipperList && (
-                            <ShipperList
-                                listShipper={listShipper}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
-                        {isTotalOrder && (
-                            <TotalOrder
-                                orderData={orderData}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
-                        {isReport && (
-                            <Report
-                                reportData={reportData}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
-                        {isService && (
-                            <Service
-                                serviceData={serviceData}
-                                getSelected={getSelected}
-                                toggledClearRows={toggledClearRows}
-                            />
-                        )}
+                        {isShopList && <ShopList listShop={listShop} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isShipperList && <ShipperList listShipper={listShipper} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isTotalOrder && <TotalOrder orderData={orderData} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isReport && <Report reportData={reportData} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
+                        {isService && <Service serviceData={serviceData} getSelected={getSelected} toggledClearRows={toggledClearRows} />}
                     </section>
                     <Footer />
                 </main>

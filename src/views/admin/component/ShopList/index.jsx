@@ -141,14 +141,7 @@ const FilterComponent = ({
             </div>
             <div className="form-group mb-0">
                 <div className="input-group">
-                    <input
-                        id="search"
-                        type="text"
-                        className="form-control"
-                        placeholder="Tìm kiếm..."
-                        value={filterText}
-                        onChange={onFilter}
-                    />
+                    <input id="search" type="text" className="form-control" placeholder="Tìm kiếm..." value={filterText} onChange={onFilter} />
                     <div className="input-group-append">
                         <button className="btn btn-secondary" type="button" onClick={onClear}>
                             Xóa
