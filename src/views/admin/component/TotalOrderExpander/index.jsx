@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import classnames from 'classnames';
 
 TotalOrderExpander.propTypes = {
     data: PropTypes.array,
@@ -24,7 +25,7 @@ function TotalOrderExpander(props) {
 
     useEffect(() => {
         if (copied) {
-            enqueueSnackbar('Đã copy Order ID thành công', { variant: 'success' });
+            enqueueSnackbar('Đã copy thành công', { variant: 'success' });
             setCopied(false);
         }
     }, [copied]);
@@ -49,7 +50,7 @@ function TotalOrderExpander(props) {
                     <div className="d-flex flex-column flex-grow-1 ml-4">
                         <header className="card-title content mb-4">
                             <div>
-                                <p>
+                                <p className={classnames({ 'mb-0': data.id_shipper ? false : true })}>
                                     Order ID: {data.id_post}{' '}
                                     <CopyToClipboard text={data.id_post} onCopy={() => setCopied(true)}>
                                         <span className="ml-1 cursor-pointer">
@@ -57,14 +58,16 @@ function TotalOrderExpander(props) {
                                         </span>
                                     </CopyToClipboard>
                                 </p>
-                                <p className="mb-0">
-                                    Shipper ID: {data.id_shipper}{' '}
-                                    <CopyToClipboard text={data.id_shipper} onCopy={() => setCopied(true)}>
-                                        <span className="ml-1 cursor-pointer">
-                                            <i className="fad fa-copy"></i>
-                                        </span>
-                                    </CopyToClipboard>
-                                </p>
+                                {data.id_shipper && (
+                                    <p className="mb-0">
+                                        Shipper ID: {data.id_shipper}{' '}
+                                        <CopyToClipboard text={data.id_shipper} onCopy={() => setCopied(true)}>
+                                            <span className="ml-1 cursor-pointer">
+                                                <i className="fad fa-copy"></i>
+                                            </span>
+                                        </CopyToClipboard>
+                                    </p>
+                                )}
                             </div>
                             <span>{dateToFromNowDaily(data.thoi_gian)}</span>
                         </header>
