@@ -49,6 +49,7 @@ function MainMailbox(props) {
                 );
             } else {
                 setSortMailbox([]);
+                setItems([]);
             }
 
             setLoading(false);
@@ -108,9 +109,7 @@ function MainMailbox(props) {
                                         </span>
                                     </span>
 
-                                    <span className="d-block text-time mt-2 font-size-sm">
-                                        Phản hồi sẽ được xử lý trong vòng 48h
-                                    </span>
+                                    <span className="d-block text-time mt-2 font-size-sm">Phản hồi sẽ được xử lý trong vòng 48h</span>
                                 </h3>
                             </div>
                             <div className="card-toolbar">
@@ -121,12 +120,8 @@ function MainMailbox(props) {
 
                                     <Dropdown.Menu>
                                         <Dropdown.Item onClick={deleteAllReport}>Xóa tất cả</Dropdown.Item>
-                                        <Dropdown.Item onClick={deleteUnResponseReport}>
-                                            Xóa tất cả đơn chưa phản hồi
-                                        </Dropdown.Item>
-                                        <Dropdown.Item onClick={deleteResponseReport}>
-                                            Xóa tất cả đơn đã phản hồi
-                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={deleteUnResponseReport}>Xóa tất cả đơn chưa phản hồi</Dropdown.Item>
+                                        <Dropdown.Item onClick={deleteResponseReport}>Xóa tất cả đơn đã phản hồi</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
@@ -165,22 +160,16 @@ function MainMailbox(props) {
                                                 <div className="d-flex flex-column flex-grow-1 ml-4">
                                                     <header className="card-title content">
                                                         <span>{data.id_report}</span>
-                                                        <span className="flex-shrink-0">
-                                                            {dateToFromNowDaily(data.time)}
-                                                        </span>
+                                                        <span className="flex-shrink-0">{dateToFromNowDaily(data.time)}</span>
                                                     </header>
                                                     <section className="card-info content">
                                                         <div className="mb-3">
                                                             <p>
-                                                                <span className="font-weight-bold mr-1">
-                                                                    Trạng thái:
-                                                                </span>
+                                                                <span className="font-weight-bold mr-1">Trạng thái:</span>
                                                                 {data.status === '0' ? <Open /> : <Close />}
                                                             </p>
                                                             <p>
-                                                                <span className="font-weight-bold mr-1">
-                                                                    Mã đơn hàng:
-                                                                </span>
+                                                                <span className="font-weight-bold mr-1">Mã đơn hàng:</span>
                                                                 <span className="font-weight-bold text-brown">{`#${data.id_post}`}</span>
                                                             </p>
                                                         </div>
