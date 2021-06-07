@@ -1,5 +1,4 @@
 import { realtime } from '../../../firebase';
-import React from 'react';
 import moment from 'moment';
 
 export async function handleDeleteOrder(id, reason, uid, enqueueSnackbar) {
@@ -24,18 +23,3 @@ export async function handleDeleteOrder(id, reason, uid, enqueueSnackbar) {
         enqueueSnackbar(`Có lỗi xảy ra !`, { variant: 'error' });
     }
 }
-
-
-
-
-
-
-function DeleteOrder(props) {
-    return (
-        <div>
-
-        </div>
-    );
-}
-
-export default DeleteOrder;

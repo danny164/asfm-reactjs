@@ -1,5 +1,4 @@
 import { changeFilter } from 'components/common/filterSlice';
-import { useAuth } from 'context/AuthContext';
 import { dateToFromNowDaily } from 'convert/DateToFromNow';
 import { Vietnamese } from 'flatpickr/dist/l10n/vn';
 import 'flatpickr/dist/themes/airbnb.css';
@@ -24,7 +23,6 @@ import TotalOrder from './component/TotalOrder';
 import './styles.scss';
 
 function AdminPanel(props) {
-    const { currentUser } = useAuth();
     const [isShopList, setIsShopList] = useState(true);
     const [isShipperList, setIsShipperList] = useState(false);
     const [isTotalOrder, setIsTotalOrder] = useState(false);
@@ -305,22 +303,25 @@ function AdminPanel(props) {
             console.log(err);
         }
     };
-    console.log(selectedData);
+    // console.log(selectedData);
 
     //cancel order function
     const CancelOrder = async () => {
         if (selectedData.length === 0) {
             return enqueueSnackbar('Bạn chưa chọn đơn nào để hủy !', { variant: 'info' });
         }
-        let reason = ''; //lý do mặc định hoặc được nhập
-        //có modal rồi thì bỏ ref vào modal rồi mở 3 dòng code bên dưới ra
-        // if(reasonRef.current.value !== '') {
-        //     reason = reasonRef.current.value
-        // } else
-        reason = 'Đơn hàng bị hủy bởi quản trị hệ thống !';
+
+        let reason = 'Đơn hàng bị hủy bởi quản trị hệ thống !';
 
         await selectedData.map((data) => {
             handleDeleteOrder(data.id_post, reason, data.id_shop, enqueueSnackbar);
+            try {
+                realtime
+                    .ref('received_order_status/' + data.id_shipper + '/' + data.id_post)
+                    .update({ status: '3', thoi_gian: `${moment().format('X')}` });
+            } catch (err) {
+                console.log(err);
+            }
         });
         setToggledClearRows(true);
         setToggledClearRows(false);
