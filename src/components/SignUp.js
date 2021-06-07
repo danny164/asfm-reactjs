@@ -41,7 +41,11 @@ const convertString = (value) => {
 
 function Register(props) {
     const schema = yup.object().shape({
-        fullname: yup.string().required('Vui lòng điền họ tên').max(50, 'Vượt quá ${max} kí tự được cho phép').min(5, 'Tối thiểu ${min} kí tự'),
+        fullname: yup
+            .string()
+            .required('Vui lòng điền họ tên')
+            .max(50, 'Vượt quá ${max} kí tự được cho phép')
+            .min(5, 'Tối thiểu ${min} kí tự'),
         phone: yup
             .string()
             .matches(/^[0-9\s]+$/, 'Định dạng không hợp lệ')
@@ -182,19 +186,15 @@ function Register(props) {
                 backgroundImage: `url(${Bubbles})`,
             }}
         >
-            {/* main page */}
             <main className="d-flex flex-column flex-root min-vh-100">
-                {/* register page */}
                 <section className="login d-flex flex-row-fluid" id="login">
                     <div className="d-flex flex-center flex-row-fluid">
                         <div className="login-form text-center p-7">
-                            {/* register page's header*/}
                             <Logo />
-                            {/* register page's form*/}
                             <div className="login_signup mw-40ch">
                                 <div className="mb-10">
                                     <h3>Đăng ký</h3>
-                                    <div className="text-muted font-weight-bold">Nhập thông tin để tạo tài khoản</div>
+                                    <div className="text-brown font-weight-bold">Nhập thông tin để tạo tài khoản</div>
                                 </div>
 
                                 <form className="form" id="login_signup_form" onSubmit={handleSubmit(onSubmit)}>
@@ -245,7 +245,12 @@ function Register(props) {
                                     <p className="text-chartjs">{errors.password?.message}</p>
 
                                     <div className="form-group mb-5">
-                                        <input className={checkingRePw} type="password" placeholder="Nhập lại mật khẩu" {...register('rePassword')} />
+                                        <input
+                                            className={checkingRePw}
+                                            type="password"
+                                            placeholder="Nhập lại mật khẩu"
+                                            {...register('rePassword')}
+                                        />
                                     </div>
                                     <p className="text-chartjs">{errors.rePassword?.message}</p>
 
@@ -280,14 +285,11 @@ function Register(props) {
                                     </div>
                                 </form>
                             </div>
-                            {/* end form */}
                         </div>
                     </div>
                 </section>
-                {/* end register page*/}
                 <Version />
             </main>
-            {/*end main page*/}
         </div>
     );
 }

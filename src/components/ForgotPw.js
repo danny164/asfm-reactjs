@@ -42,17 +42,16 @@ function ForgotPass() {
                 }}
             >
                 <main className="d-flex flex-column flex-root min-vh-100">
-                    {/* forgot page */}
                     <section className="login d-flex flex-row-fluid" id="login">
                         <div className="d-flex flex-center flex-row-fluid">
                             <div className="login-form text-center p-7">
-                                {/* forgot page's header*/}
                                 <Logo />
-                                {/* forgot page's form*/}
                                 <div className="login-forgot mw-40ch">
                                     <div className="mb-10">
                                         <h3>Quên mật khẩu?</h3>
-                                        <div className="text-muted font-weight-bold">Nhập email để lấy lại mật khẩu</div>
+                                        <div className="text-brown font-weight-bold">
+                                            Nhập email để lấy lại mật khẩu
+                                        </div>
                                     </div>
                                     {error && <Alert style={{ color: alert }}>{error}</Alert>}
                                     <form className="form" id="login_forgot_form" onSubmit={handleSubmit}>
@@ -83,11 +82,9 @@ function ForgotPass() {
                                         </div>
                                     </form>
                                 </div>
-                                {/* end form */}
                             </div>
                         </div>
                     </section>
-                    {/* end forgot page*/}
                     <Version />
                 </main>
             </div>

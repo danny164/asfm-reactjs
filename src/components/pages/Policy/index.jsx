@@ -17,8 +17,8 @@ function Policy(props) {
                         hàng và những người cần sử dụng dịch vụ giao nhận hàng hóa trên địa bàn Đà Nẵng ("Dịch vụ")
                     </p>
                     <p>
-                        <strong>Đối tác giao hàng:</strong> là nhà cung cấp dịch vụ giao thực phẩm sử dụng THE NIGHT OWL
-                        để kết nối đến Chủ cửa hàng và nhà hàng
+                        <strong>Đối tác giao hàng:</strong> là các tài xế tự do sử dụng ứng dụng THE NIGHT OWL để giao
+                        hàng hóa từ Chủ cửa hàng tới người nhận hàng trong phạm vi Thành phố Đà Nẵng.
                     </p>
                     <p>
                         <strong>Chủ cửa hàng:</strong> Các cá nhân và tổ chức đăng ký để sử dụng ứng dụng THE NIGHT OWL

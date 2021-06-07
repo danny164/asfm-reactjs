@@ -283,6 +283,7 @@ function ShipperList(props) {
             <DataTable
                 title="Danh sách quản lý Shipper"
                 expandableRows={true}
+                expandOnRowClicked={true}
                 expandableRowsComponent={<CustomExpander data={data} now={now} shipper={true} />}
                 contextMessage={{ singular: 'người dùng', plural: 'người dùng', message: 'đã chọn' }}
                 columns={columns}

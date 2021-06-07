@@ -100,7 +100,11 @@ function Login1(props) {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            if (doc.data().lock_time < moment().format('X') && doc.data().role !== '1' && doc.data().role !== '9') {
+                            if (
+                                doc.data().lock_time < moment().format('X') &&
+                                doc.data().role !== '1' &&
+                                doc.data().role !== '9'
+                            ) {
                                 updateRole();
                             }
                         }
@@ -129,7 +133,7 @@ function Login1(props) {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);
                                 localStorage.setItem('role', doc.data().role);
-                                localStorage.setItem("userInfor", JSON.stringify(doc.data()));
+                                localStorage.setItem('userInfor', JSON.stringify(doc.data()));
                                 history.push('/admin');
                             }
 
@@ -171,7 +175,7 @@ function Login1(props) {
                                 <div className="login-signin mw-40ch">
                                     <div className="mb-10">
                                         <h3>Đăng nhập</h3>
-                                        <div className="text-muted font-weight-bold">Amateur Shipper for Merchants</div>
+                                        <div className="text-brown font-weight-bold">Amateur Shipper for Merchants</div>
                                     </div>
                                     {error && <Alert className="text-chartjs p-0">{error}</Alert>}
                                     <form className="form" id="login_signin_form" onSubmit={handleSubmit(onSubmit)}>
@@ -202,7 +206,7 @@ function Login1(props) {
                                         <p className="text-chartjs">{passEmpty !== '' && passEmpty}</p>
                                         <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
                                             <div className="checkbox-inline">
-                                                <label className="checkbox m-0 text-muted">
+                                                <label className="checkbox m-0 text-brown">
                                                     <input
                                                         type="checkbox"
                                                         defaultChecked={localStorage.getItem('check')}
@@ -213,7 +217,11 @@ function Login1(props) {
                                                     Ghi nhớ đăng nhập
                                                 </label>
                                             </div>
-                                            <Link to="forgotpw" id="login_forgot" className="text-muted text-hover-primary">
+                                            <Link
+                                                to="forgotpw"
+                                                id="login_forgot"
+                                                className="text-brown text-hover-primary"
+                                            >
                                                 Quên mật khẩu?
                                             </Link>
                                         </div>
@@ -227,8 +235,8 @@ function Login1(props) {
                                         </button>
                                     </form>
                                     <div className="mt-10">
-                                        <span className="opacity-70 mr-4">Bạn chưa có tài khoản?</span>
-                                        <Link to="register" className="text-muted text-hover-primary font-weight-bold">
+                                        <span className="text-brown mr-4">Bạn chưa có tài khoản?</span>
+                                        <Link to="register" className="text-brown text-hover-primary font-weight-bold">
                                             Đăng ký!
                                         </Link>
                                     </div>

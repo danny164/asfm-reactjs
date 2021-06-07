@@ -29,14 +29,34 @@ function Header(props) {
             try {
                 await realtime.ref('OrderStatus/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot.val() !== null) {
-                        setUnReadData0(Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0));
-                        setUnReadData1(Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0));
-                        setUnReadData2(Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0));
-                        setUnReadData3(Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0));
-                        setUnRead0(Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0).length);
-                        setUnRead1(Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0).length);
-                        setUnRead2(Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0).length);
-                        setUnRead3(Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0).length);
+                        setUnReadData0(
+                            Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0)
+                        );
+                        setUnReadData1(
+                            Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0)
+                        );
+                        setUnReadData2(
+                            Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0)
+                        );
+                        setUnReadData3(
+                            Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0)
+                        );
+                        setUnRead0(
+                            Object.values(snapshot.val()).filter((data) => data.status === '0' && data.read === 0)
+                                .length
+                        );
+                        setUnRead1(
+                            Object.values(snapshot.val()).filter((data) => data.status === '1' && data.read === 0)
+                                .length
+                        );
+                        setUnRead2(
+                            Object.values(snapshot.val()).filter((data) => data.status === '2' && data.read === 0)
+                                .length
+                        );
+                        setUnRead3(
+                            Object.values(snapshot.val()).filter((data) => data.status === '3' && data.read === 0)
+                                .length
+                        );
                     }
                 });
             } catch (e) {
@@ -98,7 +118,9 @@ function Header(props) {
                             <ul className="menu-nav">
                                 <li className="menu-item">
                                     <Link to="/home" className="menu-link" onClick={() => handleFilterClick('all')}>
-                                        <span className={`menu menu-recent ${filter === 'all' ? 'active' : 'none'}`}>Đơn gần đây</span>
+                                        <span className={`menu menu-recent ${filter === 'all' ? 'active' : 'none'}`}>
+                                            Đơn gần đây
+                                        </span>
                                     </Link>
                                 </li>
                                 <li className="menu-item">
@@ -110,11 +132,15 @@ function Header(props) {
                                             updateUnreadOrder('0');
                                         }}
                                     >
-                                        <span className={`menu menu-in-progress ${filter === '0' ? 'active' : 'none'}`}>Đang xử lý</span>
+                                        <span className={`menu menu-in-progress ${filter === '0' ? 'active' : 'none'}`}>
+                                            Đang xử lý
+                                        </span>
                                     </Link>
-                                    <span className="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        {unRead0}
-                                    </span>
+                                    {unReadData0.length !== 0 && (
+                                        <span className="label label-sm label-light-warning label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                            {unRead0}
+                                        </span>
+                                    )}
                                 </li>
                                 <li className="menu-item">
                                     <Link
@@ -125,11 +151,16 @@ function Header(props) {
                                             updateUnreadOrder('1');
                                         }}
                                     >
-                                        <span className={`menu menu-picked ${filter === '1' ? 'active' : 'none'}`}>Đã nhận đơn</span>
+                                        <span className={`menu menu-picked ${filter === '1' ? 'active' : 'none'}`}>
+                                            Đã nhận đơn
+                                        </span>
                                     </Link>
-                                    <span className="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        {unRead1}
-                                    </span>
+
+                                    {unReadData1.length !== 0 && (
+                                        <span className="label label-sm label-light-info label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                            {unRead1}
+                                        </span>
+                                    )}
                                 </li>
                                 <li className="menu-item">
                                     <Link
@@ -140,11 +171,15 @@ function Header(props) {
                                             updateUnreadOrder('2');
                                         }}
                                     >
-                                        <span className={`menu menu-completed ${filter === '2' ? 'active' : 'none'}`}>Hoàn thành</span>
+                                        <span className={`menu menu-completed ${filter === '2' ? 'active' : 'none'}`}>
+                                            Hoàn thành
+                                        </span>
                                     </Link>
-                                    <span className="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        {unRead2}
-                                    </span>
+                                    {unReadData2.length !== 0 && (
+                                        <span className="label label-sm label-light-success label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                            {unRead2}
+                                        </span>
+                                    )}
                                 </li>
                                 <li className="menu-item">
                                     <Link
@@ -155,29 +190,53 @@ function Header(props) {
                                             updateUnreadOrder('3');
                                         }}
                                     >
-                                        <span className={`menu menu-canceled ${filter === '3' ? 'active' : 'none'}`}>Đơn hủy</span>
+                                        <span className={`menu menu-canceled ${filter === '3' ? 'active' : 'none'}`}>
+                                            Đơn hủy
+                                        </span>
                                     </Link>
-                                    <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
-                                        {unRead3}
-                                    </span>
+                                    {unReadData3.length !== 0 && (
+                                        <span className="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top--4 right-0 mt-1 mr-1">
+                                            {unRead3}
+                                        </span>
+                                    )}
                                 </li>
                             </ul>
                         </div>
 
                         <div className="d-flex align-items-center d-block d-xl-none d-lg-block py-3 py-lg-2">
-                            <Link to="/home" className="btn btn-icon btn-light h-40px w-40px mr-3" onClick={() => handleFilterClick('all')}>
+                            <Link
+                                to="/home"
+                                className="btn btn-icon btn-light h-40px w-40px mr-3"
+                                onClick={() => handleFilterClick('all')}
+                            >
                                 <i className="fad fa-sync-alt"></i>
                             </Link>
-                            <Link to="/home" className="btn btn-icon btn-light h-40px w-40px mr-3" onClick={() => handleFilterClick('0')}>
+                            <Link
+                                to="/home"
+                                className="btn btn-icon btn-light h-40px w-40px mr-3"
+                                onClick={() => handleFilterClick('0')}
+                            >
                                 <i className="fad fa-spinner-third menu-in-progress"></i>
                             </Link>
-                            <Link to="/home" className="btn btn-icon btn-light h-40px w-40px mr-3" onClick={() => handleFilterClick('1')}>
+                            <Link
+                                to="/home"
+                                className="btn btn-icon btn-light h-40px w-40px mr-3"
+                                onClick={() => handleFilterClick('1')}
+                            >
                                 <i className="fad fa-user-check text-primary-2"></i>
                             </Link>
-                            <Link to="/home" className="btn btn-icon btn-light h-40px w-40px mr-3" onClick={() => handleFilterClick('2')}>
+                            <Link
+                                to="/home"
+                                className="btn btn-icon btn-light h-40px w-40px mr-3"
+                                onClick={() => handleFilterClick('2')}
+                            >
                                 <i className="fad fa-box-check menu-completed"></i>
                             </Link>
-                            <Link to="/home" className="btn btn-icon btn-light h-40px w-40px mr-3" onClick={() => handleFilterClick('3')}>
+                            <Link
+                                to="/home"
+                                className="btn btn-icon btn-light h-40px w-40px mr-3"
+                                onClick={() => handleFilterClick('3')}
+                            >
                                 <i className="fas fa-times-circle text-danger-2 "></i>
                             </Link>
                         </div>

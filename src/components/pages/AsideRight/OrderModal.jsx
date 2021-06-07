@@ -1,3 +1,4 @@
+import Avatar from 'assets/media/avatar.png';
 import Cancelled from 'components/labels/Cancelled';
 import Completed from 'components/labels/Completed';
 import InProcessing from 'components/labels/InProcessing';
@@ -245,7 +246,9 @@ function OrderModal(props) {
                             <div className="d-flex justify-content-between align-items-center">
                                 <div className="shipper-info">
                                     <div className="avatar-shipper-sm">
-                                        {shipperInfor.avatar && <img src={shipperInfor.avatar} alt="Avatar Shipper" />}
+                                        {shipperInfor.avatar && (
+                                            <img src={shipperInfor.avatar || Avatar} alt="Avatar Shipper" />
+                                        )}
                                     </div>
                                     <div className="mr-5 font-weight-bold text-brown">{shipperInfor.fullname}</div>
                                     <div>
