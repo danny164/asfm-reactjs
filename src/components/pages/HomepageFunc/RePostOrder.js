@@ -2,7 +2,7 @@ import moment from 'moment';
 import random from 'randomstring';
 import { realtime } from '../../../firebase';
 
-async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
+export async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
     const idChat =
         moment().format('YYYYMMDD-HHmmssSSS') +
         random.generate({
@@ -32,6 +32,10 @@ async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
             phi_ung: dataPostOrder.phi_ung,
             id_shop: uid,
             status: '',
+            receiveLng: dataPostOrder.receiveLng + '',
+            receiveLat: dataPostOrder.receiveLat + '',
+            shipLng: dataPostOrder.shipLng + '',
+            shipLat: dataPostOrder.shipLat + '',
         });
 
         //tạo bảng transaction
@@ -75,4 +79,4 @@ async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
     }
 }
 
-export default RePostOrder;
+

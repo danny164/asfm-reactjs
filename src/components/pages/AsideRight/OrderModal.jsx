@@ -17,7 +17,7 @@ import Popover from 'react-bootstrap/Popover';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Chat from '../Chat/Chat';
 import { handleDeleteOrder } from '../HomepageFunc/DeleteOrder';
-import RePostOrder from '../HomepageFunc/RePostOrder';
+import { RePostOrder } from '../HomepageFunc/RePostOrder';
 import GoogleMaps from '../Map/GoogleMaps';
 import CustomRating from '../Rating';
 import SkeletonShipper from '../Skeleton/SkeletonShipper';
@@ -182,9 +182,7 @@ function OrderModal(props) {
                                     </p>
                                     <p>
                                         Chi phí giao hàng:
-                                        <span className="font-weight-bold text-primary-2 ml-2">
-                                            {dataModal.phi_giao}
-                                        </span>
+                                        <span className="font-weight-bold text-primary-2 ml-2">{dataModal.phi_giao}</span>
                                     </p>
                                     <p>
                                         Tạm ứng:
@@ -192,9 +190,7 @@ function OrderModal(props) {
                                     </p>
                                     <p>
                                         Mã nhận hàng:
-                                        <span className="font-weight-bold menu-in-progress ml-2">
-                                            {dataModal.ma_bi_mat}
-                                        </span>
+                                        <span className="font-weight-bold menu-in-progress ml-2">{dataModal.ma_bi_mat}</span>
                                     </p>
                                 </div>
 
@@ -219,9 +215,7 @@ function OrderModal(props) {
                         <>
                             <div className="separator separator-dashed my-5" />
                             <p>
-                                <span className="label label-xl label-inline label-inprogress label-rounded mr-2">
-                                    Ghi chú:
-                                </span>
+                                <span className="label label-xl label-inline label-inprogress label-rounded mr-2">Ghi chú:</span>
                                 {dataModal.ghi_chu}
                             </p>
                         </>
@@ -234,9 +228,7 @@ function OrderModal(props) {
                         </>
                     )}
 
-                    {(dataModal.status === '0' || fetchLoading) && dataModal.status !== '3' && (
-                        <SkeletonShipper status={dataModal.status} />
-                    )}
+                    {(dataModal.status === '0' || fetchLoading) && dataModal.status !== '3' && <SkeletonShipper status={dataModal.status} />}
 
                     {!fetchLoading && dataModal.status !== '0' && dataModal.status !== '3' && (
                         <>
@@ -246,9 +238,7 @@ function OrderModal(props) {
                             <div className="d-flex justify-content-between align-items-center">
                                 <div className="shipper-info">
                                     <div className="avatar-shipper-sm">
-                                        {shipperInfor.avatar && (
-                                            <img src={shipperInfor.avatar || Avatar} alt="Avatar Shipper" />
-                                        )}
+                                        {shipperInfor.avatar && <img src={shipperInfor.avatar || Avatar} alt="Avatar Shipper" />}
                                     </div>
                                     <div className="mr-5 font-weight-bold text-brown">{shipperInfor.fullname}</div>
                                     <div>

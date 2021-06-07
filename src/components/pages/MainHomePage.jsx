@@ -20,7 +20,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { db, realtime } from '../../firebase';
 import { handleDeleteOrder } from '../pages/HomepageFunc/DeleteOrder';
-import RePostOrder from '../pages/HomepageFunc/RePostOrder';
+import { RePostOrder } from '../pages/HomepageFunc/RePostOrder';
 import Chat from './Chat/Chat';
 import FeedbackModal from './FeedbackModal';
 import GoogleMaps from './Map/GoogleMaps';
