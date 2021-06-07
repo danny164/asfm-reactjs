@@ -36,7 +36,7 @@ export async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
             receiveLat: dataPostOrder.receiveLat + '',
             shipLng: dataPostOrder.shipLng + '',
             shipLat: dataPostOrder.shipLat + '',
-            time_estimate: dataPostOrder.time_estimate;
+            time_estimate: dataPostOrder.time_estimate,
         });
 
         //tạo bảng transaction
@@ -79,5 +79,3 @@ export async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
         console.log(error);
     }
 }
-
-
