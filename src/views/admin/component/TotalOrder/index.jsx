@@ -10,6 +10,7 @@ import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import TotalOrderExpander from '../TotalOrderExpander';
 
 TotalOrder.propTypes = {
     orderData: PropTypes.array,
@@ -240,8 +241,8 @@ function TotalOrder(props) {
             <DataTable
                 title="Danh sách tất cả các đơn"
                 expandableRows={true}
-                // expandOnRowClicked={true}
-                // expandableRowsComponent={<CustomExpander data={data} now={now} />}
+                expandOnRowClicked={true}
+                expandableRowsComponent={<TotalOrderExpander data={data} />}
                 contextMessage={{
                     singular: 'đơn',
                     plural: 'đơn',
