@@ -236,6 +236,9 @@ function TotalOrder(props) {
         }
     };
 
+    // Disable completed order
+    const rowSelectCritera = (row) => row.status === '2' || row.status === '3';
+
     return (
         <>
             <DataTable
@@ -262,7 +265,7 @@ function TotalOrder(props) {
                 selectableRowsHighlight={true}
                 onSelectedRowsChange={handleChange}
                 clearSelectedRows={toggledClearRows}
-                // selectableRowDisabled={rowSelectCritera}
+                selectableRowDisabled={rowSelectCritera}
                 progressPending={pending}
                 progressComponent={<LinearIndeterminate />}
                 subHeader
