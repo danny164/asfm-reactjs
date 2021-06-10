@@ -1,3 +1,4 @@
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
@@ -39,6 +40,8 @@ function LineChart(props) {
         }
     }, [lastDays]);
 
+    console.log(datas.filter((data) => moment.unix(data.thoi_gian).format('DD/MM') === '07/05'));
+    console.log(lastDays);
     //1 tuân 20 đơn.
     const data = {
         labels: days,
@@ -86,7 +89,9 @@ function LineChart(props) {
                 <div className="card-title py-5">
                     <h3 className="card-label">
                         <span className="d-block title">Tổng số đơn đã đăng</span>
-                        <span className="d-block text-primary-2 mt-2 font-size-sm">{`${days[0]} - ${days[6]}`}</span>
+                        <span className="d-block text-primary-2 mt-2 font-size-sm">
+                            {sortByRange === 7 ? `${days[0]} - ${days[6]}` : `${days[0]} - ${days[29]}`}
+                        </span>
                     </h3>
                 </div>
                 <div className="card-toolbar">
