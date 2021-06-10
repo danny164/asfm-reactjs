@@ -57,9 +57,15 @@ const By = ({ row }) => (
 );
 const Type = ({ row }) => (
     <>
-        {row.type === '0' && <span className="label label-sm label-light-danger label-inline py-4 flex-shrink-0">Khiếu nại</span>}
-        {row.type === '1' && <span className="label label-sm label-light-success label-inline py-4 flex-shrink-0">Góp ý</span>}
-        {row.type === '2' && <span className="label label-sm label-light-warning label-inline py-4 flex-shrink-0">Khác</span>}
+        {row.type === '0' && (
+            <span className="label label-sm label-light-danger label-inline py-4 flex-shrink-0">Khiếu nại</span>
+        )}
+        {row.type === '1' && (
+            <span className="label label-sm label-light-success label-inline py-4 flex-shrink-0">Góp ý</span>
+        )}
+        {row.type === '2' && (
+            <span className="label label-sm label-light-warning label-inline py-4 flex-shrink-0">Khác</span>
+        )}
     </>
 );
 
@@ -68,7 +74,14 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
         <div className="d-flex align-items-center">
             <div className="form-group mb-0">
                 <div className="input-group">
-                    <input id="search" type="text" className="form-control" placeholder="Tìm kiếm..." value={filterText} onChange={onFilter} />
+                    <input
+                        id="search"
+                        type="text"
+                        className="form-control"
+                        placeholder="Tìm kiếm..."
+                        value={filterText}
+                        onChange={onFilter}
+                    />
                     <div className="input-group-append">
                         <button className="btn btn-secondary" type="button" onClick={onClear}>
                             Xóa
@@ -103,13 +116,13 @@ function Report(props) {
     const columns = useMemo(
         () => [
             {
-                name: 'ID báo cáo',
+                name: 'Report ID',
                 selector: 'id_report',
                 sortable: true,
                 omit: true,
             },
             {
-                name: 'ID đơn',
+                name: 'Order ID',
                 selector: 'id_post',
                 sortable: true,
             },
@@ -160,7 +173,13 @@ function Report(props) {
             }
         };
 
-        return <FilterComponent onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+        return (
+            <FilterComponent
+                onFilter={(e) => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+            />
+        );
     }, [filterText, resetPaginationToggle]);
     // Loading time
     useEffect(() => {

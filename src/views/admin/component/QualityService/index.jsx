@@ -101,7 +101,7 @@ function Service(props) {
     const columns = useMemo(
         () => [
             {
-                name: 'ID',
+                name: 'Feedback ID',
                 selector: 'id_feedback',
                 sortable: true,
             },

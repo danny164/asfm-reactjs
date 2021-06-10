@@ -546,7 +546,7 @@ function AdminPanel(props) {
                                             <span className="bullet bullet-bar bg-orange align-self-stretch" />
                                             <div className="d-flex flex-column flex-grow-1 ml-4">
                                                 <header className="card-title content">
-                                                    <span>{selectedData[0].id_report}</span>
+                                                    <span>{`#${selectedData[0].id_report}`}</span>
                                                     <span className="flex-shrink-0">
                                                         {dateToFromNowDaily(selectedData[0].time)}
                                                     </span>
@@ -567,8 +567,8 @@ function AdminPanel(props) {
                                                             <span className="font-weight-bold text-primary-2 mr-1">
                                                                 Mã đơn hàng:
                                                             </span>
-                                                            <span className="font-weight-bold text-brown">
-                                                                {selectedData[0].id_post}
+                                                            <span className="text-brown">
+                                                                {`#${selectedData[0].id_post}`}
                                                             </span>
                                                         </p>
                                                     </div>
