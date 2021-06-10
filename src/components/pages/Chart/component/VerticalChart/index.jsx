@@ -84,7 +84,9 @@ function VerticalChart(props) {
                 <div className="card-title py-5">
                     <h3 className="card-label">
                         <span className="d-block title">Tổng thu nhập dựa trên số tiền tạm ứng</span>
-                        <span className="d-block text-chartjs mt-2 font-size-sm">{`${days[0]} - ${days[6]}`}</span>
+                        <span className="d-block text-chartjs mt-2 font-size-sm">
+                            {sortByRange === 7 ? `${days[0]} - ${days[6]}` : `${days[0]} - ${days[29]}`}
+                        </span>
                     </h3>
                 </div>
                 <div className="card-toolbar">

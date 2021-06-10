@@ -31,7 +31,7 @@ function Chart(props) {
     let totalOrder = 1;
 
     const [data, setData] = useState([]);
-    const [data3, setData3] = useState([]);
+    const [dataFinish, setDataFinish] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ function Chart(props) {
                 await realtime.ref('OrderStatus/' + currentUser.uid).on('value', (snapshot) => {
                     if (snapshot.val() !== null) {
                         setData(snapshotToArray(snapshot));
-                        setData3(snapshotToArray(snapshot).filter((data) => data.status === '3'));
+                        setDataFinish(snapshotToArray(snapshot).filter((data) => data.status === '2'));
                     }
                 });
             } catch (err) {
@@ -219,10 +219,10 @@ function Chart(props) {
 
                             <div className="row">
                                 <div className="col-xl-6">
-                                    <LineChart datas={data3} />
+                                    <LineChart datas={data} />
                                 </div>
                                 <div className="col-xl-6">
-                                    <VerticalChart datas={data3} />
+                                    <VerticalChart datas={dataFinish} />
                                 </div>
                             </div>
                         </div>
