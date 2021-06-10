@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { getDay, getLastDay } from '../Function/CommonFunc';
 import { lastDataLineChart, presentDataLineChart } from '../Function/LineChart';
+
 LineChart.propTypes = {
     datas: PropTypes.array,
 };
@@ -23,7 +24,7 @@ function LineChart(props) {
 
     useEffect(() => {
         getDay(sortByRange, setDays);
-        getLastDay(sortByRange + 7, setLastDays);
+        getLastDay(sortByRange + sortByRange, sortByRange, setLastDays);
     }, [datas, sortByRange]);
 
     useEffect(() => {
@@ -38,7 +39,6 @@ function LineChart(props) {
         }
     }, [lastDays]);
 
-   
     //1 tuân 20 đơn.
     const data = {
         labels: days,
@@ -93,9 +93,7 @@ function LineChart(props) {
                     <ul className="nav nav-pills">
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${
-                                    sortByRange === 30 ? 'active' : 'btn-outline-secondary'
-                                }`}
+                                className={`nav-link btn py-2 px-4 ${sortByRange === 30 ? 'active' : 'btn-outline-secondary'}`}
                                 onClick={() => handleSortByRange(30)}
                             >
                                 <span className="nav-text">Tháng</span>
@@ -103,9 +101,7 @@ function LineChart(props) {
                         </li>
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${
-                                    sortByRange === 7 ? 'active' : 'btn-outline-secondary'
-                                }`}
+                                className={`nav-link btn py-2 px-4 ${sortByRange === 7 ? 'active' : 'btn-outline-secondary'}`}
                                 onClick={() => handleSortByRange(7)}
                             >
                                 <span className="nav-text">Tuần</span>

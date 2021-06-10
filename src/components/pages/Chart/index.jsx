@@ -93,10 +93,12 @@ function Chart(props) {
 
     if (data.length !== 0) {
         lastStatus = data.filter((data) => last24hrs(sortByRange, data.thoi_gian));
-        lastStatus.map((data) => {
-            setPercent(data.status);
-        });
-        totalOrder = lastStatus.length;
+        if (lastStatus.length !== 0) {
+            lastStatus.map((data) => {
+                setPercent(data.status);
+            });
+            totalOrder = lastStatus.length;
+        }
     }
 
     percentS1 = Math.round((percent1 / totalOrder) * 100);

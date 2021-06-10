@@ -9,9 +9,9 @@ export const getDay = (day, setDays) => {
     setDays(array.reverse());
 };
 
-export const getLastDay = (day, setDays) => {
+export const getLastDay = (day, range, setDays) => {
     let array = [];
-    for (let i = 7; i < day; i++) {
+    for (let i = range; i < day; i++) {
         array.push(moment().subtract(i, 'day').format('DD/MM'));
     }
     setDays(array.reverse());

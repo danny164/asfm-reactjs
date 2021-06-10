@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 import { presentDataVerticalChart, lastDataVerticalChart } from '../Function/VerticalChart';
 import { getDay, getLastDay } from '../Function/CommonFunc';
+import moment from 'moment';
 
 VerticalChart.propTypes = {
     datas: PropTypes.array,
@@ -24,7 +25,7 @@ function VerticalChart(props) {
 
     useEffect(() => {
         getDay(sortByRange, setDays);
-        getLastDay(sortByRange + 7, setLastDays);
+        getLastDay(sortByRange + sortByRange, sortByRange, setLastDays);
     }, [datas, sortByRange]);
 
     useEffect(() => {
@@ -90,9 +91,7 @@ function VerticalChart(props) {
                     <ul className="nav nav-pills">
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${
-                                    sortByRange === 30 ? 'active' : 'btn-outline-secondary'
-                                }`}
+                                className={`nav-link btn py-2 px-4 ${sortByRange === 30 ? 'active' : 'btn-outline-secondary'}`}
                                 onClick={() => handleSortByRange(30)}
                             >
                                 <span className="nav-text">Tháng</span>
@@ -100,9 +99,7 @@ function VerticalChart(props) {
                         </li>
                         <li className="nav-item">
                             <div
-                                className={`nav-link btn py-2 px-4 ${
-                                    sortByRange === 7 ? 'active' : 'btn-outline-secondary'
-                                }`}
+                                className={`nav-link btn py-2 px-4 ${sortByRange === 7 ? 'active' : 'btn-outline-secondary'}`}
                                 onClick={() => handleSortByRange(7)}
                             >
                                 <span className="nav-text">Tuần</span>
