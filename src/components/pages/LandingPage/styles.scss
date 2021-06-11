@@ -1,0 +1,98 @@
+body {
+    color: rgb(14, 14, 14) !important;
+}
+
+.btn-access {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+
+    &:hover {
+        color: #fff;
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+}
+
+.btn-download {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+
+    &:hover {
+        color: #fff;
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+}
+
+.bg-custom {
+    // background: linear-gradient(to bottom right, rgba(32, 185, 94, 1), rgba(31, 196, 202, 1));
+    background: url('../../../assets/media/hero-bg.svg') left bottom no-repeat;
+    background-size: cover;
+}
+
+.hero {
+    padding-top: 7rem;
+    padding-bottom: 3.5rem;
+    &__title {
+        font-size: 3.75rem;
+        line-height: 4.5rem;
+    }
+    &__content {
+        font-size: 1.25rem;
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    &__button {
+        margin-top: 2rem;
+    }
+}
+
+.our-team {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+    &__title {
+        margin-bottom: 2.5rem;
+    }
+
+    .card-body {
+        text-align: center;
+
+        .card-image {
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+            }
+        }
+
+        .card-title {
+            display: block;
+            margin-top: 2rem;
+        }
+
+        .card-subtitle {
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+    }
+}
+
+.app-footer {
+    margin-top: 2rem;
+
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+    }
+}

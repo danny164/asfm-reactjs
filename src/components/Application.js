@@ -19,6 +19,7 @@ import Login from './Login';
 import Banned from './pages/Banned';
 import Chart from './pages/Chart';
 import FakeData from './pages/FakeData';
+import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFound';
 import Register from './SignUp';
 
@@ -40,7 +41,7 @@ function Application() {
             <ScrollToTop smooth component={<ScrollTop />} color="#fff" style={style} />
             <AuthProvider>
                 <Switch>
-                    <Redirect from="/" to="login" exact />
+                    <Route path="/" component={LandingPage} exact />
                     <CheckRoute path="/register" component={Register} />
                     <CheckRoute path="/login" component={Login} />
                     <CheckRoute path="/forgotpw" component={ForgotPw} />
@@ -55,6 +56,7 @@ function Application() {
                     <PrivateRoute path="/mailbox" component={Mailbox} />
                     <PrivateRoute path="/help" component={HelpCenter} />
                     <BanRoute path="/banned" component={Banned} />
+
                     <Route component={NotFoundPage} />
                 </Switch>
             </AuthProvider>
