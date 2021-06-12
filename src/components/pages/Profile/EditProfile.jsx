@@ -46,6 +46,7 @@ function EditProfile(props) {
 
     const { enqueueSnackbar } = useSnackbar();
 
+    //get image
     useEffect(() => {
         getDownloadUrl(user.uid).then((url) => {
             !!url && setImageUrl(url);

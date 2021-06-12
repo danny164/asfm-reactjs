@@ -33,12 +33,14 @@ function FeedbackModal(props) {
     const handleShow = () => setShow(true);
 
     const handleSubmit = async () => {
+        if (contentRef.current.value === '') {
+            return enqueueSnackbar('Vui lòng nhập nội dung báo cáo !', { variant: 'info' });
+        }
         if (handleUpdateSubmitReport) {
             handleUpdateSubmitReport();
         }
 
         handleClose();
-
         let idReport =
             moment().format('YYYYMMDD-HHmmssSSS') +
             random.generate({
@@ -77,12 +79,7 @@ function FeedbackModal(props) {
                 Báo cáo đơn
             </Button>
 
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdropClassName="modal-backdrop__feedback"
-                className="modal-feedback"
-            >
+            <Modal show={show} onHide={handleClose} backdropClassName="modal-backdrop__feedback" className="modal-feedback">
                 <Modal.Header>
                     <Modal.Title>Báo cáo đơn</Modal.Title>
                 </Modal.Header>
@@ -105,12 +102,7 @@ function FeedbackModal(props) {
                                     <label>Loại báo cáo</label>
                                     <div className="checkbox-inline">
                                         <label className="checkbox checkbox-success">
-                                            <input
-                                                type="radio"
-                                                defaultChecked="checked"
-                                                name="checkbox"
-                                                onClick={() => setTypeReport('0')}
-                                            />
+                                            <input type="radio" defaultChecked="checked" name="checkbox" onClick={() => setTypeReport('0')} />
                                             <span />
                                             Khiếu nại
                                         </label>

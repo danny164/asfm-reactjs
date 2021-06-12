@@ -52,6 +52,9 @@ function Chat(props) {
     };
 
     const submitMessage = (newestChat) => {
+        if (newestChat.message === '') {
+            return
+        }
         // setNewchat(newestChat)
         const chat = newestChat;
         chat.id = idShop;

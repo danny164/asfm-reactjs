@@ -23,7 +23,9 @@ function MainFeedback(props) {
     const { enqueueSnackbar } = useSnackbar();
 
     const handleSubmit = async () => {
-        console.log(contentRef.current.value);
+        if (contentRef.current.value === '') {
+            return enqueueSnackbar('Vui lòng nhập ý kiến kiếu nại !', { variant: 'info' });
+        }
         if (feedBack) {
             await feedBack(typeReport, contentRef.current.value);
             enqueueSnackbar('Đã ghi nhận góp ý / khiếu nại của bạn', { variant: 'success' });
