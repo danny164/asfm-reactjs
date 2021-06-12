@@ -73,6 +73,15 @@ function CustomExpander(props) {
                                 Tình trạng:
                                 {checkStatus()}
                             </p>
+                            {(data.role === '0' || data.role === '2') && (
+                                <>
+                                    <p>
+                                        Lý do khóa:
+                                        <span className="text-brown ml-2">{data.reason}</span>
+                                    </p>
+                                    <div className="separator separator-dashed my-5" />
+                                </>
+                            )}
                             <p>
                                 Họ tên:
                                 <span className="text-brown ml-2">{data.fullname}</span>

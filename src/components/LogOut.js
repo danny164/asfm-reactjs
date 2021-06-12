@@ -9,6 +9,8 @@ function Signout() {
         try {
             await logout();
             localStorage.removeItem('role');
+            localStorage.removeItem('reason');
+            localStorage.removeItem('lock_time');
             localStorage.removeItem('email');
             localStorage.removeItem('fullname');
             localStorage.removeItem('imageUrl');
@@ -18,7 +20,11 @@ function Signout() {
     };
 
     return (
-        <Link to="#" className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block" onClick={handleLogout}>
+        <Link
+            to="#"
+            className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block"
+            onClick={handleLogout}
+        >
             <i className="fad fa-sign-out mr-1" />
             Đăng xuất
         </Link>

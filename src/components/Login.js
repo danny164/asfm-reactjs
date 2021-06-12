@@ -122,6 +122,7 @@ function Login1(props) {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
+                            console.log('ok');
                             if (doc.data().role === '1' || doc.data().role === '2') {
                                 localStorage.setItem('fullname', doc.data().fullname);
                                 localStorage.setItem('email', currentUser.email);

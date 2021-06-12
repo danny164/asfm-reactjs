@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import random from 'randomstring';
 import React, { useRef, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Expand from 'react-expand-animated';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
@@ -304,15 +305,42 @@ function MainPostOrder(props) {
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
             <Header />
+
             <section className="content d-flex flex-column flex-column-fluid">
                 {/* core content */}
                 <div className="core d-flex flex-column flex-row-fluid container">
+                    {localStorage.getItem('role') === '2' && (
+                        <Alert className="d-block alert alert-custom alert-light-secondary mb-5">
+                            <Alert.Heading>Tài khoản của bạn tạm thời đang bị khóa</Alert.Heading>
+                            <p>
+                                <span className="mr-2">Lý do:</span>
+                                <span>{localStorage.getItem('reason')}</span>
+                            </p>
+                            <hr />
+                            <p className="mb-0">
+                                <span className="mr-1">- Bạn sẽ không thể đăng đơn mới cho đến</span>
+                                <span className="mr-1 font-weight-bold text-blue">
+                                    {moment.unix(localStorage.getItem('lock_time')).format('HH:mm:ss, DD/MM/YYYY')}
+                                </span>
+                                <br />
+                                <span>
+                                    - Mọi vấn đề thắc mắc, kháng nghị vui lòng liên hệ qua email{' '}
+                                    <a href="mailto:help@thenightowl.team">
+                                        <span className="text-brown">help@thenightowl.team</span>
+                                    </a>{' '}
+                                    để được giải đáp !
+                                </span>
+                            </p>
+                        </Alert>
+                    )}
                     <div className="card card-custom card-sticky" id="on_page_sticky_card">
                         <form className="form" onSubmit={handleSubmit(onSubmit)}>
                             <header className="card-header py-3">
                                 <div className="card-title align-items-start flex-column mb-2">
                                     <h3 className="card-label">Đăng đơn</h3>
-                                    <span className="text-muted font-size-sm mt-1">Hãy tạo đơn mới ngay bây giờ nhé!</span>
+                                    <span className="text-muted font-size-sm mt-1">
+                                        Hãy tạo đơn mới ngay bây giờ nhé!
+                                    </span>
                                 </div>
                                 <div className="card-toolbar align-self-center">
                                     <button type="submit" className="btn btn-chartjs mr-2">
@@ -344,7 +372,10 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* phone number */}
                                 <div className="form-group row">
-                                    <label htmlFor="phone_inputmask" className="col-xl-3 col-lg-4 col-form-label required">
+                                    <label
+                                        htmlFor="phone_inputmask"
+                                        className="col-xl-3 col-lg-4 col-form-label required"
+                                    >
                                         Số điện thoại
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -362,7 +393,10 @@ function MainPostOrder(props) {
                                 </div>
                                 {/* ship fee */}
                                 <div className="form-group row">
-                                    <label htmlFor="ship_inputmask" className="col-xl-3 col-lg-4 col-form-label required">
+                                    <label
+                                        htmlFor="ship_inputmask"
+                                        className="col-xl-3 col-lg-4 col-form-label required"
+                                    >
                                         Chi phí giao hàng
                                     </label>
                                     <div className="col-xl-9 col-lg-8">
@@ -417,7 +451,9 @@ function MainPostOrder(props) {
                                                 <span className="input-group-text">VND</span>
                                             </div>
                                         </div>
-                                        <span className="form-text text-muted">Giá trị tạm ứng tối đa là 999,000đ và là bội số của 1,000 đ</span>
+                                        <span className="form-text text-muted">
+                                            Giá trị tạm ứng tối đa là 999,000đ và là bội số của 1,000 đ
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="separator separator-dashed my-5" />
@@ -451,11 +487,18 @@ function MainPostOrder(props) {
                                     <div className="col-xl-9 col-lg-8">
                                         <span className="switch switch-sm">
                                             <label>
-                                                <input type="checkbox" defaultChecked="checked" name="select" onChange={handleDefaultAddressChange} />
+                                                <input
+                                                    type="checkbox"
+                                                    defaultChecked="checked"
+                                                    name="select"
+                                                    onChange={handleDefaultAddressChange}
+                                                />
                                                 <span />
                                             </label>
                                         </span>
-                                        <span className="form-text text-chartjs">{defaultAddressError && defaultAddressError}</span>
+                                        <span className="form-text text-chartjs">
+                                            {defaultAddressError && defaultAddressError}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -498,7 +541,9 @@ function MainPostOrder(props) {
                                                 <option value="">Chọn Quận/Huyện</option>
                                                 {districtList()}
                                             </select>
-                                            <span className="form-text text-chartjs">{districtReceiveError && districtReceiveError}</span>
+                                            <span className="form-text text-chartjs">
+                                                {districtReceiveError && districtReceiveError}
+                                            </span>
                                         </div>
                                     </div>
 
@@ -521,7 +566,9 @@ function MainPostOrder(props) {
                                                 <option value="">Chọn Phường/Xã</option>
                                                 {wardReceiveList()}
                                             </select>
-                                            <span className="form-text text-chartjs">{wardReceiveError && wardReceiveError}</span>
+                                            <span className="form-text text-chartjs">
+                                                {wardReceiveError && wardReceiveError}
+                                            </span>
                                         </div>
                                     </div>
 
@@ -543,7 +590,9 @@ function MainPostOrder(props) {
                                                 }}
                                                 ref={receiveAddressRef}
                                             />
-                                            <span className="form-text text-chartjs">{addressReceiveError && addressReceiveError}</span>
+                                            <span className="form-text text-chartjs">
+                                                {addressReceiveError && addressReceiveError}
+                                            </span>
                                         </div>
                                     </div>
                                 </Expand>

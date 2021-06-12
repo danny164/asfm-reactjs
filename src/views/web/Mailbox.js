@@ -10,21 +10,21 @@ import { realtime } from '../../firebase';
 function Mailbox(props) {
     const { currentUser } = useAuth();
     const [reportData, setReportData] = useState();
-    const [noti, setNoti] = useState()
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        fetchReport(currentUser.uid, setReportData)
+        fetchReport(currentUser.uid, setReportData);
     }, []);
-
 
     if (reportData) {
         try {
-            Object.values(reportData).filter((data) => data.read === 0).map((data) => {
-                realtime.ref('report/' + currentUser.uid + '/' + data.id_report).update({ read: 1 })
-            })
+            Object.values(reportData)
+                .filter((data) => data.read === 0)
+                .map((data) => {
+                    realtime.ref('report/' + currentUser.uid + '/' + data.id_report).update({ read: 1 });
+                });
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
     // if (reportData) {

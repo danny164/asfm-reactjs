@@ -35,7 +35,8 @@ function PostOrder(props) {
             return 0;
         } else {
             if (newAddress.district !== '') {
-                address = newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
+                address =
+                    newAddress.address + ', ' + newAddress.ward + ', ' + newAddress.district + ', Thành phố Đà Nẵng';
             } else {
                 if (userInfor.district === '' || userInfor.ward === '' || userInfor.detailAddress === '') {
                     setDefaultAddressError('Bạn chưa có địa chỉ mặc định, vui lòng chỉnh sửa thông tin cá nhân !');
@@ -54,7 +55,10 @@ function PostOrder(props) {
 
             // nếu k chọn giữ nguyên thì sẽ check giá tiền và return về giá tiền để check điều kiện ở component con
             if (!Number.isInteger(notChange)) {
-                if (parseInt(dataPostOrder.phi_giao.replace(' ', '')) < lngLatList.data.routes[0].legs[0].distance.value * 5) {
+                if (
+                    parseInt(dataPostOrder.phi_giao.replace(' ', '')) <
+                    lngLatList.data.routes[0].legs[0].distance.value * 5
+                ) {
                     return lngLatList.data.routes[0].legs[0].distance.value;
                 }
             }
@@ -130,7 +134,7 @@ function PostOrder(props) {
                     shipLat: lngLatList.data.routes[0].legs[0].end_location.lat,
                     time_estimate: lngLatList.data.routes[0].legs[0].duration.value,
                     read: 0,
-                    status_report: 0
+                    status_report: 0,
                 });
 
                 // hiển thị thông báo
@@ -151,9 +155,10 @@ function PostOrder(props) {
                 await db
                     .collection('ShopProfile')
                     .doc(currentUser.uid)
-                    .get()
-                    .then((doc) => {
+                    .onSnapshot((doc) => {
                         if (doc.exists) {
+                            localStorage.setItem('reason', doc.data().reason);
+                            localStorage.setItem('lock_time', doc.data().lock_time);
                             setUserInfor(doc.data());
                         } else {
                             console.log('No such document!');
