@@ -82,7 +82,6 @@ function Register(props) {
     const fullNameRef = useRef();
     const phoneRef = useRef();
 
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState('');
     const [license, setLicense] = useState(false);

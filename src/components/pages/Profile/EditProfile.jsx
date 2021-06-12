@@ -48,9 +48,11 @@ function EditProfile(props) {
 
     //get image
     useEffect(() => {
-        getDownloadUrl(user.uid).then((url) => {
-            !!url && setImageUrl(url);
-        });
+        try {
+            getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
+        } catch (err) {
+            console.log(err);
+        }
     }, [user.uid]);
 
     const fileChange = async (files) => {

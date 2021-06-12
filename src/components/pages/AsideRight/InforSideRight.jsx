@@ -17,17 +17,21 @@ InforSideRight.defaultProps = {
 function InforSideRight(props) {
     const { isShowChange } = props;
     const { currentUser } = useAuth();
-  
+
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
         async function fetchImg() {
-            await getDownloadUrl(currentUser.uid).then((url) => {
-                if (!!url) {
-                    localStorage.setItem('imageUrl', url);
-                    setImageUrl(url);
-                }
-            });
+            try {
+                await getDownloadUrl(currentUser.uid).then((url) => {
+                    if (!!url) {
+                        localStorage.setItem('imageUrl', url);
+                        setImageUrl(url);
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }
         }
         fetchImg();
     }, [currentUser.uid, isShowChange]);

@@ -48,11 +48,6 @@ export async function RePostOrder(dataPostOrder, uid, enqueueSnackbar) {
             status: '0',
             ma_bi_mat: dataPostOrder.ma_bi_mat,
             thoi_gian: moment().format('X'),
-            // receiveLng: dataPostOrder.receiveLng,
-            // receiveLat: dataPostOrder.receiveLat,
-            // shipLng: dataPostOrder.shipLng,
-            // shipLat: dataPostOrder.shipLat,
-            // time_estimate: dataPostOrder.time_estimate,
         });
 
         //tạo bảng thông báo
