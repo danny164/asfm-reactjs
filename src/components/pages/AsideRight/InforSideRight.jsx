@@ -8,14 +8,14 @@ import { getDownloadUrl } from '../../../context/Upload';
 import PropTypes from 'prop-types';
 
 InforSideRight.propTypes = {
-    isShowChange: PropTypes.bool,
+    checkUpdateProfile: PropTypes.bool,
 };
 
 InforSideRight.defaultProps = {
-    isShowChange: false,
+    checkUpdateProfile: false,
 };
 function InforSideRight(props) {
-    const { isShowChange } = props;
+    const { checkUpdateProfile } = props;
     const { currentUser } = useAuth();
 
     const [imageUrl, setImageUrl] = useState('');
@@ -23,7 +23,7 @@ function InforSideRight(props) {
     useEffect(() => {
         async function fetchImg() {
             try {
-                await getDownloadUrl(currentUser.uid).then((url) => {
+                getDownloadUrl(currentUser.uid).then((url) => {
                     if (!!url) {
                         localStorage.setItem('imageUrl', url);
                         setImageUrl(url);
@@ -34,12 +34,16 @@ function InforSideRight(props) {
             }
         }
         fetchImg();
-    }, [currentUser.uid, isShowChange]);
+    }, [checkUpdateProfile]);
 
     return (
         <section
             className="card card-custom bgi-no-repeat gutter-b"
-            style={{ backgroundPosition: 'right top', backgroundSize: '30% auto', backgroundImage: `url(${AbstractThree})` }}
+            style={{
+                backgroundPosition: 'right top',
+                backgroundSize: '30% auto',
+                backgroundImage: `url(${AbstractThree})`,
+            }}
         >
             <div className="card-body pt-15">
                 <div className="text-center mb-10">
@@ -47,7 +51,9 @@ function InforSideRight(props) {
                         <div
                             className="symbol-label"
                             style={{
-                                backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
+                                backgroundImage: `url(${
+                                    (imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar
+                                })`,
                             }}
                         />
                         <i className="symbol-badge symbol-badge-bottom bg-success" />
@@ -56,14 +62,22 @@ function InforSideRight(props) {
                     <h4 className="font-weight-bold my-2">
                         {localStorage.getItem('fullname') ? localStorage.getItem('fullname') : currentUser.email}
                     </h4>
-                    <div className="text-muted mb-2">{localStorage.getItem('role') === '9' ? 'Admin' : 'Shop Owner'}</div>
+                    <div className="text-muted mb-2">
+                        {localStorage.getItem('role') === '9' ? 'Admin' : 'Shop Owner'}
+                    </div>
                     <span className="label label-light-warning label-inline font-weight-bold label-lg">Hoạt động</span>
                     <div className="mt-10">
-                        <Link to="/profile" className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">
+                        <Link
+                            to="/profile"
+                            className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block"
+                        >
                             <i className="fad fa-user-circle mr-1" />
                             Xem hồ sơ
                         </Link>
-                        <Link to="/changepw" className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">
+                        <Link
+                            to="/changepw"
+                            className="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block"
+                        >
                             <i className="fad fa-lock-alt mr-1" />
                             Thay đổi mật khẩu
                         </Link>

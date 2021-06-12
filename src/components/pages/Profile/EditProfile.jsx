@@ -10,7 +10,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import * as yup from 'yup';
 
@@ -29,7 +28,6 @@ function EditProfile(props) {
     const { user, edit } = props;
 
     const history = useHistory();
-    const dispatch = useDispatch();
 
     const fullNameRef = useRef();
     const phoneRef = useRef();
@@ -53,7 +51,7 @@ function EditProfile(props) {
         } catch (err) {
             console.log(err);
         }
-    }, [user.uid]);
+    }, []);
 
     const fileChange = async (files) => {
         if (files.length === 0) return;
@@ -199,11 +197,15 @@ function EditProfile(props) {
             return setAddressEmpty('Vui lòng cung cấp số nhà, tên đường !');
         }
 
-        console.log(fullNameRef.current.value, phoneRef.current.value, addressRef.current.value, wardRef.current.value, districtRef.current.value);
         await edit(
             convertString(fullNameRef.current.value),
             phoneRef.current.value,
-            convertAddress(addressRef.current.value) + ', ' + wardRef.current.value + ', ' + districtRef.current.value + ', Thành phố Đà Nẵng',
+            convertAddress(addressRef.current.value) +
+                ', ' +
+                wardRef.current.value +
+                ', ' +
+                districtRef.current.value +
+                ', Thành phố Đà Nẵng',
             districtRef.current.value,
             wardRef.current.value,
             convertAddress(addressRef.current.value)
@@ -242,7 +244,10 @@ function EditProfile(props) {
                                         className="image-input image-input-outline"
                                         id="profile_avatar"
                                         style={{
-                                            backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
+                                            backgroundImage: `url(${
+                                                (imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) ||
+                                                Avatar
+                                            })`,
                                         }}
                                     >
                                         <div className="image-input-wrapper" />
@@ -271,7 +276,9 @@ function EditProfile(props) {
                                             now={uploadProgress}
                                             style={{ width: '120px', height: '4px' }}
                                         />
-                                        <span className="form-text text-muted">Định dạng cho phép: png, jpg, jpeg.</span>
+                                        <span className="form-text text-muted">
+                                            Định dạng cho phép: png, jpg, jpeg.
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +314,9 @@ function EditProfile(props) {
                                         ref={fullNameRef}
                                     />
                                     <span className="form-text text-chartjs">{errors.fullname?.message}</span>
-                                    <span className="form-text text-chartjs">{fullNameEmpty !== '' && fullNameEmpty}</span>
+                                    <span className="form-text text-chartjs">
+                                        {fullNameEmpty !== '' && fullNameEmpty}
+                                    </span>
                                 </div>
                             </div>
                             <div className="separator separator-dashed my-5" />
@@ -359,7 +368,12 @@ function EditProfile(props) {
                                     Quận/Huyện
                                 </label>
                                 <div className="col-xl-9 col-lg-8">
-                                    <select className="form-control form-control-lg" id="district" onClick={handleDistrictChange} ref={districtRef}>
+                                    <select
+                                        className="form-control form-control-lg"
+                                        id="district"
+                                        onClick={handleDistrictChange}
+                                        ref={districtRef}
+                                    >
                                         <option value="">Chọn Quận/Huyện</option>
                                         {districtList()}
                                     </select>
@@ -373,7 +387,12 @@ function EditProfile(props) {
                                     Phường/Xã
                                 </label>
                                 <div className="col-xl-9 col-lg-8">
-                                    <select className="form-control form-control-lg" id="ward" onClick={(e) => setWard(e.target.value)} ref={wardRef}>
+                                    <select
+                                        className="form-control form-control-lg"
+                                        id="ward"
+                                        onClick={(e) => setWard(e.target.value)}
+                                        ref={wardRef}
+                                    >
                                         <option value="">Chọn Phường/Xã</option>
                                         {wardList()}
                                     </select>
@@ -398,7 +417,9 @@ function EditProfile(props) {
                                         ref={addressRef}
                                     />
                                     <span className="form-text text-chartjs">{errors.address?.message}</span>
-                                    <span className="form-text text-chartjs">{addressEmpty !== '' && addressEmpty}</span>
+                                    <span className="form-text text-chartjs">
+                                        {addressEmpty !== '' && addressEmpty}
+                                    </span>
                                 </div>
                             </div>
                         </div>

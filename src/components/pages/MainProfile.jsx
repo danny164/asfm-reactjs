@@ -1,8 +1,7 @@
 import Footer from 'components/common/Footer';
 import Header from 'components/common/Header';
-import { getDownloadUrl } from 'context/Upload';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import EditProfile from './Profile/EditProfile';
 import InfoProfile from './Profile/InfoProfile';
@@ -21,16 +20,6 @@ function MainProfile(props) {
     const { user, edit } = props;
 
     const { url } = useRouteMatch();
-
-    const [imageUrl, setImageUrl] = useState('');
-
-    useEffect(() => {
-        try {
-            getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
-        } catch (err) {
-            console.log(err);
-        }
-    }, [user.uid]);
 
     return (
         <main className="d-flex flex-column flex-row-fluid wrapper">
@@ -66,11 +55,11 @@ function MainProfile(props) {
 
                 <Switch>
                     <Route exact path={url}>
-                        <InfoProfile user={user} imageUrl={imageUrl} />
+                        <InfoProfile user={user} />
                     </Route>
 
                     <Route path={`${url}/edit`}>
-                        <EditProfile user={user} imageUrl={imageUrl} edit={edit} />
+                        <EditProfile user={user} edit={edit} />
                     </Route>
                 </Switch>
             </section>

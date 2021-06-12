@@ -22,15 +22,9 @@ export default function Profile() {
         },
     });
 
-    function changeToProfile() {
-        setUserInfor({
-            ...userInfor,
-            error: 'Chỉnh sửa thông tin thành công !',
-        });
-    }
+    const [checkUpdateProfile, setCheckUpdateProfile] = useState(false);
 
     async function editProfile(fullName, phone, address, district, ward, detailAddress) {
-        console.log(fullName, phone, address, district, ward, detailAddress);
         try {
             await db.collection('ShopProfile').doc(currentUser.uid).update({
                 fullname: fullName,
@@ -40,7 +34,12 @@ export default function Profile() {
                 ward: ward,
                 detailAddress: detailAddress,
             });
-            changeToProfile();
+
+            if (checkUpdateProfile === true) {
+                setCheckUpdateProfile(false);
+            } else {
+                setCheckUpdateProfile(true);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -52,8 +51,7 @@ export default function Profile() {
                 await db
                     .collection('ShopProfile')
                     .doc(userInfor.uid)
-                    .get()
-                    .then((doc) => {
+                    .onSnapshot((doc) => {
                         if (doc.exists) {
                             localStorage.setItem('fullname', doc.data().fullname);
                             setUserInfor({
@@ -68,7 +66,7 @@ export default function Profile() {
             }
         }
         fetchUserInfor();
-    }, [userInfor]);
+    }, []);
 
     return (
         <>
@@ -76,7 +74,7 @@ export default function Profile() {
                 <div className="d-flex flex-row flex-column-fluid page">
                     <AsideLeft />
                     <MainProfile user={userInfor} edit={editProfile} />
-                    <AsideRight name={userInfor.input.fullname} />
+                    <AsideRight checkUpdateProfile={checkUpdateProfile} name={userInfor.input.fullname} />
                 </div>
             </div>
         </>

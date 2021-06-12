@@ -1,21 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Avatar from 'assets/media/avatar.png';
+import { getDownloadUrl } from 'context/Upload';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 InfoProfile.propTypes = {
-    imageUrl: PropTypes.string,
     user: PropTypes.object,
 };
-InfoProfile.propTypes = {
-    imageUrl: '',
+InfoProfile.defaultProps = {
     user: null,
 };
 
 function InfoProfile(props) {
-    const { imageUrl, user } = props;
+    const { user } = props;
     const { url } = useRouteMatch();
+
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        try {
+            getDownloadUrl(user.uid).then((url) => !!url && setImageUrl(url));
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
+
     return (
         <>
             <div className="core d-flex flex-column flex-row-fluid container">
@@ -42,7 +52,10 @@ function InfoProfile(props) {
                                         className="image-input image-input-outline"
                                         id="profile_avatar"
                                         style={{
-                                            backgroundImage: `url(${(imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) || Avatar})`,
+                                            backgroundImage: `url(${
+                                                (imageUrl === '' ? localStorage.getItem('imageUrl') : imageUrl) ||
+                                                Avatar
+                                            })`,
                                         }}
                                     >
                                         <div className="image-input-wrapper" />
@@ -63,7 +76,6 @@ function InfoProfile(props) {
                                         value={user.email}
                                         readOnly
                                     />
-                                    {/* <span class="form-text text-muted">Some help content goes here</span> */}
                                 </div>
                             </div>
                             {/* full name */}
@@ -97,7 +109,6 @@ function InfoProfile(props) {
                                         value={user.input.phone}
                                         readOnly
                                     />
-                                    {/* <span class="form-text text-muted">Some help content goes here</span> */}
                                 </div>
                             </div>
                             {/* address */}
