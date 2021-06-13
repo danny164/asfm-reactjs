@@ -78,7 +78,7 @@ export default function GoogleMaps(props) {
     }, [shipperInfor, status]);
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyAY_kSdaiEWmqo1FNrxC5mSdlgnmnI7wkg" language="vi">
+        <LoadScript googleMapsApiKey="AIzaSyASWbYzzz4_apfsWyQbBu6tbYduJzum5_M" language="vi">
             <GoogleMap
                 mapContainerStyle={mapStyles}
                 zoom={shipperLocation !== null ? 18 : 12}
